@@ -23,6 +23,14 @@ $app->get('/tutor/sessions', function ($request, $response, $args) {
         $tutorSessions = $sth->fetchAll();
         return $this->response->withJson($tutorSessions);
     });
+
+//View Sessions from Student POV
+$app->get('/student/sessions', function ($request, $response, $args) {
+         $sth = $this->db->prepare("SELECT * FROM Sessions NATURAL JOIN Students");
+        $sth->execute();
+        $studentSessions = $sth->fetchAll();
+        return $this->response->withJson($studentSessions);
+    });
  
     
 //Public Index.phtml page    
