@@ -15,6 +15,15 @@ $app->get('/student/viewProfile', function ($request, $response, $args) {
         $studentprofiles = $sth->fetchAll();
         return $this->response->withJson($studentprofiles);
     });
+
+//View Sessions from Tutor's pov
+$app->get('/tutor/sessions', function ($request, $response, $args) {
+         $sth = $this->db->prepare("SELECT * FROM Sessions NATURAL JOIN Tutors");
+        $sth->execute();
+        $tutorSessions = $sth->fetchAll();
+        return $this->response->withJson($tutorSessions);
+    });
+ 
     
 //Public Index.phtml page    
 $app->get('/[{name}]', function ($request, $response, $args) {
