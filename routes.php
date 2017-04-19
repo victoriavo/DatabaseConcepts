@@ -7,6 +7,14 @@
         $tutorprofiles = $sth->fetchAll();
         return $this->response->withJson($tutorprofiles);
     });
+
+//Get Student Profile Info
+$app->get('/student/viewProfile', function ($request, $response, $args) {
+         $sth = $this->db->prepare("SELECT * FROM Students ORDER BY student_id");
+        $sth->execute();
+        $studentprofiles = $sth->fetchAll();
+        return $this->response->withJson($studentprofiles);
+    });
     
 //Public Index.phtml page    
 $app->get('/[{name}]', function ($request, $response, $args) {
