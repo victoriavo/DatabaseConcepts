@@ -1,0 +1,18 @@
+.btn{
+    background-color: gray;
+    border: none
+}
+
+.container{
+    margin-top: 50px;
+    border-radius: 30px;
+    background-color: white;
+    width:500px;
+    opacity: 1;
+
+}
+
+.container .bg{
+
+    opacity: .4;
+}
