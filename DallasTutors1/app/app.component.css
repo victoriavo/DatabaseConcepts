@@ -1,0 +1,34 @@
+.btn{
+    background-color: gray;
+    border: none
+}
+div{
+    text-align: center;
+}
+nav{
+    background-color: grey;
+}
+p{
+    color: gray;
+}
+
+.navbar a{
+    color: white;
+    font-size: 100%;
+    background: transparent;
+}
+
+
+.container .bg{
+    background-image: url('../tutorandstudent.png');
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: .4;
+    background-size: 100%;
+}
+
+
+
