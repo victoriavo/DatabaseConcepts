@@ -10,7 +10,7 @@ $app->get('/tutor/viewProfile/[{tutor_id}]', function ($request, $response, $arg
 });
 //View Student Profile
 $app->get('/student/viewProfile/[{student_id}]', function ($request, $response, $args) {
-   $sth = $this->db->prepare("SELECT first_name, last_name, email, high_school, graduation_year, bio FROM `Students` WHERE student_id = :student_id");
+   $sth = $this->db->prepare("SELECT photo, first_name, last_name, high_school, graduation_year, bio FROM `Students` JOIN `Photos`  WHERE student_id = :student_id AND id = student_id");
    $sth->bindParam("student_id",$args['student_id']);
    $sth->execute();
    $view = $sth->fetchObject();
