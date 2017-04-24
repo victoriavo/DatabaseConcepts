@@ -108,3 +108,12 @@ $app->get('/findTutor/[{subject_name}]', function ($request, $response, $args) {
    $find = $sth->fetchAll();
    return $this->response->withJson($find);
 });
+
+//TEST the courses stuff
+$app->get('/tutor/getCourses/[{tutor_id}]', function($request, $response, $args) {
+  $sth = $this->db->prepare("SELECT course_name FROM `Courses Taught` NATURAL JOIN `Courses` WHERE tutor_id = :tutor_id");
+  $sth->bindParam("tutor_id", $args['tutor_id']);
+  $sth->execute();
+  $find = $sth->fetchAll();
+  return $this->response->withJson($find);
+});
