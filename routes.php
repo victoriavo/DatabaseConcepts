@@ -1,5 +1,31 @@
 <?php
 //Victoria's Routes
+
+//login
+$app->post('/login', function ($request, $response) {
+  $input = $request->getParsedBody();
+  $sql = "SELECT `student_id`, `tutor_id` 
+          FROM `Students`, `Tutors`
+          WHERE `Students`.email = :email 
+          AND `Students`.password = :password
+          OR `Tutors`.email = :email
+          AND `Tutors`.password = :password
+          LIMIT 0,1";
+
+  $sth = $this->db->prepare($sql);
+  $sth->bindParam(":email", $input['email']);
+  $sth->bindParam(":password", $input['password']);
+  $sth->execute();
+  if( $sth->rowCount() == 0){
+    $input['error']="bad request";
+    $input['message']="<message>";
+  }
+  else {
+    $input['Authorization']= "LongTokenOfRandomUniqueCharacters";
+  }
+  return $this->response->withJson($input);
+});
+
 // tutor sign up 
 $app->post('/tutor/signup', function ($request, $response) {
   $input = $request->getParsedBody();
