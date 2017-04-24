@@ -62,6 +62,20 @@ $app->post('/tutor/signup', function ($request, $response) {
          return $this->response->withJson($input);
 
     });
+
+ // Logout
+    $app->post('/logout', function ($request, $response) {
+       $input = $request->getParsedBody();
+       //Delete Authorization key / session
+        $input['Success'] = "Successfully logged out";
+       //if($input){
+       //               $input['Success'] = "Logged out";
+        //}
+        //else{
+        //      $input['Failure'] = "Bad request";
+        //}
+       return $this->response->withJson($input);
+    });        
         
 
 //Maya's Routes
