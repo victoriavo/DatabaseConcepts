@@ -109,7 +109,8 @@ $app->get('/findTutor/[{subject_name}]', function ($request, $response, $args) {
    return $this->response->withJson($find);
 });
 
-//TEST the courses stuff
+//Edit courses
+//Retrieve courses taught by a tutor
 $app->get('/tutor/getCourses/[{tutor_id}]', function($request, $response, $args) {
   $sth = $this->db->prepare("SELECT course_name, course_id FROM `Courses Taught` NATURAL JOIN `Courses` WHERE tutor_id = :tutor_id");
   $sth->bindParam("tutor_id", $args['tutor_id']);
@@ -131,13 +132,13 @@ $app->post('/tutor/addNewCourse', function ($request, $response) {
   return $this->response->withJson($input);
 });
 
-//Delete a course - DOESN'T ACTUALLY DELETE?
+//Delete a course - must test with RAW json in postman
 $app->delete('/tutor/removeCourse', function ($request, $response) {
   $input = $request->getParsedBody();
   $sql = "DELETE FROM `Courses Taught` WHERE course_id = :course_id AND tutor_id = :tutor_id";
   $sth = $this->db->prepare($sql);
-  $sth->bindParam(":course_id", $input['course_id']);
-  $sth->bindParam(":tutor_id", $input['tutor_id']);
+  $sth->bindParam("course_id", $input['course_id']);
+  $sth->bindParam("tutor_id", $input['tutor_id']);
   $sth->execute();
   return $this->response;
 });
