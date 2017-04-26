@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 19, 2017 at 10:03 PM
+-- Generation Time: Apr 24, 2017 at 08:19 PM
 -- Server version: 5.5.54-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.21
 
@@ -117,8 +117,19 @@ CREATE TABLE IF NOT EXISTS `High School Subjects` (
 
 CREATE TABLE IF NOT EXISTS `Photos` (
   `id` int(11) NOT NULL,
-  `photo` blob NOT NULL
+  `photo` blob
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `Photos`
+--
+
+INSERT INTO `Photos` (`id`, `photo`) VALUES
+(2, NULL),
+(1, NULL),
+(3, NULL),
+(4, NULL),
+(11, NULL);
 
 -- --------------------------------------------------------
 
@@ -168,13 +179,14 @@ INSERT INTO `Sessions` (`tutor_id`, `student_id`, `course_id`, `isAccepted`, `ti
 CREATE TABLE IF NOT EXISTS `Students` (
   `first_name` text NOT NULL,
   `last_name` text NOT NULL,
-  `student_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL AUTO_INCREMENT,
   `email` text NOT NULL,
   `password` text NOT NULL,
   `high_school` text NOT NULL,
   `graduation_year` text NOT NULL,
-  `bio` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `bio` text NOT NULL,
+  PRIMARY KEY (`student_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `Students`
@@ -212,25 +224,53 @@ INSERT INTO `Subjects` (`subject_name`, `subject_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `Tutors` (
+  `tutor_id` int(11) NOT NULL,
   `first_name` longtext NOT NULL,
   `last_name` text NOT NULL,
-  `tutor_id` int(11) NOT NULL,
   `email` text NOT NULL,
   `password` text NOT NULL,
   `past_high_school` text NOT NULL,
-  `bio` text NOT NULL
+  `bio` text NOT NULL,
+  PRIMARY KEY (`tutor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `Tutors`
 --
 
-INSERT INTO `Tutors` (`first_name`, `last_name`, `tutor_id`, `email`, `password`, `past_high_school`, `bio`) VALUES
-('Maya', 'Playa', 1, 'mayaplayalovesmargs@gmail.com', 'margs', 'Some High School In Dallas', 'Hi, I go to Some High School In Dallas. I am looking for help. '),
-('Maya', 'Playa', 1, 'mayaplayalovesmargs@gmail.com', 'margs', 'Some High School In Dallas', 'Hi, I go to Some High School In Dallas. I am looking for help. '),
-('Harrison', 'Fields', 4, 'hfields@smu.edu', 'f13ld0fdr3@m$', 'St. Mark''s School of Texas', 'Howdy!  I''m Harrison, I''m a Mechanical Engineering Major at SMU who specializes in Calculus and Physics tutoring.  Let me know if you need any help!'),
-('Pauline', 'Woodson', 11, 'pawoodson@smu.edu', 'd@@@mns0n', 'Hockaday School', 'I''m Pauline, I graduated from Hockaday in 2015 and I can help you with any of the AP History classes!'),
-('Langston', 'Kuiper', 12, 'thelangman@gmail.com', 'r0m@nc3l@ngu@age', 'Parish Episcopal School', 'Yo!  Langston here, need help with programming?  I''m your man!');
+INSERT INTO `Tutors` (`tutor_id`, `first_name`, `last_name`, `email`, `password`, `past_high_school`, `bio`) VALUES
+(1, 'Maya', 'Playa', 'mayaplayalovesmargs@gmail.com', 'margs', 'Some High School In Dallas', 'Hi, I go to Some High School In Dallas. I am looking for help. '),
+(4, 'Harrison', 'Fields', 'hfields@smu.edu', 'f13ld0fdr3@m$', 'St. Mark''s School of Texas', 'Howdy!  I''m Harrison, I''m a Mechanical Engineering Major at SMU who specializes in Calculus and Physics tutoring.  Let me know if you need any help!'),
+(11, 'Pauline', 'Woodson', 'pawoodson@smu.edu', 'd@@@mns0n', 'Hockaday School', 'I''m Pauline, I graduated from Hockaday in 2015 and I can help you with any of the AP History classes!'),
+(12, 'Langston', 'Kuiper', 'thelangman@gmail.com', 'r0m@nc3l@ngu@age', 'Parish Episcopal School', 'Yo!  Langston here, need help with programming?  I''m your man!');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Users`
+--
+
+CREATE TABLE IF NOT EXISTS `Users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` longtext NOT NULL,
+  `last_name` text NOT NULL,
+  `email` text NOT NULL,
+  `password` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
+
+--
+-- Dumping data for table `Users`
+--
+
+INSERT INTO `Users` (`id`, `first_name`, `last_name`, `email`, `password`) VALUES
+(1, 'Maya', 'Playa', 'mayaplayalovesmargs@gmail.com', 'margs'),
+(2, 'Bob', 'Bobbert', 'bbobbert@greenhill.org', 'peacocksrockmysocks'),
+(3, 'Monica', 'Lee', 'leemo@hockaday.edu', 'k1tt3nm1tt3n$'),
+(4, 'Harrison', 'Fields', 'hfields@smu.edu', 'f13ld0fdr3@m$'),
+(11, 'Pauline', 'Woodson', 'pawoodson@smu.edu', 'd@@@mns0n'),
+(12, 'Langston', 'Kuiper', 'thelangman@gmail.com', 'r0m@nc3l@ngu@age'),
+(14, 'Marshall', 'Mathers', 'eminem@gmail.com', 'Mathers');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

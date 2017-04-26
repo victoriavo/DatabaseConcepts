@@ -1,0 +1,334 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Dallas Tutors
+
+Dallas Tutors helps you find the perfect tutor for your high school
+course in the Dallas area.
+
+## Login [/login]
+
+### Login [POST]
++ Request (application/json)
+
+    + Body
+
+            {
+                "username": "mayaplaya_margs4lyfe",
+                "password": "password1"
+            }
+
++ Response 200 (application/json)
+    
+    + Body
+
+            {
+                "Authorization": "LongTokenOfRandomUniqueCharacters"
+            }
+            
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "error": "bad request",
+                "message": "<message>",
+            }
+
++ Response 401 (application/json)
+
+    + Body
+    
+            {
+                "error": "unauthorized",
+                "message": "<message>"
+            }
+
+## Logout [/logout]
+
+### Logout [POST]
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+     
++ Response 200 (application/json)
+
+## Tutor Sign up [/tutor/signup]
+
+### Sign up [POST]
++ Request (application/json)
+
+    + Body
+
+            {
+                "first_name": "Maya",
+				"last_name": "Playa",
+                "password": "password1",
+                "email": "playamaya@gmail.com"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "Authorization": "LongTokenOfRandomUniqueCharacters"
+            }
+            
++ Response 409 (application/json)
+
+    + Body
+    
+            {
+                "text": "Email is already registered."
+            }
+
+## Student Sign up [/student/signup]
+
+### Sign up [POST]
++ Request (application/json)
+
+    + Body
+
+            {
+                "first_name": "Maya",
+				"last_name": "Playa",
+                "password": "password1",
+                "email": "playamaya@gmail.com"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "Authorization": "LongTokenOfRandomUniqueCharacters"
+            }
+            
++ Response 409 (application/json)
+
+    + Body
+    
+            {
+                "text": "Email is already registered."
+            }
+            
+## New Tutor Profile Info [/tutor/newProfile]
+
+### Provide new info [POST]
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+            
+    + Body
+    
+            {
+                "first_name": "Vicky",
+                "last_name": "Waters",
+                "bio": "My name is vicky and I like to learn.",
+                "classes": ["Calculus AB", "AP English Literature"],
+                "price": "3",
+                "photo": "/lib/photos/meUnderWater.jpeg",
+                "previous_highschool": "Highland Park High School"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "Authorization": "LongTokenOfRandomUniqueCharacters"
+            }
+            
++ Response 409 (application/json)
+
+    + Body
+    
+            {
+                "text": "Please enter valid input."
+            }
+
+## New Student Profile Info [/student/newProfile]
+
+### Provide new info [POST]
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+            
+    + Body
+    
+            {
+                "first_name": "Need",
+                "last_name": "Learn",
+                "bio": "My name is Need and I need to learn.",
+                "classes": ["Calculus AB", "AP English Literature"],
+                "photo": "/lib/photos/lastYearsPic.jpeg",
+                "highschool": "Highland Park High School"
+            }
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "Authorization": "LongTokenOfRandomUniqueCharacters"
+            }
+            
++ Response 409 (application/json)
+
+    + Body
+    
+            {
+                "text": "Please enter valid input."
+            }
+
+
+## Home Page [/home]
+
+### Home [GET]
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    
++ Response 200 (application/json)
+
+    + Body 
+            
+            {
+                
+            }
+            
+## View Tutor Profile [/tutor/viewProfile]
+
+### Get Profile Info [GET]
++ Request (application/json)
+
+    + Headers
+        
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+            
++ Response 200 (application/json)
+            
+    + Body
+    
+            {
+                "first_name": "Vicky",
+                "last_name": "Waters",
+                "bio": "My name is vicky and I like to learn.",
+                "classes": ["Calculus AB", "AP English Literature"],
+                "photo": "/lib/photos/meUnderWater.jpeg",
+                "past_high_school": "Highland Park High School"
+            }
+
+## View Student Profile [/student/viewProfile]
+### Get Profile Info [GET]
++ Request (application/json)
+
+    + Headers
+        
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+            
++ Response 200 (application/json)
+            
+    + Body
+    
+            {
+                "first_name": "Need",
+                "last_name": "Learn",
+                "bio": "My name is Need and I need to learn.",
+                "classes": ["Calculus AB", "AP English Literature"],
+                "photo": "/lib/photos/lastYearsPic.jpeg",
+                "high_school": "Highland Park High School"
+            }
+
+## View Sessions from Tutor POV [/tutor/sessions]
+### Show Tutor Sessions [GET]
++ Request (application/json)
+    
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
++ Response 200 (application/json)
+
+    + Body 
+        
+            {
+                "first_name":"Markle",
+				"last_name":  "Sparkle",
+                "bio": "Hi, my name is Markle Sparkle and I need a tutor in...."
+				"isAccepted": 1,
+				"time_requested": "2017-04-19 02:31:24",
+				"time_accepted": "2017-04-19 02:50:30" 
+				
+            }
+
+## View Sessions from Student POV [/student/sessions]
+### Show Student Sessions [GET]
++ Request (application/json)
+    
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
++ Response 200 (application/json)
+
+    + Body 
+        
+            {
+                "first_name":"Markle",
+				"last_name":  "Sparkle",
+                "bio": "Hi, my name is Markle Sparkle and I need a tutor in...."
+				"isAccepted": 1,
+				"time_requested": "2017-04-19 02:31:24",
+				"time_accepted": "2017-04-19 02:50:30"
+            }
+        
+## Search Box Find Tutor [/findTutor]
+### Find Tutor [GET]
++ Request (application/json)
+    
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+            
+            {
+                "high_school": "Mansfield High", 
+                "subject": "Math",
+                "course": "Geometry"
+            }
+            
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "first_name": "Mark",
+                "last_name": "Qut",
+                "bio": "I love math and so can you!",
+                "classes": ["Calculus AB", "Geometry"],
+                "photo": "/lib/photos/tutorPic.jpeg",
+				"past_high_school": "Mansfield High"
+            }
+        
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "error_msg":"No results found"
+            }
+        
