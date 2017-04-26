@@ -3,11 +3,21 @@
 // tutor sign up 
 $app->post('/tutor/signup', function ($request, $response) {
   $input = $request->getParsedBody();
-  $sql = "INSERT INTO `Tutors`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
+  $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
   $sth = $this->db->prepare($sql);
   $sth->bindParam(":email", $input['email']);
   $sth->bindParam(":first_name", $input['first_name']);
   $sth->bindParam(":last_name", $input['last_name']);
+  $sth->bindParam(":password", $input['password']);
+  $sth->execute();
+  $lastId = $this->db->lastInsertId();
+  $sql = "INSERT INTO `Tutors`(`first_name`, `last_name`, `email`, `password`, `tutor_id`) VALUES (:first_name,:last_name,:email,:password, :lastId)";
+  $sth = $this->db->prepare($sql);
+  $sth->bindParam(":email", $input['email']);
+  $sth->bindParam(":first_name", $input['first_name']);
+  $sth->bindParam(":last_name", $input['last_name']);
+  $sth->bindParam(":password", $input['password']);
+  $sth->bindParam(":lastId", $lastId);
   $sth->bindParam(":password", $input['last_name']);
   $sth->execute();
   $input['first_name'] = $this->db->lastInsertId();
@@ -22,13 +32,22 @@ $app->post('/tutor/signup', function ($request, $response) {
    // student sign up 
     $app->post('/student/signup', function ($request, $response) {
          $input = $request->getParsedBody();
-        $sql = "INSERT INTO `Students`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
+        $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
          $sth = $this->db->prepare($sql);
          $sth->bindParam(":email", $input['email']);
-        $sth->bindParam(":first_name", $input['first_name']);
+         $sth->bindParam(":first_name", $input['first_name']);
          $sth->bindParam(":last_name", $input['last_name']);
-         $sth->bindParam(":password", $input['last_name']);
+         $sth->bindParam(":password", $input['password']);
          $sth->execute();
+	       $lastId = $this->db->lastInsertId();
+	       $sql = "INSERT INTO `Students`(`first_name`, `last_name`, `email`, `password`, `student_id`) VALUES (:first_name,:last_name,:email,:password, :lastId)";
+	       $sth = $this->db->prepare($sql);
+         $sth->bindParam(":email", $input['email']);
+         $sth->bindParam(":first_name", $input['first_name']);
+	       $sth->bindParam(":last_name", $input['last_name']);
+	       $sth->bindParam("password", $input['last_name']);
+         $sth->bindParam(":lastId", $lastId);
+	       $sth->execute();
          $input['email'] = $this->db->lastInsertId();
          $input['first_name'] = $this->db->lastInsertId();
          $input['last_name'] = $this->db->lastInsertId();
