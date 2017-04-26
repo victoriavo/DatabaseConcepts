@@ -111,7 +111,7 @@ $app->get('/findTutor/[{subject_name}]', function ($request, $response, $args) {
 
 //Edit courses
 //Retrieve courses taught by a tutor
-$app->get('/tutor/getCourses/[{tutor_id}]', function($request, $response, $args) {
+$app->get('/tutor/editCourse/[{tutor_id}]', function($request, $response, $args) {
   $sth = $this->db->prepare("SELECT course_name, course_id FROM `Courses Taught` NATURAL JOIN `Courses` WHERE tutor_id = :tutor_id");
   $sth->bindParam("tutor_id", $args['tutor_id']);
   $sth->execute();
@@ -120,7 +120,7 @@ $app->get('/tutor/getCourses/[{tutor_id}]', function($request, $response, $args)
 });
 
 //Add new course
-$app->post('/tutor/addNewCourse', function ($request, $response) {
+$app->post('/tutor/editCourse', function ($request, $response) {
   $input = $request->getParsedBody();
   $sql = "INSERT INTO `Courses Taught` (`course_id`, `tutor_id`) VALUES (:course_id, :tutor_id)";
   $sth = $this->db->prepare($sql);
@@ -133,7 +133,7 @@ $app->post('/tutor/addNewCourse', function ($request, $response) {
 });
 
 //Delete a course - must test with RAW json in postman
-$app->delete('/tutor/removeCourse', function ($request, $response) {
+$app->delete('/tutor/editCourse', function ($request, $response) {
   $input = $request->getParsedBody();
   $sql = "DELETE FROM `Courses Taught` WHERE course_id = :course_id AND tutor_id = :tutor_id";
   $sth = $this->db->prepare($sql);
