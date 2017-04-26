@@ -25,11 +25,11 @@ $app->post('/tutor/signup', function ($request, $response) {
   $input['password'] = $this->db->lastInsertId();
   $input['email'] = $this->db->lastInsertId();
   return $this->response->withJson($input);
-  
+
 
 });
 
-   // student sign up 
+   // student sign up
     $app->post('/student/signup', function ($request, $response) {
          $input = $request->getParsedBody();
         $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
@@ -55,7 +55,36 @@ $app->post('/tutor/signup', function ($request, $response) {
          return $this->response->withJson($input);
 
     });
-        
+
+//Jacob's routes
+
+//Update tutor info w/out specifying a tutor
+$app->post('/tutor/newProfile', function ($request, $response) {
+    $input = $request->getParsedBody();
+    $sql = "INSERT INTO `Tutors` (`bio`, `past_high_school`) VALUES (:bio, :past_high_school)";
+    $sth = $this->db->prepare($sql);
+    $sth->bindParam(":bio", $input['bio']);
+    $sth->bindParam(":past_high_school", $input['past_high_school']);
+    $sth->execute();
+    $input['bio'] = $this->db->lastInsertId();
+    $input['past_high_school'] = $this->db->lastInsertId();
+    return $this->response->withJson($input);
+});
+
+//Update student info w/out specifying a student
+$app->post('/student/newProfile', function ($request, $response) {
+    $input = $request->getParsedBody();
+    $sql = "INSERT INTO `Students` (`bio`, `high_school`, `graduation_year`) VALUES (:bio, :high_school, :graduation_year)";
+    $sth = $this->db->prepare($sql);
+    $sth->bindParam(":bio", $input['bio']);
+    $sth->bindParam(":high_school", $input['high_school']);
+    $sth->bindParam(":graduation_year", $input['graduation_year']);
+    $sth->execute();
+    $input['bio'] = $this->db->lastInsertId();
+    $input['high_school'] = $this->db->lastInsertId();
+    $input['graduation_year'] = $this->db->lastInsertId();
+    return $this->response->withJson($input);
+});
 
 //Maya's Routes
 //View Tutor Profile
@@ -98,3 +127,38 @@ $app->get('/findTutor/[{subject_name}]', function ($request, $response, $args) {
    $find = $sth->fetchAll();
    return $this->response->withJson($find);
 });
+
+//Edit courses
+//Retrieve courses taught by a tutor
+$app->get('/tutor/editCourse/[{tutor_id}]', function($request, $response, $args) {
+  $sth = $this->db->prepare("SELECT course_name, course_id FROM `Courses Taught` NATURAL JOIN `Courses` WHERE tutor_id = :tutor_id");
+  $sth->bindParam("tutor_id", $args['tutor_id']);
+  $sth->execute();
+  $find = $sth->fetchAll();
+  return $this->response->withJson($find);
+});
+
+//Add new course
+$app->post('/tutor/editCourse', function ($request, $response) {
+  $input = $request->getParsedBody();
+  $sql = "INSERT INTO `Courses Taught` (`course_id`, `tutor_id`) VALUES (:course_id, :tutor_id)";
+  $sth = $this->db->prepare($sql);
+  $sth->bindParam(":course_id", $input['course_id']);
+  $sth->bindParam(":tutor_id", $input['tutor_id']);
+  $sth->execute();
+  $input['course_id'] = $this->db->lastInsertId();
+  $input['tutor_id'] = $this->db->lastInsertId();
+  return $this->response->withJson($input);
+});
+
+//Delete a course - must test with RAW json in postman
+$app->delete('/tutor/editCourse', function ($request, $response) {
+  $input = $request->getParsedBody();
+  $sql = "DELETE FROM `Courses Taught` WHERE course_id = :course_id AND tutor_id = :tutor_id";
+  $sth = $this->db->prepare($sql);
+  $sth->bindParam("course_id", $input['course_id']);
+  $sth->bindParam("tutor_id", $input['tutor_id']);
+  $sth->execute();
+  return $this->response;
+});
+
