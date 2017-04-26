@@ -26,10 +26,36 @@ $app->post('/tutor/signup', function ($request, $response) {
   $input['email'] = $this->db->lastInsertId();
   return $this->response->withJson($input);
 
+//login
+ // Login insert username and password
+   $app->post('/login', function ($request, $response) {
+        $input = $request->getParsedBody();
+        $sql = "SELECT `student_id`, `tutor_id` 
+                FROM `Students`, `Tutors`
+                WHERE `Students`.email = :email 
+                AND `Students`.password = :password
+                OR `Tutors`.email = :email
+                AND `Tutors`.password = :password
+                LIMIT 0,1";
 
-});
-
-   // student sign up
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":email", $input['email']);
+        $sth->bindParam(":password", $input['password']);
+        $sth->execute();
+        //echo 'You are logged in as: ' . $input['email'];
+        $token  = bin2hex(openssl_random_pseudo_bytes(16));
+        if( $sth->rowCount() == 0){
+                $input['error']="bad request";
+                $input['message']="<message>";
+        }
+        else {
+                //session_start();
+                //$_SESSION["email"] = :email;
+                //$_SESSION["password"] = :password;
+                $input['Authorization']= $token;
+        }
+        return $this->response->withJson($input);
+    });
     $app->post('/student/signup', function ($request, $response) {
          $input = $request->getParsedBody();
         $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
@@ -37,7 +63,7 @@ $app->post('/tutor/signup', function ($request, $response) {
          $sth->bindParam(":email", $input['email']);
          $sth->bindParam(":first_name", $input['first_name']);
          $sth->bindParam(":last_name", $input['last_name']);
-         $sth->bindParam(":password", $input['password']);
+         $sth->bindParam(":password", crypt($input['password']));
          $sth->execute();
 	       $lastId = $this->db->lastInsertId();
 	       $sql = "INSERT INTO `Students`(`first_name`, `last_name`, `email`, `password`, `student_id`) VALUES (:first_name,:last_name,:email,:password, :lastId)";
@@ -53,9 +79,38 @@ $app->post('/tutor/signup', function ($request, $response) {
          $input['last_name'] = $this->db->lastInsertId();
          $input['password'] = $this->db->lastInsertId();
          return $this->response->withJson($input);
-
     });
+        
 
+   // tutor sign up 
+    $app->post('/tutor/signup', function ($request, $response) {
+       $input = $request->getParsedBody();
+       $sql = "INSERT INTO `Tutors`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
+       $sth = $this->db->prepare($sql);
+        $sth->bindParam(":email", $input['email']);
+        $sth->bindParam(":first_name", $input['first_name']);
+         $sth->bindParam(":last_name", $input['last_name']);
+         $sth->bindParam(":password", crypt($input['password']));
+        $sth->execute();
+        $input['first_name'] = $this->db->lastInsertId();
+        $input['last_name'] = $this->db->lastInsertId();
+        $input['password'] = $this->db->lastInsertId();
+        $input['email'] = $this->db->lastInsertId();
+        return $this->response->withJson($input);
+    });
+ // Logout
+    $app->post('/logout', function ($request, $response) {
+       $input = $request->getParsedBody();
+       //Delete Authorization key / session
+        $input['Success'] = "Successfully logged out";
+       //if($input){
+       //               $input['Success'] = "Logged out";
+        //}
+        //else{
+        //      $input['Failure'] = "Bad request";
+        //}
+       return $this->response->withJson($input);
+    });        
 //Jacob's routes
 
 //Update tutor info w/out specifying a tutor
@@ -85,7 +140,6 @@ $app->post('/student/newProfile', function ($request, $response) {
     $input['graduation_year'] = $this->db->lastInsertId();
     return $this->response->withJson($input);
 });
-
 //Maya's Routes
 //View Tutor Profile
 $app->get('/tutor/viewProfile/[{tutor_id}]', function ($request, $response, $args) {
