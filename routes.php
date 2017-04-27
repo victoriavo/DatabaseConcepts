@@ -8,9 +8,7 @@
                 WHERE `Users`.email = :email";
         $sth = $this->db->prepare($sql);
         $sth->bindParam(":email", $input['email']);
-        //$sth->bindParam(":password", $input['password']);
         $sth->execute();
-        //$hashedpass = $input['password'] 
         $token  = bin2hex(openssl_random_pseudo_bytes(16));
         if( $sth->rowCount() == 0){
                 $input['error']="bad request";
@@ -22,15 +20,17 @@
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
                 $dbpass = $sth->fetch();
+                $dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
 
-                if(password_verify($inpass, '$2y$10$.MtO4YqHqfs/pB8Kssswfe4BuLn6J96.xyPQyWyinv6C9VmZqe51G')){
+                if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
                         $input['Authorization'] = $token;
                 }
                 else{
                         $input['failure'] = "password is wrong";
                 }
+
         }
         return $this->response->withJson($input);
     });
