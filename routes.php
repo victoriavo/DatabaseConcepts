@@ -34,6 +34,7 @@
         return $this->response->withJson($input);
     });
 
+//student signup
 //email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
         $input = $request->getParsedBody();
@@ -70,7 +71,7 @@ $app->post('/student/signup', function ($request, $response) {
          return $this->response->withJson($input);
     });
 
-
+//tutor sign up
 //email duplicates are accounted for 
 $app->post('/tutor/signup', function ($request, $response) {
         $input = $request->getParsedBody();
