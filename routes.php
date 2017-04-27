@@ -33,7 +33,6 @@
         }
         return $this->response->withJson($input);
     });
-
 //student signup
 //email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
@@ -106,8 +105,6 @@ $app->post('/tutor/signup', function ($request, $response) {
         }
         return $this->response->withJson($input);
 });
-
-
 
  // Logout
     $app->post('/logout', function ($request, $response) {
