@@ -34,57 +34,78 @@
         return $this->response->withJson($input);
     });
 
-//need to check for email and password duplications 
- $app->post('/student/signup', function ($request, $response) {
-         $input = $request->getParsedBody();
-        $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
-         $sth = $this->db->prepare($sql);
-         $sth->bindParam(":email", $input['email']);
-         $sth->bindParam(":first_name", $input['first_name']);
-         $sth->bindParam(":last_name", $input['last_name']);
-         $sth->bindParam(":password", password_hash($input['password'],PASSWORD_DEFAULT,['cost' => 15]));
-         $sth->execute();
-         $lastId = $this->db->lastInsertId();
-         $sql = "INSERT INTO `Students`(`first_name`, `last_name`, `email`, `password`, `student_id`) VALUES (:first_name,:last_name,:email,:pas$
-         $sth = $this->db->prepare($sql);
-         $sth->bindParam(":email", $input['email']);
-         $sth->bindParam(":first_name", $input['first_name']);
-         $sth->bindParam(":last_name", $input['last_name']);
-         $sth->bindParam(":password",password_hash($input['password'], PASSWORD_DEFAULT, ['cost' => 15]));
-         $sth->bindParam(":lastId", $lastId);
-         $sth->execute();
-         $input['email'] = $this->db->lastInsertId();
-         $input['first_name'] = $this->db->lastInsertId();
-         $input['last_name'] = $this->db->lastInsertId();
-         $input['password'] = $this->db->lastInsertId();
+//email duplicates are accounted for 
+$app->post('/student/signup', function ($request, $response) {
+        $input = $request->getParsedBody();
+        $sql = "SELECT * FROM `Users` WHERE email = :email";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":email", $input['email']);
+        $sth->execute();
+
+        if($sth->rowCount() == 0) {
+                $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":email", $input['email']);
+                $sth->bindParam(":first_name", $input['first_name']);
+                $sth->bindParam(":last_name", $input['last_name']);
+                $sth->bindParam(":password", password_hash($input['password'],PASSWORD_DEFAULT,['cost' => 15]));
+                $sth->execute();
+                $lastId = $this->db->lastInsertId();
+                $sql = "INSERT INTO `Students`(`first_name`, `last_name`, `email`, `password`, `student_id`) VALUES (:first_name,:last_name,:email,:password,:lastId)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":email", $input['email']);
+                $sth->bindParam(":first_name", $input['first_name']);
+                $sth->bindParam(":last_name", $input['last_name']);
+                $sth->bindParam(":password",password_hash($input['password'], PASSWORD_DEFAULT, ['cost' => 15]));
+                $sth->bindParam(":lastId", $lastId);
+                $sth->execute();
+                $input['email'] = $this->db->lastInsertId();
+                $input['first_name'] = $this->db->lastInsertId();
+                $input['last_name'] = $this->db->lastInsertId();
+                $input['password'] = $this->db->lastInsertId();
+        }
+        else{
+                $input['error'] = "A user with this email already exists.";
+        }
          return $this->response->withJson($input);
     });
 
-//need to check for password and email duplicates
+
+//email duplicates are accounted for 
 $app->post('/tutor/signup', function ($request, $response) {
-  $input = $request->getParsedBody();
-  $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
-  $sth = $this->db->prepare($sql);
-  $sth->bindParam(":email", $input['email']);
-  $sth->bindParam(":first_name", $input['first_name']);
-  $sth->bindParam(":last_name", $input['last_name']);
-  $sth->bindParam(":password", password_hash($input['password'],PASSWORD_DEFAULT,['cost' => 15]));
-  $sth->execute();
-  $lastId = $this->db->lastInsertId();
-  $sql = "INSERT INTO `Tutors`(`first_name`, `last_name`, `email`, `password`, `tutor_id`) VALUES (:first_name,:last_name,:email,:password, :las$
-  $sth = $this->db->prepare($sql);
-  $sth->bindParam(":email", $input['email']);
-  $sth->bindParam(":first_name", $input['first_name']);
-  $sth->bindParam(":last_name", $input['last_name']);
-  $sth->bindParam(":password", password_hash($input['password'], PASSWORD_DEFAULT,['cost' => 15]));
-  $sth->bindParam(":lastId", $lastId);
-  $sth->execute();
-  $input['first_name'] = $this->db->lastInsertId();
-  $input['last_name'] = $this->db->lastInsertId();
-  $input['password'] = $this->db->lastInsertId();
-  $input['email'] = $this->db->lastInsertId();
-  return $this->response->withJson($input);
+        $input = $request->getParsedBody();
+        $sql = "SELECT * FROM `Users` WHERE email = :email";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":email", $input['email']);
+        $sth->execute();
+        if($sth->rowCount() == 0) {
+                $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":email", $input['email']);
+                $sth->bindParam(":first_name", $input['first_name']);
+                $sth->bindParam(":last_name", $input['last_name']);
+                $sth->bindParam(":password", password_hash($input['password'],PASSWORD_DEFAULT,['cost' => 15]));
+                $sth->execute();
+                $lastId = $this->db->lastInsertId();
+                $sql = "INSERT INTO `Tutors`(`first_name`, `last_name`, `email`, `password`, `tutor_id`) VALUES (:first_name,:last_name,:email,:password, :lastId)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":email", $input['email']);
+                $sth->bindParam(":first_name", $input['first_name']);
+                $sth->bindParam(":last_name", $input['last_name']);
+                $sth->bindParam(":password", password_hash($input['password'], PASSWORD_DEFAULT,['cost' => 15]));
+                $sth->bindParam(":lastId", $lastId);
+                $sth->execute();
+                $input['first_name'] = $this->db->lastInsertId();
+                $input['last_name'] = $this->db->lastInsertId();
+                $input['password'] = $this->db->lastInsertId();
+                $input['email'] = $this->db->lastInsertId();
+        }
+        else {
+                $input['error'] = "A user with that email already exists.";
+        }
+        return $this->response->withJson($input);
 });
+
 
 
  // Logout
