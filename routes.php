@@ -22,9 +22,9 @@
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
                 $dbpass = $sth->fetch();
-                $inpass = password_hash($input['password'], PASSWORD_DEFAULT,['cost' => 15]);
+                $inpass = $input['password'];
 
-                if(password_verify('john', '$2y$10$.MtO4YqHqfs/pB8Kssswfe4BuLn6J96.xyPQyWyinv6C9VmZqe51G')){
+                if(password_verify($inpass, '$2y$10$.MtO4YqHqfs/pB8Kssswfe4BuLn6J96.xyPQyWyinv6C9VmZqe51G')){
                         $input['success'] = "logged in";
                         $input['Authorization'] = $token;
                 }
