@@ -30,7 +30,6 @@
                 else{
                         $input['failure'] = "password is wrong";
                 }
-
         }
         return $this->response->withJson($input);
     });
