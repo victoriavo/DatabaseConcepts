@@ -106,16 +106,18 @@ $app->post('/tutor/signup', function ($request, $response) {
  // Logout
     $app->post('/logout', function ($request, $response) {
        $input = $request->getParsedBody();
+        $sql = "UPDATE `Web Sessions` SET `logout_time` = CURRENT_TIMESTAMP";
+        $sth = $this->db->prepare($sql);
+        $sth->execute();
+        $input['logout_time'] = CURRENT_TIMESTAMP;
        //Delete Authorization key / session
+        $sql = "UPDATE `Web Sessions` SET `authorization`= NULL";
+        $sth = $this->db->prepare($sql);
+        $sth->execute();
         $input['Success'] = "Successfully logged out";
-       //if($input){
-       //               $input['Success'] = "Logged out";
-        //}
-        //else{
-        //      $input['Failure'] = "Bad request";
-        //}
        return $this->response->withJson($input);
     });        
+       
 //Jacob's routes
 
 //Update tutor info w/out specifying a tutor
