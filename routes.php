@@ -15,16 +15,24 @@
                 $input['message']="No User Found";
         }
         else {
-                $sql = "SELECT password FROM `Users` WHERE `Users`.email = :email";
+                $sql = "SELECT password,id FROM `Users` WHERE `Users`.email = :email";
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
-                $dbpass = $sth->fetch();
-                $dbpass = implode(" ",$dbpass);
+                $dbpass = $sth->fetchColumn(0);
+                $input['dbpass'] = $dbpass;
+                $id = $sth->fetchColumn(1);
+                $input['id'] = $id;
+                //$dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
 
                 if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
+                        $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
+                        $sth = $this->db->prepare($sql);
+                        $sth->bindParam(":id", $id);
+                        $sth->bindParam(":token", $token);
+                        $sth->execute();
                 }
                 else{
                         $input['failure'] = "password is wrong";
@@ -33,6 +41,7 @@
         $newResponse = $this->response->withAddedHeader("authorization",$token);
         return $newResponse->withJson($input);
     });
+
 //student signup
 //email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
