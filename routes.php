@@ -121,6 +121,7 @@ $app->post('/tutor/signup', function ($request, $response) {
 //Update tutor info
 $app->post('/tutor/newProfile/[{tutor_id}]', function ($request, $response, $args) {
     $input = $request->getParsedBody();
+    //$authorization = $request->getHeader('authorization');
     $sql = "UPDATE `Tutors` SET bio = :bio, past_high_school = :past_high_school WHERE tutor_id = :tutor_id";
     $sth = $this->db->prepare($sql);
     $sth->bindParam(":bio", $input['bio']);
