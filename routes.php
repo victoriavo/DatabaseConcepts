@@ -19,11 +19,11 @@ $app->post('/login', function ($request, $response) {
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
-                $dbpass = $sth->fetchColumn(0);
-                $input['dbpass'] = $dbpass;
-                $id = $sth->fetchColumn(1);
-                $input['id'] = $id;
-                //$dbpass = implode(" ",$dbpass);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+		$row = $sth->fetch();
+                $input['dbpass'] = $row["password"];
+                $input['id'] = $row["id"];
+		 //$dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
                 if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
