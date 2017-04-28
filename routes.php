@@ -1,7 +1,6 @@
 <?php
 //Victoria's Routes
 // Login insert username and password
-// Login insert username and password
  $app->post('/login', function ($request, $response) {
         $input = $request->getParsedBody();
         $sql = "SELECT *
@@ -34,7 +33,6 @@
         $newResponse = $this->response->withAddedHeader("authorization",$token);
         return $newResponse->withJson($input);
     });
-
 //student signup
 //email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
@@ -43,7 +41,6 @@ $app->post('/student/signup', function ($request, $response) {
         $sth = $this->db->prepare($sql);
         $sth->bindParam(":email", $input['email']);
         $sth->execute();
-
         if($sth->rowCount() == 0) {
                 $sql = "INSERT INTO `Users`(`first_name`, `last_name`, `email`, `password`) VALUES (:first_name,:last_name,:email,:password)";
                 $sth = $this->db->prepare($sql);
@@ -71,7 +68,6 @@ $app->post('/student/signup', function ($request, $response) {
         }
          return $this->response->withJson($input);
     });
-
 //tutor sign up
 //email duplicates are accounted for 
 $app->post('/tutor/signup', function ($request, $response) {
@@ -107,7 +103,6 @@ $app->post('/tutor/signup', function ($request, $response) {
         }
         return $this->response->withJson($input);
 });
-
  // Logout
     $app->post('/logout', function ($request, $response) {
        $input = $request->getParsedBody();
