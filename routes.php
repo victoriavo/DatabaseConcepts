@@ -1,9 +1,10 @@
 <?php
 //Victoria's Routes
 // Login insert username and password
+// Login insert username and password
  $app->post('/login', function ($request, $response) {
         $input = $request->getParsedBody();
-        $sql = "SELECT * 
+        $sql = "SELECT *
                 FROM `Users`
                 WHERE `Users`.email = :email";
         $sth = $this->db->prepare($sql);
@@ -25,14 +26,15 @@
 
                 if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
-                        $input['Authorization'] = $token;
                 }
                 else{
                         $input['failure'] = "password is wrong";
                 }
         }
-        return $this->response->withJson($input);
+        $newResponse = $this->response->withAddedHeader("authorization",$token);
+        return $newResponse->withJson($input);
     });
+
 //student signup
 //email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
