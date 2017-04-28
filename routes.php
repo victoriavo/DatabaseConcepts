@@ -95,16 +95,17 @@ $app->post('/tutor/signup', function ($request, $response) {
     });        
 //Jacob's routes
 
-//Update tutor info w/out specifying a tutor
-$app->post('/tutor/newProfile', function ($request, $response) {
+//Update tutor info
+$app->post('/tutor/newProfile/[{tutor_id}]', function ($request, $response, $args) {
     $input = $request->getParsedBody();
-    $sql = "INSERT INTO `Tutors` (`bio`, `past_high_school`) VALUES (:bio, :past_high_school)";
+    $sql = "UPDATE `Tutors` SET bio = :bio, past_high_school = :past_high_school WHERE tutor_id = :tutor_id";
     $sth = $this->db->prepare($sql);
     $sth->bindParam(":bio", $input['bio']);
     $sth->bindParam(":past_high_school", $input['past_high_school']);
+    $sth->bindParam(":tutor_id", $args['tutor_id]);
     $sth->execute();
-    $input['bio'] = $this->db->lastInsertId();
-    $input['past_high_school'] = $this->db->lastInsertId();
+//    $input['bio'] = $this->db->lastInsertId();
+//    $input['past_high_school'] = $this->db->lastInsertId();
     return $this->response->withJson($input);
 });
 
