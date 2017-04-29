@@ -1,0 +1,19 @@
+<!-- new syntax for ng-if -->
+<section *ngIf="student">
+  <section>
+    <h2>You selected: {{student.email}}</h2>
+    <h3>Description</h3>
+    <p>
+      {{student.email}} 
+      </p>
+  </section>
+  <section>
+    <form (ngSubmit)="saveStudentDetails()" #personForm="ngForm">
+        <div>
+            <label for="name">Name: </label>
+            <input type="text" name="name" required [(ngModel)]="student.email" #name="ngModel">
+  
+      </div>
+    
+  <button (click)="gotoStudentList()">Back to student list</button>
+<section>
