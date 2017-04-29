@@ -151,7 +151,6 @@ $app->post('/tutor/newProfile', function ($request, $response) {
 	}
 	else {
 		$sql = "UPDATE `Tutors` SET bio = :bio, past_high_school = :past_high_school WHERE tutor_id = :id";
-    		//$sql = "INSERT INTO `Tutors` (`bio`, `past_high_school`) VALUES (:bio, :past_high_school)";
     		$sth = $this->db->prepare($sql);
     		$sth->bindParam(":bio", $input['bio']);
 		$sth->bindParam(":id", $id);
@@ -166,17 +165,37 @@ $app->post('/tutor/newProfile', function ($request, $response) {
 
 //Add the remaining student informatin
 $app->post('/student/newProfile', function ($request, $response) {
-    $input = $request->getParsedBody();
-    $sql = "INSERT INTO `Students` (`bio`, `high_school`, `graduation_year`) VALUES (:bio, :high_school, :graduation_year)";
-    $sth = $this->db->prepare($sql);
-    $sth->bindParam(":bio", $input['bio']);
-    $sth->bindParam(":high_school", $input['high_school']);
-    $sth->bindParam(":graduation_year", $input['graduation_year']);
-    $sth->execute();
-    $input['bio'] = $this->db->lastInsertId();
-    $input['high_school'] = $this->db->lastInsertId();
-    $input['graduation_year'] = $this->db->lastInsertId();
-    return $this->response->withJson($input);
+	//Retrieve the authorization token and get the id of the active user
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$id = $row["id"];
+
+	//If there was no id found, return an error
+	if (empty($id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {
+		$sql = "UPDATE `Students` SET bio = :bio, high_school = :high_school, graduation_year = :graduation_year  WHERE student_id = :id";
+    		$sth = $this->db->prepare($sql);
+    		$sth->bindParam(":bio", $input['bio']);
+		$sth->bindParam(":id", $id);
+    		$sth->bindParam(":high_school", $input['high_school']);
+		$sth->bindParam(":graduation_year", $input['graduation_year']);
+    		$sth->execute();
+    		$input['bio'] = $this->db->lastInsertId();
+		$input['past_high_school'] = $this->db->lastInsertId();
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
 });
 //Maya's Routes
 //View Tutor Profile
