@@ -154,6 +154,51 @@ $app->post('/uploadpic', function ($request, $response) {
 
 });
 
+//create sessions
+$app->post('/requestsession', function ($request, $response) {
+        $input = $request->getParsedBody();
+        //get authorization token and user id 
+        $authArray = $request->getHeader('Authorization');
+        $auth = implode(" ", $authArray);
+        $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":auth", $auth);
+        $sth->execute();
+
+        //Retrieve the ID from the resulting SQL statment
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $sth->fetch();
+        $id = $row["id"];
+
+        //If there was no id found, return an error
+        if (empty($id)) {
+                $input["Failure"] = "Action not authorized";
+        }
+        else {
+                //get course id by requested course name
+                $sql = "SELECT course_id FROM `Courses` WHERE course_name = :course_name";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":course_name", $input['course_name']);
+                $sth->execute();
+                $course_id = $sth->fetchColumn(0);
+                $input['course_id'] = $course_id;
+                
+                //now create a session with the tutor id, student id, course id, and timestamp
+                $sql = "INSERT INTO `Sessions` (`tutor_id`, `student_id`, `course_id`) 
+                        VALUES (:tutor_id ,:student_id, :course_id)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $input['tutor_id']);
+                $sth->bindParam(":student_id", $id);
+                $sth->bindParam(":course_id", $course_id);
+                $sth->execute();
+                $input['success'] = "Session successfully requested.";
+        }
+
+        $newResponse = $this->response->withAddedHeader("Authorization", $auth);
+        return $newResponse->withJson($input);
+});
+
+
        
 //Jacob's routes
 
