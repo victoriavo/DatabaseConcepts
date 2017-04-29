@@ -1,0 +1,42 @@
+<div class="container" >
+    <nav class='navbar navbar-default navbar-fixed-top'>
+        <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
+        <ul class="nav navbar-nav">
+            <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+            <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a>Update Profile</a></li>
+                        <li><a>Change Password</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+            </li>
+		</ul>
+    </nav>
+
+
+    <img style="margin-top: 100px; border-radius: 5px" [src]= tutor.imagePath/>
+
+    <h2> {{tutor.firstName}} {{tutor.lastName}} </h2>
+    <p> {{tutor.bio}} </p>
+    <p> {{tutor.email}} </p>
+
+
+        <div>
+            <p>
+        Courses taught: {{tutor.courses}}
+            </p>
+        </div>
+        <p>
+            Graduated from {{tutor.high_school}} in {{tutor.grad_year}}
+        </p>
+
+    <p>
+        <a [routerLink] = "['/tutor/' + tutor.id +'/updateProfile']" class="btn btn-primary">Edit Your Profile</a> 
+        <a [routerLink] = "['/tutor/' + tutor.id +'/courses']" class="btn btn-primary">Edit Your Courses</a> 
+    </p>
+</div>
