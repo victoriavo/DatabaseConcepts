@@ -198,6 +198,49 @@ $app->post('/requestsession', function ($request, $response) {
         return $newResponse->withJson($input);
 });
 
+$app->post('/acceptsession', function ($request, $response) {
+        $input = $request->getParsedBody();
+        //get authorization token and user id 
+        $authArray = $request->getHeader('Authorization');
+        $auth = implode(" ", $authArray);
+        $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":auth", $auth);
+        $sth->execute();
+
+        //Retrieve the ID from the resulting SQL statment
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $sth->fetch();
+        $id = $row["id"];
+        $input['id'] = $id;
+
+        //If there was no id found, return an error
+        if (empty($id)) {
+                $input["Failure"] = "Action not authorized";
+        }
+        else {
+                //set is accepted to 1 and add the time
+                $sql = "UPDATE `Sessions` SET `isAccepted`= 1 
+                        WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $id);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+                $sql = "UPDATE `Sessions` SET `time_accepted`= CURRENT_TIMESTAMP 
+                        WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $id);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+        }
+
+        $newResponse = $this->response->withAddedHeader("Authorization", $auth);
+        return $newResponse->withJson($input);
+        
+});
+
 
        
 //Jacob's routes
