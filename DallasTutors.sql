@@ -307,8 +307,8 @@ INSERT INTO `Users` (`id`, `first_name`, `last_name`, `email`, `password`) VALUE
 CREATE TABLE `Web Sessions` (
   `id` int(11) NOT NULL,
   `authorization` text,
-  `login_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `logout_time` datetime DEFAULT NULL
+  `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `logout_time` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
