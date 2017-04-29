@@ -21,8 +21,9 @@ const app_routing_1 = require("./app.routing");
 // import { AlertService, AuthenticationService, UserService } from './_services/index';
 const index_1 = require("./home/index");
 const index_2 = require("./login/index");
-const index_3 = require("./register/index");
 const users_module_1 = require("./users/users.module");
+const index_3 = require("./studentRegister/index");
+const index_4 = require("./tutorRegister/index");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -39,7 +40,8 @@ AppModule = __decorate([
             // AlertComponent,
             index_1.HomeComponent,
             index_2.LoginComponent,
-            index_3.RegisterComponent
+            index_3.StudentRegisterComponent,
+            index_4.TutorRegisterComponent,
         ],
         providers: [
             // AuthGuard,

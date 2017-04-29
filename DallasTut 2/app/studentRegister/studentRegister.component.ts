@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
     styleUrls: ['register.component.css'],
 })
 
-export class RegisterComponent {
+export class StudentRegisterComponent {
     model: any = {};
     loading = false;
 

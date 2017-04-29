@@ -2,20 +2,23 @@
 
 import { HomeComponent } from './home/index';
 import { LoginComponent } from './login/index';
-import { RegisterComponent } from './register/index';
 import { TutorEditorComponent } from "./users/tutors/tutor-editor/tutor-editor.component";
 import { StudentEditorComponent } from "./users/students/student-editor/student-editor.component";
 import { CoursesEditorComponent } from "./users/courses/courses-editor.component";
 import { TutorProfileComponent } from "./users/tutors/tutor-profile/tutor-profile.component";
 import { StudentProfileComponent } from "./users/students/student-profile/student-profile.component";
+import { StudentRegisterComponent } from "./studentRegister/index";
+import { TutorRegisterComponent } from "./tutorRegister/index";
+
 
 
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent},
+    { path: '', component: LoginComponent},
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LoginComponent },
-    { path: 'signUp', component: RegisterComponent },
+    { path: 'tutorSignUp', component: TutorRegisterComponent },
+    { path: 'studentSignUp', component: StudentRegisterComponent },
     { path: 'findTutor', component: HomeComponent },
     { path: 'tutor/newProfile', component: TutorEditorComponent },
     { path: 'student/newProfile', component: StudentEditorComponent },

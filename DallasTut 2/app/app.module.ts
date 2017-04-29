@@ -16,8 +16,9 @@ import { routing }  from './app.routing';
 // import { AlertService, AuthenticationService, UserService } from './_services/index';
 import { HomeComponent } from './home/index';
 import { LoginComponent } from './login/index';
-import { RegisterComponent } from './register/index';
 import { UsersModule } from './users/users.module';
+import { StudentRegisterComponent } from "./studentRegister/index";
+import { TutorRegisterComponent } from "./tutorRegister/index";
 
 @NgModule({
     imports: [
@@ -32,7 +33,9 @@ import { UsersModule } from './users/users.module';
         // AlertComponent,
         HomeComponent,
         LoginComponent,
-        RegisterComponent
+        StudentRegisterComponent,
+        TutorRegisterComponent,
+
     ],
     providers: [
         // AuthGuard,

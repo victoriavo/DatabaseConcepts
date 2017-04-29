@@ -10,22 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
-const router_1 = require("@angular/router");
-// import { AlertService, UserService } from '../_services/index';
-let RegisterComponent = class RegisterComponent {
-    constructor(router) {
-        this.router = router;
-        this.model = {};
-        this.loading = false;
+const http_1 = require("@angular/http");
+require("rxjs/add/operator/toPromise");
+let UserRepository = class UserRepository {
+    constructor(http) {
+        this.http = http;
+        this._apiUrl = 'api/students';
     }
 };
-RegisterComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        templateUrl: 'register.component.html',
-        styleUrls: ['register.component.css'],
-    }),
-    __metadata("design:paramtypes", [router_1.Router])
-], RegisterComponent);
-exports.RegisterComponent = RegisterComponent;
-//# sourceMappingURL=register.component.js.map
+UserRepository = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], UserRepository);
+exports.UserRepository = UserRepository;
+//# sourceMappingURL=student-repository.js.map
