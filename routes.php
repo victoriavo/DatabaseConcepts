@@ -129,21 +129,42 @@ $app->post('/tutor/signup', function ($request, $response) {
        
 //Jacob's routes
 
-//Update tutor info w/out specifying a tutor
-$app->post('/tutor/newProfile/[{tutor_id}]', function ($request, $response) {
-    $input = $request->getParsedBody();
-    $authorization = $request->getHeader('authorization');
-    $sql = "INSERT INTO `Tutors` (`bio`, `past_high_school`) VALUES (:bio, :past_high_school)";
-    $sth = $this->db->prepare($sql);
-    $sth->bindParam(":bio", $input['bio']);
-    $sth->bindParam(":past_high_school", $input['past_high_school']);
-    $sth->execute();
-    $input['bio'] = $this->db->lastInsertId();
-    $input['past_high_school'] = $this->db->lastInsertId();
-    return $this->response->withJson($input);
+//Add the remaining tutor information
+$app->post('/tutor/newProfile', function ($request, $response) {
+	//Retrieve the authorization token and get the id of the active user
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$id = $row["id"];
+
+	//If there was no id found, return an error
+	if (empty($id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {
+		$sql = "UPDATE `Tutors` SET bio = :bio, past_high_school = :past_high_school WHERE tutor_id = :id";
+    		//$sql = "INSERT INTO `Tutors` (`bio`, `past_high_school`) VALUES (:bio, :past_high_school)";
+    		$sth = $this->db->prepare($sql);
+    		$sth->bindParam(":bio", $input['bio']);
+		$sth->bindParam(":id", $id);
+    		$sth->bindParam(":past_high_school", $input['past_high_school']);
+    		$sth->execute();
+    		$input['bio'] = $this->db->lastInsertId();
+		$input['past_high_school'] = $this->db->lastInsertId();
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
 });
 
-//Update student info w/out specifying a student
+//Add the remaining student informatin
 $app->post('/student/newProfile', function ($request, $response) {
     $input = $request->getParsedBody();
     $sql = "INSERT INTO `Students` (`bio`, `high_school`, `graduation_year`) VALUES (:bio, :high_school, :graduation_year)";
