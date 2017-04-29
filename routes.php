@@ -1,9 +1,9 @@
 <?php
 //Victoria's Routes
-// tutor sign up 
- $app->post('/login', function ($request, $response) {
+// Login insert username and password
+$app->post('/login', function ($request, $response) {
         $input = $request->getParsedBody();
-        $sql = "SELECT * 
+        $sql = "SELECT *
                 FROM `Users`
                 WHERE `Users`.email = :email";
         $sth = $this->db->prepare($sql);
@@ -15,22 +15,32 @@
                 $input['message']="No User Found";
         }
         else {
-                $sql = "SELECT password FROM `Users` WHERE `Users`.email = :email";
+                $sql = "SELECT password,id FROM `Users` WHERE `Users`.email = :email";
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
-                $dbpass = $sth->fetch();
-                $dbpass = implode(" ",$dbpass);
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+		$row = $sth->fetch();
+                $input['dbpass'] = $row["password"];
+		$dbpass = $row["password"];
+                $input['id'] = $row["id"];
+		$id = $row["id"];
+		 //$dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
-                if(password_verify($inpass, $dbpass)){
+	                if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
-                        $input['Authorization'] = $token;
+                        $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
+                        $sth = $this->db->prepare($sql);
+                        $sth->bindParam(":id", $id);
+                        $sth->bindParam(":token", $token);
+                        $sth->execute();
                 }
                 else{
                         $input['failure'] = "password is wrong";
                 }
         }
-        return $this->response->withJson($input);
+        $newResponse = $this->response->withAddedHeader("Authorization",$token);
+        return $newResponse->withJson($input);
     });
 //student signup
 //email duplicates are accounted for 
@@ -102,20 +112,21 @@ $app->post('/tutor/signup', function ($request, $response) {
         }
         return $this->response->withJson($input);
 });
-        
  // Logout
     $app->post('/logout', function ($request, $response) {
        $input = $request->getParsedBody();
+        $sql = "UPDATE `Web Sessions` SET `logout_time` = CURRENT_TIMESTAMP";
+        $sth = $this->db->prepare($sql);
+        $sth->execute();
+        $input['logout_time'] = CURRENT_TIMESTAMP;
        //Delete Authorization key / session
+        $sql = "UPDATE `Web Sessions` SET `authorization`= NULL";
+        $sth = $this->db->prepare($sql);
+        $sth->execute();
         $input['Success'] = "Successfully logged out";
-       //if($input){
-       //               $input['Success'] = "Logged out";
-        //}
-        //else{
-        //      $input['Failure'] = "Bad request";
-        //}
        return $this->response->withJson($input);
     });        
+       
 //Jacob's routes
 
 //Update tutor info w/out specifying a tutor
