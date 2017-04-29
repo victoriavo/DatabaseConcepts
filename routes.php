@@ -13,22 +13,19 @@ $app->post('/login', function ($request, $response) {
                 $input['message']="No User Found";
         }
         else {
-                $sql = "SELECT id FROM `Users` WHERE email = :email";
+                $sql = "SELECT password,id FROM `Users` WHERE `Users`.email = :email";
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
-                $id = $sth->fetchColumn(0);
-                $input['id'] = $id;
-                $sql = "SELECT password FROM `Users` WHERE email = :email";
-                $sth = $this->db->prepare($sql);
-                $sth->bindParam(":email", $input['email']);
-                $sth->execute();
-                $dbpass = $sth->fetchColumn(0);
-                $input['dbpass'] = $dbpass;
-                //$input['id'] = implode(" ",$id);
+		            $sth->setFetchMode(PDO::FETCH_ASSOC);
+		            $row = $sth->fetch();
+                $input['dbpass'] = $row["password"];
+		            $dbpass = $row["password"];
+                $input['id'] = $row["id"];
+		            $id = $row["id"];
+		            //$dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
-
-                if(password_verify($inpass, $dbpass)){
+	                if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
                         $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
                         $sth = $this->db->prepare($sql);
@@ -40,7 +37,7 @@ $app->post('/login', function ($request, $response) {
                         $input['failure'] = "password is wrong";
                 }
         }
-        $newResponse = $this->response->withAddedHeader("authorization",$token);
+        $newResponse = $this->response->withAddedHeader("Authorization",$token);
         return $newResponse->withJson($input);
    });
 
