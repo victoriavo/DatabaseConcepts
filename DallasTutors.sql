@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 28, 2017 at 06:00 PM
+-- Generation Time: Apr 29, 2017 at 04:56 PM
 -- Server version: 5.7.18-0ubuntu0.16.04.1
 -- PHP Version: 7.0.15-0ubuntu0.16.04.4
 
@@ -177,11 +177,11 @@ INSERT INTO `Sessions` (`tutor_id`, `student_id`, `course_id`, `isAccepted`, `ti
 --
 
 CREATE TABLE `Students` (
-  `first_name` text NOT NULL,
-  `last_name` text NOT NULL,
+  `first_name` text,
+  `last_name` text,
   `student_id` int(11) NOT NULL,
-  `email` text NOT NULL,
-  `password` text NOT NULL,
+  `email` text,
+  `password` text,
   `high_school` text,
   `graduation_year` text,
   `bio` text
@@ -196,7 +196,8 @@ INSERT INTO `Students` (`first_name`, `last_name`, `student_id`, `email`, `passw
 ('Monica', 'Lee', 3, 'leemo@hockaday.edu', 'k1tt3nm1tt3n$', 'The Hockaday School', '2018', 'Hi!  I\'m Monica and I go to Hockaday.  I need help with the ACT, specifically in the Science section.  I would greatly appreciate your help!'),
 ('does', 'thiswork', 24, 'hopefully@gmail.com', 'idk', NULL, NULL, NULL),
 ('test2', 'test2', 28, 'test2@gmail.com', 'testing123', NULL, NULL, NULL),
-('Kitty', 'Kat', 29, 'meow@gmail.com', 'meow', NULL, NULL, NULL);
+('Kitty', 'Kat', 29, 'meow@gmail.com', 'meow', NULL, NULL, NULL),
+('Taco', 'Bell', 33, 'yoquiero', '$2y$15$/H4mfxUDN..I.nkQC0gfbOXKCp0VVqnDbTOJFzEdbvRWIV0d5JSqy', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -227,10 +228,10 @@ INSERT INTO `Subjects` (`subject_name`, `subject_id`) VALUES
 
 CREATE TABLE `Tutors` (
   `tutor_id` int(11) NOT NULL,
-  `first_name` longtext NOT NULL,
-  `last_name` text NOT NULL,
-  `email` text NOT NULL,
-  `password` text NOT NULL,
+  `first_name` text,
+  `last_name` text,
+  `email` text,
+  `password` text,
   `past_high_school` text,
   `bio` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -261,10 +262,10 @@ INSERT INTO `Tutors` (`tutor_id`, `first_name`, `last_name`, `email`, `password`
 
 CREATE TABLE `Users` (
   `id` int(11) NOT NULL,
-  `first_name` longtext NOT NULL,
-  `last_name` text NOT NULL,
-  `email` text NOT NULL,
-  `password` text NOT NULL
+  `first_name` text,
+  `last_name` text,
+  `email` text,
+  `password` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -294,7 +295,8 @@ INSERT INTO `Users` (`id`, `first_name`, `last_name`, `email`, `password`) VALUE
 (29, 'Kitty', 'Kat', 'meow@gmail.com', '$1$2DNcOJZs$wBlRmqjuN.nsIe0qrnp740'),
 (30, 'Maya', 'Playa', 'playamaya@gmail.com', 'password1'),
 (31, 'Test', 'User', 'testuser', 'testpass'),
-(32, 'Test2', 'User2', 'testuser2', '$2y$15$ewl6lxHQmjXueI1grIJ9/.v70jHAn6cladsrjpMBInf.18NS91g.G');
+(32, 'Test2', 'User2', 'testuser2', '$2y$15$ewl6lxHQmjXueI1grIJ9/.v70jHAn6cladsrjpMBInf.18NS91g.G'),
+(33, 'Taco', 'Bell', 'yoquiero', '$2y$15$XPox.4O3HpJ7voXOr.v4puBQGU17Jiblv4ObbZYJ2XAGKgocbiC7S');
 
 -- --------------------------------------------------------
 
@@ -303,11 +305,29 @@ INSERT INTO `Users` (`id`, `first_name`, `last_name`, `email`, `password`) VALUE
 --
 
 CREATE TABLE `Web Sessions` (
-  `tutor_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `authorization` text,
-  `login_time` datetime DEFAULT NULL,
+  `login_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `logout_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `Web Sessions`
+--
+
+INSERT INTO `Web Sessions` (`id`, `authorization`, `login_time`, `logout_time`) VALUES
+(0, '69b9ceb6dc6491497899a8c2ab57bc6a', '2017-04-29 16:31:02', NULL),
+(0, '0539c0fbfc1d9d57cd5c17a473a37175', '2017-04-29 16:31:01', NULL),
+(32, '090beb792d66c016390ec35a513456f0', '2017-04-29 16:34:12', NULL),
+(32, '4701d95a4384a244e24e9c1df090cace', '2017-04-29 16:35:21', NULL),
+(32, 'a555c74151d15c11b7b3d79de57bf42f', '2017-04-29 16:36:16', NULL),
+(32, 'a7f9d0fcd0f1683a718e0d2754b0fc55', '2017-04-29 16:36:29', NULL),
+(32, '0091e86d613a02b6cfc75b262b52871c', '2017-04-29 16:41:57', NULL),
+(32, '9997ecda0dede320db5c0db4077b40c0', '2017-04-29 16:42:10', NULL),
+(32, '65d561963fce77433fc8e7be53211e1d', '2017-04-29 16:42:44', NULL),
+(32, 'eb95bbc9f9504db536983b5bb84666cb', '2017-04-29 16:51:27', NULL),
+(32, 'b5479f7008cfc8269bb6208a5f8dd909', '2017-04-29 16:54:11', NULL),
+(32, 'fa65a353f3af87a5e306c2524c2191a1', '2017-04-29 16:56:00', NULL);
 
 --
 -- Indexes for dumped tables
@@ -332,12 +352,6 @@ ALTER TABLE `Users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `Web Sessions`
---
-ALTER TABLE `Web Sessions`
-  ADD PRIMARY KEY (`tutor_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -345,12 +359,12 @@ ALTER TABLE `Web Sessions`
 -- AUTO_INCREMENT for table `Students`
 --
 ALTER TABLE `Students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
