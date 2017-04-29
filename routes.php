@@ -1,11 +1,9 @@
 <?php
 //Victoria's Routes
 // Login insert username and password
- $app->post('/login', function ($request, $response) {
+$app->post('/login', function ($request, $response) {
         $input = $request->getParsedBody();
-        $sql = "SELECT *
-                FROM `Users`
-                WHERE `Users`.email = :email";
+        $sql = "SELECT * FROM `Users` WHERE `Users`.email = :email";
         $sth = $this->db->prepare($sql);
         $sth->bindParam(":email", $input['email']);
         $sth->execute();
@@ -15,15 +13,19 @@
                 $input['message']="No User Found";
         }
         else {
-                $sql = "SELECT password,id FROM `Users` WHERE `Users`.email = :email";
+                $sql = "SELECT id FROM `Users` WHERE email = :email";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":email", $input['email']);
+                $sth->execute();
+                $id = $sth->fetchColumn(0);
+                $input['id'] = $id;
+                $sql = "SELECT password FROM `Users` WHERE email = :email";
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
                 $dbpass = $sth->fetchColumn(0);
                 $input['dbpass'] = $dbpass;
-                $id = $sth->fetchColumn(1);
-                $input['id'] = $id;
-                //$dbpass = implode(" ",$dbpass);
+                //$input['id'] = implode(" ",$id);
                 $inpass = $input['password'];
 
                 if(password_verify($inpass, $dbpass)){
@@ -40,10 +42,9 @@
         }
         $newResponse = $this->response->withAddedHeader("authorization",$token);
         return $newResponse->withJson($input);
-    });
+   });
 
 //student signup
-//email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
         $input = $request->getParsedBody();
         $sql = "SELECT * FROM `Users` WHERE email = :email";
@@ -77,6 +78,8 @@ $app->post('/student/signup', function ($request, $response) {
         }
          return $this->response->withJson($input);
     });
+
+//tutor signup
 //tutor sign up
 //email duplicates are accounted for 
 $app->post('/tutor/signup', function ($request, $response) {
@@ -112,20 +115,48 @@ $app->post('/tutor/signup', function ($request, $response) {
         }
         return $this->response->withJson($input);
 });
- // Logout
+
+//logout
     $app->post('/logout', function ($request, $response) {
-       $input = $request->getParsedBody();
-        $sql = "UPDATE `Web Sessions` SET `logout_time` = CURRENT_TIMESTAMP";
+        $authorization = $request->getHeader('authorization');
+        $authorization = implode(" ",$authorization);
+        $input = $request->getParsedBody();
+        $sql = "SELECT authorization FROM `Web Sessions` WHERE authorization = :authorization";
         $sth = $this->db->prepare($sql);
+        $sth->bindParam(":authorization", $authorization);
         $sth->execute();
-        $input['logout_time'] = CURRENT_TIMESTAMP;
-       //Delete Authorization key / session
-        $sql = "UPDATE `Web Sessions` SET `authorization`= NULL";
-        $sth = $this->db->prepare($sql);
-        $sth->execute();
-        $input['Success'] = "Successfully logged out";
+        if($sth->rowCount() != 0 ){
+                $sql = "UPDATE `Web Sessions` SET `logout_time` = CURRENT_TIMESTAMP WHERE authorization = :authorization";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":authorization", $authorization);
+                $sth->execute();
+                $input['logout_time'] = CURRENT_TIMESTAMP;
+                //Delete Authorization key / session
+                $sql = "UPDATE `Web Sessions` SET `authorization`= NULL WHERE authorization = :authorization";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":authorization", $authorization);
+                $sth->execute();
+                $input['Success'] = "Successfully logged out";
+        }
+        else{
+                $input['Failure'] = "Error: Action not authorized";
+        }
        return $this->response->withJson($input);
-    });        
+    });   
+
+
+$app->post('/uploadpic', function ($request, $response) {
+        $input = $request->getParsedBody();
+        $files = $request->getUploadedFiles();
+        $sql = "INSERT INTO `Photos` (`name`, `photo`) VALUES (:image_name, :image)";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":image_name", $input['image_name']);
+        $sth->bindParam(":image", $files);
+        $sth->execute();
+        return $this->response->withJson($view);
+
+});
+
        
 //Jacob's routes
 
