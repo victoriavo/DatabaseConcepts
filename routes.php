@@ -220,12 +220,12 @@ $app->get('/tutor/viewProfile', function ($request, $response) {
         $view["Login Error"] = "The user is not logged in";
     }
     else {
-    $sth = $this->db->prepare("SELECT photo, first_name, last_name, past_high_school, bio FROM `Tutors`  JOIN `Photos`  WHERE tutor_id=:tutor_id AND tutor_id = id");
-    $sth->bindParam("tutor_id", $test);
-    $sth->execute();
-    $view = $sth->fetchObject();
-    $view["tutor_id"] = $id;
-    $view["authorization"] = $auth;
+        $sth = $this->db->prepare("SELECT photo, first_name, last_name, past_high_school, bio FROM `Tutors`  JOIN `Photos`  WHERE tutor_id=:tutor_id AND tutor_id = id");
+        $sth->bindParam("tutor_id", $test);
+        $sth->execute();
+        $view = $sth->fetchObject();
+        $view["tutor_id"] = $id;
+        $view["authorization"] = $auth;
     }
     $newResponse = $this->response->withAddedHeader("Authorization", $auth);
     return $newResponse->withJson($view);
@@ -255,11 +255,29 @@ $app->get('/student/sessions/[{student_id}]', function ($request, $response, $ar
    return $this->response->withJson($sessions);
 });
 //Find Tutor
-$app->get('/findTutor/[{subject_name}]', function ($request, $response, $args) {
-   $sth = $this->db->prepare("SELECT first_name, last_name, past_high_school FROM `Subjects` NATURAL JOIN `Courses` NATURAL JOIN `Courses Taught` NATURAL JOIN `Tutors`WHERE subject_name = :subject_name");
-   $sth->bindParam("subject_name", $args['subject_name']);
+$app->get('/findTutor/{params:.*}', function ($request, $response, $args) {
+   $params = explode('/', $request->getAttribute('params'));
+   $subject_name = $params[0];
+   $course_name = $params[1];
+   $past_high_school = $params[2];
+   if (empty($subject_name)) {
+   	$subject_name = '%%';
+   }
+   if (empty($course_name)) {
+   	$course_name = '%%';
+   }
+   if (empty($past_high_school)) {
+   	$past_high_school = '%%';
+   }
+   $sth = $this->db->prepare("SELECT DISTINCT first_name, last_name, past_high_school FROM `Courses` NATURAL JOIN `Course Subjects` NATURAL JOIN `Subjects` NATURAL JOIN `Courses Taught` NATURAL JOIN `Tutors` WHERE subject_name LIKE :subject_name AND course_name LIKE :course_name AND past_high_school LIKE :past_high_school");
+   $sth->bindParam("subject_name", $subject_name);
+   $sth->bindParam("course_name", $course_name);
+   $sth->bindParam("past_high_school", $past_high_school);
    $sth->execute();
    $find = $sth->fetchAll();
+   $find['subject_name'] = $subject_name;
+   $find['course_name'] = $course_name;
+   $find['past_high_school'] = $past_high_school;
    return $this->response->withJson($find);
 });
 
