@@ -332,3 +332,73 @@ course in the Dallas area.
                 "error_msg":"No results found"
             }
         
+## Tutor Session Rating [/tutor/ratesession]
+### Rate Session [POST]
++ Request (application/json)
+    
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+            
+            {
+                "tutor_id": "1", 
+                "student_id": "2",
+                "course_id": "3"
+            }
+            
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "rating_value": 1,
+                "rating_receiver": "student"
+            }
+        
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "error_msg":"No results found"
+            }
+
+## Student Session Rating [/student/ratesession]
+### Rate Session [GET]
++ Request (application/json)
+    
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+            
+            {
+                "tutor_id": "1", 
+                "student_id": "2",
+                "course_id": "3"
+            }
+            
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "rating_value": 1,
+                "rating_receiver": "tutor"
+            }
+        
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "error_msg":"No results found"
+            }
+                        
