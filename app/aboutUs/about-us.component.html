@@ -1,0 +1,40 @@
+
+ <nav class='navbar navbar-default navbar-fixed-top'>
+      <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
+      <ul class="nav navbar-nav">
+          <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+          <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+      </ul>
+  </nav>
+
+
+
+<div class=bg></div>
+
+<div class="container">
+<div class="row">
+    <div class="col-lg-14">
+    	<h1 style="font-size:300%;">{{ title }}</h1> 
+<h3> We are commited to help you find the right tutor for your needs!</h3>
+</div>
+<div class="col-lg-2 col-sm-6 text-center" *ngFor="let member of members">
+    
+	<span class="media-left">
+		<img class="img-circle img-responsive img-center" [src]="member.imagePath || 'images/blank.jpg'"/>
+	</span>
+	<div class="media-body">
+		<h4 class="media-heading">
+			{{ member.name }} 
+		</h4>		
+        <p> {{ member.bio }} </p>
+	</div>
+</div>
+</div>
+
+
+   
+
+
+
+      
+

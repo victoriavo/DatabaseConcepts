@@ -1,0 +1,74 @@
+.btn{
+    background-color: gray;
+    border: none
+}
+div{
+    text-align: center;
+}
+nav{
+    background-color: white;
+}
+p{
+    text-align: center;
+    color: gray;
+    font-size: 20px;
+    font-family: "Courier New", Courier, monospace;
+    word-wrap: break-word;
+    background-size: auto;
+    table-layout: fixed;
+}
+
+p.blocktext{
+    margin-left: auto;
+    margin-right: auto;
+    width: 6em
+}
+
+.navbar a{
+    font-size: 100%;
+    /*background: transparent;*/
+}
+
+.dropdown{
+    margin-right: 20px;
+}
+
+.dropdown-menu li{
+    position: relative;
+    z-index: 2;
+}
+
+h1{
+    padding-top: 90px;
+    font-size: 90px;
+    font-family: "Enriqueta", arial, serif;
+}
+
+h2{
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 60px;
+}
+
+.container2{
+    background-color: lightyellow;
+    background-size: 100%;
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+
+.image-left{
+    background-image: 100% ;
+    position: fixed;
+    top:150px;
+    bottom:0;
+    left:20px;
+    right:0;
+}
+
+.immage-center{
+    align-items: center;
+}
+

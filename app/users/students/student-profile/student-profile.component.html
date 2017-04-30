@@ -1,0 +1,48 @@
+<nav class='navbar navbar-default navbar-fixed-top'>
+    <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
+    <ul class="nav navbar-nav">
+        <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+        <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+        <li><a [routerLink]="['/aboutUs']">About Us</a>
+    </ul>
+     <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a>Update Profile</a></li>
+                        <li><a>Change Password</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+            </li>
+		</ul>
+</nav>
+
+<div class="container2">
+
+
+    <div class="title">
+        <!--<h1>{{ title }}</h1>-->
+        <h1> Student Profile </h1>
+    </div>
+    <div class="image-left">
+        <!--<img class="img-responsive" src='/app/images/tutorQuote1.png'>-->
+    </div>
+
+    <img style="margin-top: 20px; border-radius: 5px" [src]= student.photo/>
+    
+    
+    <h2> {{ student.first_name }} {{ student.last_name }} </h2>
+    <p class="blocktext" style="word-wrap: break-word; width: 800px;"> {{student.bio}} </p>
+
+    <div>
+        <p>Classes: {{ student.classes }}</p>
+    </div>
+    <p>  Currently attending: {{ student.high_school }} </p>
+    <p>
+        <a [routerLink] = "['/student/' + student.id +'/updateProfile']" class="btn btn-primary">Edit Your Profile</a> 
+        <a [routerLink] = "['/student/' + student.id +'/courses']" class="btn btn-primary">Edit Your Classes</a> 
+    </p>
+
+</div>
+
