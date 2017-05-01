@@ -9,8 +9,7 @@ import { TutorProfileComponent } from "./users/tutors/tutor-profile/tutor-profil
 import { StudentProfileComponent } from "./users/students/student-profile/student-profile.component";
 import { StudentRegisterComponent } from "./studentRegister/index";
 import { TutorRegisterComponent } from "./tutorRegister/index";
-
-
+import { FindTutorComponent } from "./users/tutors/findTutor/findTutor-component";
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent},
@@ -19,7 +18,7 @@ const appRoutes: Routes = [
     { path: 'logout', component: LoginComponent },
     { path: 'tutorSignUp', component: TutorRegisterComponent },
     { path: 'studentSignUp', component: StudentRegisterComponent },
-    { path: 'findTutor', component: HomeComponent },
+    { path: 'findTutor', component: FindTutorComponent },
     { path: 'tutor/newProfile', component: TutorEditorComponent },
     { path: 'student/newProfile', component: StudentEditorComponent },
     { path: 'tutor/:id/updateProfile', component: TutorEditorComponent },

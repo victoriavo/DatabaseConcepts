@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { User } from "../api/user";
-import { UserRepository } from "../api/user-repository";
+// import { TutorRepository, Tutor } from "../index";
 
 @Component({
   moduleId: module.id,
@@ -11,12 +10,11 @@ import { UserRepository } from "../api/user-repository";
 })
 
 export class CoursesEditorComponent {
-    tutor: User;
+    // tutor: Tutor;
 
-    constructor(
-        private router: Router,
-        private userRepository: UserRepository) { }
-    
-    
+    // constructor(
+    //     private router: Router,
+    //     private tutorRepository: TutorRepository) { }
+ 
 
 }

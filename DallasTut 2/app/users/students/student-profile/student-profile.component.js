@@ -7,6 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
+// import { UserRepository } from "../../api/user-repository";
+// import { User } from "../../api/user";
 let StudentProfileComponent = class StudentProfileComponent {
 };
 StudentProfileComponent = __decorate([

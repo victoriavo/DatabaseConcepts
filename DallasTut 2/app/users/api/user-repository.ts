@@ -1,14 +1,14 @@
-import { User } from './user';
-import { Injectable } from '@angular/core';
-import { RequestOptions, Http, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/toPromise';
+// import { User } from './user';
+// import { Injectable } from '@angular/core';
+// import { RequestOptions, Http, Headers, Response } from '@angular/http';
+// import { Observable } from 'rxjs/Rx';
+// import 'rxjs/add/operator/toPromise';
 
-@Injectable()
-export class UserRepository {
-	private _apiUrl = 'api/users';
+// @Injectable()
+// export class UserRepository {
+// 	private _apiUrl = 'api/users';
 
-	constructor(private http: Http) {}
+	// constructor(private http: Http) {}
 //   getAll(): Promise<void>{
 //         let body = {
 //             "email" :  "testuser2",
@@ -27,7 +27,7 @@ export class UserRepository {
 //     //   .map((res: Response) => res.json())
 //     //   .catch(handleError);
 //     //   return student$;
-  }
+  
 
 // viewProfile(): Observable<User[]>{
 //   

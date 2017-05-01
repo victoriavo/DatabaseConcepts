@@ -7,22 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
+// import { User } from '../users/api/user';
+// import { UserRepository } from "../users/api/user-repository";
 let HomeComponent = class HomeComponent {
-    constructor() {
-        this.users = [];
-        // deleteUser(id: number) {
-        //     this.userService.delete(id).subscribe(() => { this.loadAllUsers() });
-        // }
-        // private loadAllUsers() {
-        //     this.userService.getAll().subscribe(users => { this.users = users; });
-        // }
-    }
-    // constructor(private userService: UserRepository) {
-    //     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // }
-    ngOnInit() {
-        // this.loadAllUsers();
-    }
 };
 HomeComponent = __decorate([
     core_1.Component({

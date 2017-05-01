@@ -11,14 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
-const user_repository_1 = require("../../api/user-repository");
+const tutor_repository_service_1 = require("../../api/tutor-repository.service");
 let TutorProfileComponent = class TutorProfileComponent {
-    constructor(route, router, userRepository) {
+    constructor(route, router, tutorRepository) {
         this.route = route;
         this.router = router;
-        this.userRepository = userRepository;
-        this.tutor = { id: 1, email: "jsmith@gmail.com", imagePath: "/johny.jpeg", username: "Johny", password: "1234", firstName: "John", lastName: "Smith",
-            bio: "I love teaching!", courses: ["English", "Math", "Physics"], grad_year: 2004, high_school: "Highland Park" };
+        this.tutorRepository = tutorRepository;
+        tutorRepository.getById(1)
+            .then(x => this.tutor = x);
     }
 };
 TutorProfileComponent = __decorate([
@@ -30,7 +30,16 @@ TutorProfileComponent = __decorate([
     }),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
         router_1.Router,
-        user_repository_1.UserRepository])
+        tutor_repository_service_1.TutorRepository])
 ], TutorProfileComponent);
 exports.TutorProfileComponent = TutorProfileComponent;
+//      save(){
+//          if(this.tutor.id){
+//             this.tutorRepository.update(this.tutor);
+// 		    this.router.navigateByUrl('');
+//          }else{
+// 		    this.tutorRepository.add(this.tutor);
+// 		    this.router.navigateByUrl('');
+//          }
+// 	}
 //# sourceMappingURL=tutor-profile.component.js.map

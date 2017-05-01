@@ -1,0 +1,42 @@
+<div class="container">
+       <nav class='navbar navbar-default navbar-fixed-top'>
+        <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
+        <ul class="nav navbar-nav">
+            <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+            <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a [routerLink] = "['/tutor/' + tutor?.id +'/updateProfile']">Update Profile</a></li>-->
+                        <li><a>Change Password</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a [routerLink] = "['/login']">Logout</a></li>
+                    </ul>
+            </li>
+		</ul>
+    </nav>
+
+
+   <h1 style="margin-top: 100px"> Tutors Near You </h1>
+   <div class="media" *ngFor="let tutor of tutors">
+	<span class="media">
+		<img style="border-radius: 10px" [src]="tutor.imagePath || 'images/blank.jpg'"/>
+	</span>
+	<div class="media-body">
+		<h4 class="media-heading">
+			{{ tutor.firstName }} {{ tutor.lastName }} <br>
+		
+			<a href="javascript:void(0);" [routerLink]="['/tutor/' + tutor.id +'/viewProfile']">
+                <i class="glyphicon glyphicon-new-window"> </i>
+                  View Profile
+			</a><br>
+
+            <a href="mailto:{{ tutor.email }}">
+			    <i class="glyphicon glyphicon-envelope"></i> {{ tutor.email }} </a>
+		</h4>	
+
+	</div>
+</div>
+</div>

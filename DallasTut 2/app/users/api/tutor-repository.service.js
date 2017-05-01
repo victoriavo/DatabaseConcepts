@@ -12,15 +12,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
 require("rxjs/add/operator/toPromise");
-let UserRepository = class UserRepository {
+let TutorRepository = class TutorRepository {
     constructor(http) {
         this.http = http;
         this._apiUrl = 'api/tutors';
     }
+    listAll() {
+        return this.http
+            .get(this._apiUrl)
+            .toPromise()
+            .then(x => x.json().data)
+            .catch(x => x.message);
+    }
+    getById(id) {
+        return this.http
+            .get(`${this._apiUrl}/?id=${id}`)
+            .toPromise()
+            .then(x => x.json().data)
+            .catch(x => x.message);
+    }
+    add(tutor) {
+        return this.http
+            .post(this._apiUrl, tutor)
+            .toPromise()
+            .then(x => x.json().data)
+            .catch(x => x.message);
+    }
+    update(tutor) {
+        return this.http
+            .put(`${this._apiUrl}/${tutor.id}`, tutor)
+            .toPromise()
+            .then(() => tutor)
+            .catch(x => x.message);
+    }
+    delete(tutor) {
+        return this.http
+            .delete(`${this._apiUrl}/${tutor.id}`)
+            .toPromise()
+            .catch(x => x.message);
+    }
 };
-UserRepository = __decorate([
+TutorRepository = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [http_1.Http])
-], UserRepository);
-exports.UserRepository = UserRepository;
-//# sourceMappingURL=tutor-repository.js.map
+], TutorRepository);
+exports.TutorRepository = TutorRepository;
+//# sourceMappingURL=tutor-repository.service.js.map

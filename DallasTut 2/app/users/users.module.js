@@ -10,13 +10,17 @@ const core_1 = require("@angular/core");
 const platform_browser_1 = require("@angular/platform-browser");
 const forms_1 = require("@angular/forms");
 const http_1 = require("@angular/http");
+const router_1 = require("@angular/router");
 const tutor_editor_component_1 = require("./tutors/tutor-editor/tutor-editor.component");
 const student_editor_component_1 = require("./students/student-editor/student-editor.component");
-const user_repository_1 = require("./api/user-repository");
 const courses_editor_component_1 = require("./courses/courses-editor.component");
 const tutor_profile_component_1 = require("./tutors/tutor-profile/tutor-profile.component");
 const student_profile_component_1 = require("./students/student-profile/student-profile.component");
-const router_1 = require("@angular/router");
+const tutor_repository_service_1 = require("./api/tutor-repository.service");
+const student_repository_service_1 = require("./api/student-repository.service");
+// import { TutorProfileComponent, StudentProfileComponent, StudentEditorComponent, TutorEditorComponent, TutorRepository, StudentRepository, CoursesEditorComponent } from './index';
+const app_routing_1 = require("../app.routing");
+const findTutor_component_1 = require("./tutors/findTutor/findTutor-component");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
@@ -25,7 +29,8 @@ UsersModule = __decorate([
             forms_1.FormsModule,
             platform_browser_1.BrowserModule,
             http_1.HttpModule,
-            router_1.RouterModule
+            app_routing_1.routing,
+            router_1.RouterModule,
         ],
         declarations: [
             tutor_editor_component_1.TutorEditorComponent,
@@ -33,16 +38,19 @@ UsersModule = __decorate([
             courses_editor_component_1.CoursesEditorComponent,
             tutor_profile_component_1.TutorProfileComponent,
             student_profile_component_1.StudentProfileComponent,
+            findTutor_component_1.FindTutorComponent
         ],
         exports: [
             tutor_editor_component_1.TutorEditorComponent,
             student_editor_component_1.StudentEditorComponent,
             courses_editor_component_1.CoursesEditorComponent,
             tutor_profile_component_1.TutorProfileComponent,
-            student_profile_component_1.StudentProfileComponent
+            student_profile_component_1.StudentProfileComponent,
+            findTutor_component_1.FindTutorComponent
         ],
         providers: [
-            user_repository_1.UserRepository,
+            tutor_repository_service_1.TutorRepository,
+            student_repository_service_1.StudentRepository,
         ]
     })
 ], UsersModule);

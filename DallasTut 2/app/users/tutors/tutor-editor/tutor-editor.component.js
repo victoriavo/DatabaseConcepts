@@ -11,35 +11,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
-const user_repository_1 = require("../../api/user-repository");
+const tutor_repository_service_1 = require("../../api/tutor-repository.service");
+const tutor_1 = require("../../api/tutor");
+// import { Tutor } from "../../index";
 let TutorEditorComponent = class TutorEditorComponent {
-    constructor(router, route, userRepository) {
+    constructor(router, route, tutorRepository) {
         this.router = router;
         this.route = route;
-        this.userRepository = userRepository;
+        this.tutorRepository = tutorRepository;
     }
     ngOnInit() {
-        // var onLoad = (data) => {
-        //     this.user = data;
-        // };
-        // this.route.params.subscribe(params => {
-        // 	if(params['id'] !== undefined) {
-        //             this.userRepository.getById(+params['id'])
-        //                 .then(onLoad);
-        // 	} 
-        //   else 
-        // 		this.user = new User();
-        // });
+        var onLoad = (data) => {
+            this.user = data;
+        };
+        this.route.params.subscribe(params => {
+            if (params['id'] !== undefined) {
+                this.tutorRepository.getById(+params['id'])
+                    .then(onLoad);
+            }
+            else
+                this.user = new tutor_1.Tutor();
+        });
     }
-    // save() {
-    //     if(this.user.id)
-    //         this.userRepository.update(this.user);
-    //     else 
-    //         this.userRepository.add(this.user);
-    //     this.router.navigateByUrl('/');           
-    // }
-    go(path) {
-        this.router.navigate([path]);
+    save() {
+        if (this.user.id)
+            this.tutorRepository.update(this.user);
+        else
+            this.tutorRepository.add(this.user);
+        this.router.navigateByUrl('/');
     }
 };
 TutorEditorComponent = __decorate([
@@ -51,7 +50,7 @@ TutorEditorComponent = __decorate([
     }),
     __metadata("design:paramtypes", [router_1.Router,
         router_1.ActivatedRoute,
-        user_repository_1.UserRepository])
+        tutor_repository_service_1.TutorRepository])
 ], TutorEditorComponent);
 exports.TutorEditorComponent = TutorEditorComponent;
 //# sourceMappingURL=tutor-editor.component.js.map

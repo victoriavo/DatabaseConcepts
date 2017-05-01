@@ -10,20 +10,15 @@ const core_1 = require("@angular/core");
 const platform_browser_1 = require("@angular/platform-browser");
 const forms_1 = require("@angular/forms");
 const http_1 = require("@angular/http");
-// used to create fake backend
-// import { fakeBackendProvider } from './_helpers/index';
-// import { MockBackend, MockConnection } from '@angular/http/testing';
-const http_2 = require("@angular/http");
 const app_component_1 = require("./app.component");
 const app_routing_1 = require("./app.routing");
-// import { AlertComponent } from './_directives/index';
-// import { AuthGuard } from './_guards/index';
-// import { AlertService, AuthenticationService, UserService } from './_services/index';
 const index_1 = require("./home/index");
 const index_2 = require("./login/index");
 const users_module_1 = require("./users/users.module");
 const index_3 = require("./studentRegister/index");
 const index_4 = require("./tutorRegister/index");
+const mock_api_service_1 = require("./mock-api.service");
+const angular_in_memory_web_api_1 = require("angular-in-memory-web-api");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -34,6 +29,7 @@ AppModule = __decorate([
             http_1.HttpModule,
             app_routing_1.routing,
             users_module_1.UsersModule,
+            angular_in_memory_web_api_1.InMemoryWebApiModule.forRoot(mock_api_service_1.MockApiService),
         ],
         declarations: [
             app_component_1.AppComponent,
@@ -42,16 +38,6 @@ AppModule = __decorate([
             index_2.LoginComponent,
             index_3.StudentRegisterComponent,
             index_4.TutorRegisterComponent,
-        ],
-        providers: [
-            // AuthGuard,
-            // AlertService,
-            // AuthenticationService,
-            // UserService,
-            // // providers used to create fake backend
-            // fakeBackendProvider,
-            // MockBackend,
-            http_2.BaseRequestOptions
         ],
         bootstrap: [app_component_1.AppComponent]
     })

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserRepository } from "../../api/user-repository";
-import { User } from "../../api/user";
+// import { UserRepository } from "../../api/user-repository";
+// import { User } from "../../api/user";
 
 @Component({
   moduleId: module.id,

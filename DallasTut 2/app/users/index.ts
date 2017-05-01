@@ -1,21 +1,15 @@
-// import { NgModule } from '@angular/core';
-// import { BrowserModule } from '@angular/platform-browser';
-// import { FormsModule } from '@angular/forms';
-// // import { RouterModule } from '@angular/router';
-// import { HttpModule } from '@angular/http';
+// export * from './users.module';
 
-// @NgModule({
-//   imports:      [ 
-//     BrowserModule,
-//     FormsModule,
-//     // RouterModule.forRoot(routes),
-//     HttpModule
-//   ],
-//   declarations: [
-//     StudentEditorComponent,
-//     EditorComponent,
-//   ],
-//   providers: []
-// })
+// export * from './courses/courses-editor.component';
 
-// export class AccountsModule { }
+// export * from './students/student-profile/student-profile.component';
+// export * from './tutors/tutor-profile/tutor-profile.component';
+
+// export * from './students/student-editor/student-editor.component';
+// export * from './tutors/tutor-editor/tutor-editor.component';
+
+// export * from './api/tutor';
+// export * from './api/student';
+
+// export * from './api/student-repository.service';
+// export * from './api/tutor-repository.service';

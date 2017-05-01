@@ -10,6 +10,7 @@ const tutor_profile_component_1 = require("./users/tutors/tutor-profile/tutor-pr
 const student_profile_component_1 = require("./users/students/student-profile/student-profile.component");
 const index_3 = require("./studentRegister/index");
 const index_4 = require("./tutorRegister/index");
+const findTutor_component_1 = require("./users/tutors/findTutor/findTutor-component");
 const appRoutes = [
     { path: '', component: index_2.LoginComponent },
     { path: 'home', component: index_1.HomeComponent },
@@ -17,7 +18,7 @@ const appRoutes = [
     { path: 'logout', component: index_2.LoginComponent },
     { path: 'tutorSignUp', component: index_4.TutorRegisterComponent },
     { path: 'studentSignUp', component: index_3.StudentRegisterComponent },
-    { path: 'findTutor', component: index_1.HomeComponent },
+    { path: 'findTutor', component: findTutor_component_1.FindTutorComponent },
     { path: 'tutor/newProfile', component: tutor_editor_component_1.TutorEditorComponent },
     { path: 'student/newProfile', component: student_editor_component_1.StudentEditorComponent },
     { path: 'tutor/:id/updateProfile', component: tutor_editor_component_1.TutorEditorComponent },

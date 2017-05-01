@@ -1,42 +1,46 @@
 <div class="container">
-    <nav class='navbar navbar-default navbar-fixed-top'>
+       <nav class='navbar navbar-default navbar-fixed-top'>
         <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
         <ul class="nav navbar-nav">
             <li><a [routerLink]="['/findTutor']">Find Tutor</a>
             <li><a href="#" [routerLink]="['/login']">View Sessions</a>
-            <li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="color:#fff;"> My Account <span class="caret"></span></a>
-					<ul class="dropdown-menu" id="nav-dropdown" role="menu">
-						<li><a (click)="navToEdit(restaurant.id)"> Edit Profile </a></li>
-						<li><a (click)= "navToUpload(restaurant.id)">Upload </a></li>
-						<li class="divider"></li>
-						<li><a routerLink="/" >Sign Out</a></li>
-					</ul>
-			</li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a [routerLink] = "['/tutor/' + tutor?.id +'/updateProfile']">Update Profile</a></li>
+                        <li><a>Change Password</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a [routerLink] = "['/login']">Logout</a></li>
+                    </ul>
+            </li>
+		</ul>
     </nav>
 
     <h2 style="margin-top: 100px"> Update Your Tutor Profile</h2>
 
     <div class="col-md-6 col-md-offset-3">
         <form class="form-horizontal" name="form">
-            <div class="form-group">
+            <div class="form-group" *ngIf="user">
                 <label for="fname">First Name</label>
-                <input type="text" class="form-control" name="fname"/>
+                <input type="text" class="form-control" name="fname" [(ngModel)]="user.firstName"/>
                 <label for="lname">Last Name</label>
-                <input type="text" class="form-control" name="lname"/>
+                <input type="text" class="form-control" name="lname" [(ngModel)]="user.lastName"/>
                 <label for="email">Email</label>
-                <input type="text" class="form-control" name="email"/>
+                <input type="text" class="form-control" name="email" [(ngModel)]="user.email"/>
                 <label for="bio">Bio</label>
-                <textarea class="form-control" name="bio"></textarea>
+                <textarea class="form-control" name="bio" [(ngModel)]="user.bio"></textarea>
                 <label for="high_school">High School</label>
-                <input type="text" class="form-control" name="high_school"/>
+                <input type="text" class="form-control" name="high_school" [(ngModel)]="user.high_school"/>
+                <label for="high_school">High School</label>
+                <input type="number" class="form-control" name="gradYear" [(ngModel)]="user.grad_year"/>
                 <label for="photo">Image Path</label>
-                <input type="text" class="form-control" name="photo" />
+                <input type="text" class="form-control" name="photo"  [(ngModel)]="user.imagePath"/>
             </div>
             <div class="form-group">
                 <a class="btn btn-primary"
-                    href="javascript:void(0);" [routerLink]="['/tutor/' +1+'/viewProfile']" >
+                    href="javascript:void(0);" [routerLink]="['/tutor/' +1+'/viewProfile']" (click)="save()" >
                     Save
                 </a>
                 <a class="btn btn-primary" [routerLink]="['/tutor/' +1+'/viewProfile']">Cancel</a> 

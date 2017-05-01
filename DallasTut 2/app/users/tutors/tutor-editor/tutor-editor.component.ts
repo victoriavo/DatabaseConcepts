@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { UserRepository } from "../../api/user-repository";
-import { User } from "../../api/user";
+import { TutorRepository } from "../../api/tutor-repository.service";
+import { Tutor } from "../../api/tutor";
+// import { Tutor } from "../../index";
 
 @Component({
   moduleId: module.id,
@@ -11,41 +12,33 @@ import { User } from "../../api/user";
 })
 
 export class TutorEditorComponent {
-  user: any;
+  user: any
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private userRepository: UserRepository){}
+              private tutorRepository: TutorRepository){}
   
   ngOnInit() {
-    // var onLoad = (data) => {
-    //     this.user = data;
-    // };
+    var onLoad = (data) => {
+        this.user = data;
+    };
 
-		// this.route.params.subscribe(params => {
-		// 	if(params['id'] !== undefined) {
-    //             this.userRepository.getById(+params['id'])
-    //                 .then(onLoad);
-		// 	} 
-    //   else 
-		// 		this.user = new User();
-		// });
+	this.route.params.subscribe(params => {
+		if(params['id'] !== undefined) {
+            this.tutorRepository.getById(+params['id'])
+                .then(onLoad);
+		} 
+        else 
+			this.user = new Tutor();
+		});
 	}
     
-  // save() {
-  //     if(this.user.id)
-  //         this.userRepository.update(this.user);
-  //     else 
-  //         this.userRepository.add(this.user);
-  //     this.router.navigateByUrl('/');           
-	// }
-
-  go(path : string){
-      this.router.navigate([path]);
-  }
-
-  // returnToList(message){
-  //   this.router.navigateByUrl('/');
-	// }
+  save() {
+      if(this.user.id)
+          this.tutorRepository.update(this.user);
+      else 
+          this.tutorRepository.add(this.user);
+      this.router.navigateByUrl('/');           
+	}
 
 }
