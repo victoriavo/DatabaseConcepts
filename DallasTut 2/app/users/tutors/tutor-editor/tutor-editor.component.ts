@@ -12,33 +12,33 @@ import { Tutor } from "../../api/tutor";
 })
 
 export class TutorEditorComponent {
-  user: any
+  tutor: Tutor;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private tutorRepository: TutorRepository){}
-  
-  ngOnInit() {
-    var onLoad = (data) => {
-        this.user = data;
-    };
+   constructor(private router: Router, 
+                private tutorRepository: TutorRepository, 
+                private route: ActivatedRoute){}
 
-	this.route.params.subscribe(params => {
-		if(params['id'] !== undefined) {
-            this.tutorRepository.getById(+params['id'])
-                .then(onLoad);
-		} 
-        else 
-			this.user = new Tutor();
-		});
-	}
+    ngOnInit() {
+        var onLoad = (data) => {
+            this.tutor = data;
+        };
+
+        this.route.params.subscribe(params => {
+            if(params['id'] !== undefined) {
+                this.tutorRepository.getById(+params['id'])
+                    .then(onLoad);
+            } 
+            else 
+				this.tutor = new Tutor();
+        });
+    }
     
-  save() {
-      if(this.user.id)
-          this.tutorRepository.update(this.user);
-      else 
-          this.tutorRepository.add(this.user);
-      this.router.navigateByUrl('/');           
-	}
+    save() {
+        if(this.tutor.id)
+            this.tutorRepository.update(this.tutor);
+        else 
+            this.tutorRepository.add(this.tutor);
+        this.router.navigateByUrl('/');           
+    }
 
 }

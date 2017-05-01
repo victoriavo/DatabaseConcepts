@@ -15,14 +15,14 @@ const tutor_repository_service_1 = require("../../api/tutor-repository.service")
 const tutor_1 = require("../../api/tutor");
 // import { Tutor } from "../../index";
 let TutorEditorComponent = class TutorEditorComponent {
-    constructor(router, route, tutorRepository) {
+    constructor(router, tutorRepository, route) {
         this.router = router;
-        this.route = route;
         this.tutorRepository = tutorRepository;
+        this.route = route;
     }
     ngOnInit() {
         var onLoad = (data) => {
-            this.user = data;
+            this.tutor = data;
         };
         this.route.params.subscribe(params => {
             if (params['id'] !== undefined) {
@@ -30,14 +30,14 @@ let TutorEditorComponent = class TutorEditorComponent {
                     .then(onLoad);
             }
             else
-                this.user = new tutor_1.Tutor();
+                this.tutor = new tutor_1.Tutor();
         });
     }
     save() {
-        if (this.user.id)
-            this.tutorRepository.update(this.user);
+        if (this.tutor.id)
+            this.tutorRepository.update(this.tutor);
         else
-            this.tutorRepository.add(this.user);
+            this.tutorRepository.add(this.tutor);
         this.router.navigateByUrl('/');
     }
 };
@@ -49,8 +49,8 @@ TutorEditorComponent = __decorate([
         styleUrls: ['tutor-editor.component.css'],
     }),
     __metadata("design:paramtypes", [router_1.Router,
-        router_1.ActivatedRoute,
-        tutor_repository_service_1.TutorRepository])
+        tutor_repository_service_1.TutorRepository,
+        router_1.ActivatedRoute])
 ], TutorEditorComponent);
 exports.TutorEditorComponent = TutorEditorComponent;
 //# sourceMappingURL=tutor-editor.component.js.map

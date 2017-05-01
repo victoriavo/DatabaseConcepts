@@ -16,6 +16,6 @@ export class FindTutorComponent {
 	
 	constructor(private tutorRepository : TutorRepository, private router: Router){
 			tutorRepository.listAll()
-            .then(x => this.tutors = x);
+             .then(x => this.tutors = x);
 	}
 }

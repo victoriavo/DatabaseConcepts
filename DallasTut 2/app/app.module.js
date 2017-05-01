@@ -33,7 +33,6 @@ AppModule = __decorate([
         ],
         declarations: [
             app_component_1.AppComponent,
-            // AlertComponent,
             index_1.HomeComponent,
             index_2.LoginComponent,
             index_3.StudentRegisterComponent,

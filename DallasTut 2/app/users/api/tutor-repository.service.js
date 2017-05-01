@@ -26,7 +26,7 @@ let TutorRepository = class TutorRepository {
     }
     getById(id) {
         return this.http
-            .get(`${this._apiUrl}/?id=${id}`)
+            .get(`${this._apiUrl}/${id}`)
             .toPromise()
             .then(x => x.json().data)
             .catch(x => x.message);

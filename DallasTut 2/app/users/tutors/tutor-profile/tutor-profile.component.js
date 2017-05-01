@@ -13,12 +13,21 @@ const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
 const tutor_repository_service_1 = require("../../api/tutor-repository.service");
 let TutorProfileComponent = class TutorProfileComponent {
-    constructor(route, router, tutorRepository) {
-        this.route = route;
+    constructor(router, tutorRepository, route) {
         this.router = router;
         this.tutorRepository = tutorRepository;
-        tutorRepository.getById(1)
-            .then(x => this.tutor = x);
+        this.route = route;
+    }
+    ngOnInit() {
+        var onLoad = (data) => {
+            this.tutor = data;
+        };
+        this.route.params.subscribe(params => {
+            if (params['id'] !== undefined) {
+                this.tutorRepository.getById(+params['id'])
+                    .then(onLoad);
+            }
+        });
     }
 };
 TutorProfileComponent = __decorate([
@@ -28,18 +37,9 @@ TutorProfileComponent = __decorate([
         templateUrl: 'tutor-profile.component.html',
         styleUrls: ['tutor-profile.component.css'],
     }),
-    __metadata("design:paramtypes", [router_1.ActivatedRoute,
-        router_1.Router,
-        tutor_repository_service_1.TutorRepository])
+    __metadata("design:paramtypes", [router_1.Router,
+        tutor_repository_service_1.TutorRepository,
+        router_1.ActivatedRoute])
 ], TutorProfileComponent);
 exports.TutorProfileComponent = TutorProfileComponent;
-//      save(){
-//          if(this.tutor.id){
-//             this.tutorRepository.update(this.tutor);
-// 		    this.router.navigateByUrl('');
-//          }else{
-// 		    this.tutorRepository.add(this.tutor);
-// 		    this.router.navigateByUrl('');
-//          }
-// 	}
 //# sourceMappingURL=tutor-profile.component.js.map

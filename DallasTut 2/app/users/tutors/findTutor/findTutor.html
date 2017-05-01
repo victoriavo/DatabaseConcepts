@@ -19,10 +19,10 @@
     </nav>
 
 
-   <h1 style="margin-top: 100px"> Tutors Near You </h1>
+   <h1 style="margin-top: 75px"> Tutors Near You </h1>
    <div class="media" *ngFor="let tutor of tutors">
 	<span class="media">
-		<img style="border-radius: 10px" [src]="tutor.imagePath || 'images/blank.jpg'"/>
+		<img style="height:250px; border-radius: 10px" [src]="tutor.imagePath || 'images/blank.jpg'"/>
 	</span>
 	<div class="media-body">
 		<h4 class="media-heading">
@@ -36,6 +36,7 @@
             <a href="mailto:{{ tutor.email }}">
 			    <i class="glyphicon glyphicon-envelope"></i> {{ tutor.email }} </a>
 		</h4>	
+        <br>
 
 	</div>
 </div>

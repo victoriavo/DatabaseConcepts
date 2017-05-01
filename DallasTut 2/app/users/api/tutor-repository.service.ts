@@ -19,7 +19,7 @@ export class TutorRepository {
 
 	getById(id : number) : Promise<Tutor>{
 		return this.http
-			.get(`${this._apiUrl}/?id=${id}`)
+			.get(`${this._apiUrl}/${id}`)
 			.toPromise()
 			.then(x => x.json().data as Tutor)
 			.catch(x => x.message);

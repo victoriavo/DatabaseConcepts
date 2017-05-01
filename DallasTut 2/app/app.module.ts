@@ -26,7 +26,6 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
     ],
     declarations: [
         AppComponent,
-        // AlertComponent,
         HomeComponent,
         LoginComponent,
         StudentRegisterComponent,
