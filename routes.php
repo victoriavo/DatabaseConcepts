@@ -3,9 +3,7 @@
 // Login insert username and password
 $app->post('/login', function ($request, $response) {
         $input = $request->getParsedBody();
-        $sql = "SELECT *
-                FROM `Users`
-                WHERE `Users`.email = :email";
+        $sql = "SELECT * FROM `Users` WHERE `Users`.email = :email";
         $sth = $this->db->prepare($sql);
         $sth->bindParam(":email", $input['email']);
         $sth->execute();
@@ -19,13 +17,13 @@ $app->post('/login', function ($request, $response) {
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
-		$sth->setFetchMode(PDO::FETCH_ASSOC);
-		$row = $sth->fetch();
+		            $sth->setFetchMode(PDO::FETCH_ASSOC);
+		            $row = $sth->fetch();
                 $input['dbpass'] = $row["password"];
-		$dbpass = $row["password"];
+		            $dbpass = $row["password"];
                 $input['id'] = $row["id"];
-		$id = $row["id"];
-		 //$dbpass = implode(" ",$dbpass);
+		            $id = $row["id"];
+		            //$dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
 	                if(password_verify($inpass, $dbpass)){
                         $input['success'] = "logged in";
@@ -41,9 +39,9 @@ $app->post('/login', function ($request, $response) {
         }
         $newResponse = $this->response->withAddedHeader("Authorization",$token);
         return $newResponse->withJson($input);
-    });
+   });
+
 //student signup
-//email duplicates are accounted for 
 $app->post('/student/signup', function ($request, $response) {
         $input = $request->getParsedBody();
         $sql = "SELECT * FROM `Users` WHERE email = :email";
@@ -77,6 +75,8 @@ $app->post('/student/signup', function ($request, $response) {
         }
          return $this->response->withJson($input);
     });
+
+//tutor signup
 //tutor sign up
 //email duplicates are accounted for 
 $app->post('/tutor/signup', function ($request, $response) {
@@ -112,20 +112,245 @@ $app->post('/tutor/signup', function ($request, $response) {
         }
         return $this->response->withJson($input);
 });
- // Logout
+
+//logout
     $app->post('/logout', function ($request, $response) {
-       $input = $request->getParsedBody();
-        $sql = "UPDATE `Web Sessions` SET `logout_time` = CURRENT_TIMESTAMP";
+        $authorization = $request->getHeader('authorization');
+        $authorization = implode(" ",$authorization);
+        $input = $request->getParsedBody();
+        $sql = "SELECT authorization FROM `Web Sessions` WHERE authorization = :authorization";
         $sth = $this->db->prepare($sql);
+        $sth->bindParam(":authorization", $authorization);
         $sth->execute();
-        $input['logout_time'] = CURRENT_TIMESTAMP;
-       //Delete Authorization key / session
-        $sql = "UPDATE `Web Sessions` SET `authorization`= NULL";
-        $sth = $this->db->prepare($sql);
-        $sth->execute();
-        $input['Success'] = "Successfully logged out";
+        if($sth->rowCount() != 0 ){
+                $sql = "UPDATE `Web Sessions` SET `logout_time` = CURRENT_TIMESTAMP WHERE authorization = :authorization";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":authorization", $authorization);
+                $sth->execute();
+                $input['logout_time'] = CURRENT_TIMESTAMP;
+                //Delete Authorization key / session
+                $sql = "UPDATE `Web Sessions` SET `authorization`= NULL WHERE authorization = :authorization";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":authorization", $authorization);
+                $sth->execute();
+                $input['Success'] = "Successfully logged out";
+        }
+        else{
+                $input['Failure'] = "Error: Action not authorized";
+        }
        return $this->response->withJson($input);
-    });        
+    });   
+
+
+$app->post('/uploadpic', function ($request, $response) {
+        $input = $request->getParsedBody();
+        $files = $request->getUploadedFiles();
+        $sql = "INSERT INTO `Photos` (`name`, `photo`) VALUES (:image_name, :image)";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":image_name", $input['image_name']);
+        $sth->bindParam(":image", $files);
+        $sth->execute();
+        return $this->response->withJson($view);
+
+});
+
+//create sessions
+$app->post('/requestsession', function ($request, $response) {
+        $input = $request->getParsedBody();
+        //get authorization token and user id 
+        $authArray = $request->getHeader('Authorization');
+        $auth = implode(" ", $authArray);
+        $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":auth", $auth);
+        $sth->execute();
+
+        //Retrieve the ID from the resulting SQL statment
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $sth->fetch();
+        $id = $row["id"];
+
+        //If there was no id found, return an error
+        if (empty($id)) {
+                $input["Failure"] = "Action not authorized";
+        }
+        else {
+                //get course id by requested course name
+                $sql = "SELECT course_id FROM `Courses` WHERE course_name = :course_name";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":course_name", $input['course_name']);
+                $sth->execute();
+                $course_id = $sth->fetchColumn(0);
+                $input['course_id'] = $course_id;
+                
+                //now create a session with the tutor id, student id, course id, and timestamp
+                $sql = "INSERT INTO `Sessions` (`tutor_id`, `student_id`, `course_id`) 
+                        VALUES (:tutor_id ,:student_id, :course_id)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $input['tutor_id']);
+                $sth->bindParam(":student_id", $id);
+                $sth->bindParam(":course_id", $course_id);
+                $sth->execute();
+                $input['success'] = "Session successfully requested.";
+        }
+
+        $newResponse = $this->response->withAddedHeader("Authorization", $auth);
+        return $newResponse->withJson($input);
+});
+
+$app->post('/acceptsession', function ($request, $response) {
+        $input = $request->getParsedBody();
+        //get authorization token and user id 
+        $authArray = $request->getHeader('Authorization');
+        $auth = implode(" ", $authArray);
+        $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":auth", $auth);
+        $sth->execute();
+
+        //Retrieve the ID from the resulting SQL statment
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $sth->fetch();
+        $id = $row["id"];
+        $input['id'] = $id;
+
+        //If there was no id found, return an error
+        if (empty($id)) {
+                $input["Failure"] = "Action not authorized";
+        }
+        else {
+                //set is accepted to 1 and add the time
+                $sql = "UPDATE `Sessions` SET `isAccepted`= 1 
+                        WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $id);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+                $sql = "UPDATE `Sessions` SET `time_accepted`= CURRENT_TIMESTAMP 
+                        WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $id);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+        }
+
+        $newResponse = $this->response->withAddedHeader("Authorization", $auth);
+        return $newResponse->withJson($input);
+        
+});
+
+//Rate Session route
+$app->post('/ratesession', function ($request, $response) {
+        $input = $request->getParsedBody();
+        //get authorization token and user id 
+        $authArray = $request->getHeader('Authorization');
+        $auth = implode(" ", $authArray);
+        $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":auth", $auth);
+        $sth->execute();
+        $rating_receiver = NULL;
+        
+        $input["check"] = $input['tutor_id'];
+        //Retrieve the ID from the resulting SQL statment
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $sth->fetch();
+        $id = $row["id"];
+        $input['id'] = $id;
+
+        //If there was no id found in Web Sessions, return an error
+        //User is not logged in
+        if (empty($id)) {
+                $input['Failure'] = "Action not authorized";
+        }
+        else {
+                //check if the session even exists between the student, tutor, and course
+                $sql = "SELECT * FROM `Sessions` WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $input['tutor_id']);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+                $session = $sth->fetchAll();
+                if(empty($session))
+                {
+                        $input['error']= "Cannot give session rating. Session does not exist.";
+                }
+                else{
+                        //check if the user is a tutor or student
+                        $sql = "SELECT * FROM `Tutors` WHERE `tutor_id` = :tutor_id";
+                        $sth = $this->db->prepare($sql);
+                        $sth->bindParam(":tutor_id", $id);
+                        $sth->execute();
+                        $sth->setFetchMode(PDO::FETCH_ASSOC);
+                        $row = $sth->fetch();
+                        $tutor_id = $row["tutor_id"];
+                        //User is not a tutor, so check if user is a student
+                        if (empty($tutor_id)) {
+                                $sql = "SELECT * FROM `Students` WHERE `student_id` = :student_id";
+                                $sth = $this->db->prepare($sql);
+                                $sth->bindParam(":student_id", $id);
+                                $sth->execute();
+                                $sth->setFetchMode(PDO::FETCH_ASSOC);
+                                $row = $sth->fetch();
+                                $student_id = $row["student_id"];
+                                if (empty($student_id)) {
+                                        $input['Failure'] = "Action not authorized";
+                                }
+                                //user is a student
+                                else{
+                                        //check if user is giving a valid rating (it must be between 1-5); if user gives invalid input, rating_value is blank in table
+                                        if($input['rating_value'] <= 5 and $input['rating_value'] >= 1){
+                                                $rating_receiver = "Tutor";
+                                                $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
+                                                        VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                                $sth = $this->db->prepare($sql);
+                                                $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                                $sth->bindParam(":student_id",$input['student_id']);
+                                                $sth->bindParam(":course_id", $input['course_id']);
+                                                $sth->bindParam(":rating_receiver", $rating_receiver);
+                                                $sth->bindParam(":rating_value", $input['rating_value']);
+                                                $sth->execute();
+                                                $input['success'] = "Success. You have given the tutor a rating of " . $input['rating_value'];
+                                        }
+                                        else{
+                                                $input['error'] = "Invalid rating. Rating must be between 1-5.";
+                                        }
+                                }
+			}
+
+                        //User is a tutor so insert their rating of the student into Ratings table
+                        else{
+                                //check if user is giving a valid rating (it must be between 1-5); if user gives invalid input, rating_value is blank in table
+                                if($input['rating_value'] <= 5 and $input['rating_value'] >= 1){
+                                        $rating_receiver = "Student";
+                                        $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
+                                                VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                        $sth = $this->db->prepare($sql);
+                                        $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                        $sth->bindParam(":student_id",$input['student_id']);
+                                        $sth->bindParam(":course_id", $input['course_id']);
+                                        $sth->bindParam(":rating_receiver", $rating_receiver);
+                                        $sth->bindParam(":rating_value", $input['rating_value']);
+                                        $sth->execute();
+                                        $input['success'] = "Success. You have given the student a rating of " . $input['rating_value'];
+                                }
+                                else{
+                                        $input['error'] = "Invalid rating. Rating must be between 1-5.";
+                                }
+                        }
+                }
+        }
+        return $this->response->withJson($input);
+
+});
+
+							
+
+
+
        
 //Jacob's routes
 
@@ -199,60 +424,113 @@ $app->post('/student/newProfile', function ($request, $response) {
 });
 //Maya's Routes
 //View Tutor Profile
-$app->get('/tutor/viewProfile', function ($request, $response) {
-    //Retrieve the authorization token and get the id of the active user
-    $authArray = $request->getHeader('Authorization');
-    $auth = implode(" ", $authArray);
-    //$auth = $authArray[0];
-
-    $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
-    $sth = $this->db->prepare($sql);
-    $sth->bindParam(":auth", $auth);
-    $sth->execute();
-
-    //Retrieve the ID from the resulting SQL statment
-    $sth->setFetchMode(PDO::FETCH_ASSOC);
-    $row = $sth->fetch();
-    $id = $row["id"];
-
-    //If there was no id found, return an error
-    if (empty($id)) {
-        $view["Login Error"] = "The user is not logged in";
-    }
-    else {
-        $sth = $this->db->prepare("SELECT photo, first_name, last_name, past_high_school, bio FROM `Tutors`  JOIN `Photos`  WHERE tutor_id=:tutor_id AND tutor_id = id");
-        $sth->bindParam("tutor_id", $test);
-        $sth->execute();
-        $view = $sth->fetchObject();
-        $view["tutor_id"] = $id;
-        $view["authorization"] = $auth;
-    }
-    $newResponse = $this->response->withAddedHeader("Authorization", $auth);
-    return $newResponse->withJson($view);
+$app->get('/tutor/viewProfile', function ($request, $response, $args) {
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$tutor_id = $row["id"];
+	//If there was no id found, return an error
+	if (empty($tutor_id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {
+		$sth = $this->db->prepare("SELECT first_name, last_name, past_high_school, bio FROM `Tutors` WHERE tutor_id=:tutor_id");
+		$sth->bindParam("tutor_id",$tutor_id);
+		$sth->execute();
+		$view = $sth->fetchObject();
+		return $this->response->withJson($view);
+		
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
 });
 //View Student Profile
-$app->get('/student/viewProfile/[{student_id}]', function ($request, $response, $args) {
-   $sth = $this->db->prepare("SELECT photo, first_name, last_name, high_school, graduation_year, bio FROM `Students` JOIN `Photos`  WHERE student_id = :student_id AND id = student_id");
-   $sth->bindParam("student_id",$args['student_id']);
-   $sth->execute();
-   $view = $sth->fetchObject();
-   return $this->response->withJson($view);
+$app->get('/student/viewProfile', function ($request, $response, $args) {
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$student_id = $row["id"];
+	//If there was no id found, return an error
+	if (empty($student_id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {
+		$sth = $this->db->prepare("SELECT first_name, last_name, high_school, graduation_year, bio FROM `Students` JOIN `Photos`  WHERE student_id = :student_id AND id = student_id");
+		$sth->bindParam("student_id",$args['student_id']);
+		$sth->execute();
+		$view = $sth->fetchObject();
+		return $this->response->withJson($view);
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
 });
 //View Sessions From Tutor POV
-$app->get('/tutor/sessions/[{tutor_id}]', function ($request, $response, $args) {
-   $sth = $this->db->prepare("SELECT first_name, last_name, bio, isAccepted, time_requested, time_accepted FROM `Sessions` NATURAL JOIN `Students` WHERE tutor_id =  :tutor_id");
-   $sth->bindParam("tutor_id",$args['tutor_id']);
-   $sth->execute();
-   $sessions = $sth->fetchAll();
-   return $this->response->withJson($sessions);
+$app->get('/tutor/sessions', function ($request, $response, $args) {
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$tutor_id = $row["id"];
+	//If there was no id found, return an error
+	if (empty($tutor_id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {   
+		$sth = $this->db->prepare("SELECT first_name, last_name, bio, isAccepted, time_requested, time_accepted FROM `Sessions` NATURAL JOIN `Students` WHERE tutor_id =  :tutor_id");
+		$sth->bindParam("tutor_id",$tutor_id);
+		$sth->execute();
+		$sessions = $sth->fetchAll();
+		return $this->response->withJson($sessions);
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
 });
 //View Sessions From Student POV
-$app->get('/student/sessions/[{student_id}]', function ($request, $response, $args) {
-   $sth = $this->db->prepare("SELECT first_name, last_name, bio, isAccepted, time_requested, time_accepted FROM `Sessions` NATURAL JOIN `Tutors` WHERE student_id = :student_id");
-   $sth->bindParam("student_id", $args['student_id']);
-   $sth->execute();
-   $sessions = $sth->fetchAll();
-   return $this->response->withJson($sessions);
+$app->get('/student/sessions', function ($request, $response, $args) {
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$student_id = $row["id"];
+	//If there was no id found, return an error
+	if (empty($student_id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {
+		$sth = $this->db->prepare("SELECT first_name, last_name, bio, isAccepted, time_requested, time_accepted FROM `Sessions` NATURAL JOIN `Tutors` WHERE student_id = :student_id");
+		$sth->bindParam("student_id", $student_id);
+		$sth->execute();
+		$sessions = $sth->fetchAll();
+   		return $this->response->withJson($sessions);
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
 });
 //Find Tutor
 $app->get('/findTutor/{params:.*}', function ($request, $response, $args) {
@@ -376,3 +654,34 @@ $app->delete('/tutor/editCourse', function ($request, $response) {
 	return $newResponse->withJson($input);
 });
 
+// Edit Tutor Profile Info
+$app->post('/tutor/editProfile', function  ($request, $response) {
+	$authArray = $request->getHeader('Authorization');
+	$input = $request->getParsedBody();
+	$auth = implode(" ", $authArray);
+	$sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+	$sth = $this->db->prepare($sql);
+	$sth->bindParam(":auth", $auth);
+	$sth->execute();
+	//Retrieve the ID from the resulting SQL statment
+	$sth->setFetchMode(PDO::FETCH_ASSOC);
+	$row = $sth->fetch();
+	$id = $row["id"];
+	//If there was no id found, return an error
+	if (empty($id)) {
+		$input["Login Error"] = "The user is not logged in";
+	}
+	else {
+		$sql = "UPDATE `Tutors` SET  first_name = :first_name, last_name = :last_name, email = :email, past_high_school = :past_high_school, bio = :bio WHERE tutor_id = :id";
+		$sth = $this->db->prepare($sql);
+		$sth->bindParam(":first_name", $input['first_name']);
+		$sth->bindParam(":last_name", $input['last_name']);
+		$sth->bindParam(":email", $input['email']);
+		$sth->bindParam(":past_high_school", $input['past_high_school']);
+		$sth->bindParam(":bio", $input['bio']);
+		$sth->bindParam(":id", $id);
+		$sth->execute();
+	}
+	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
+	return $newResponse->withJson($input);
+});
