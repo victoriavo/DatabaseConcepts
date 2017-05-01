@@ -241,6 +241,115 @@ $app->post('/acceptsession', function ($request, $response) {
         
 });
 
+//Rate Session route
+$app->post('/ratesession', function ($request, $response) {
+        $input = $request->getParsedBody();
+        //get authorization token and user id 
+        $authArray = $request->getHeader('Authorization');
+        $auth = implode(" ", $authArray);
+        $sql = "SELECT id FROM `Web Sessions` WHERE authorization = :auth";
+        $sth = $this->db->prepare($sql);
+        $sth->bindParam(":auth", $auth);
+        $sth->execute();
+        $rating_receiver = NULL;
+        
+        $input["check"] = $input['tutor_id'];
+        //Retrieve the ID from the resulting SQL statment
+        $sth->setFetchMode(PDO::FETCH_ASSOC);
+        $row = $sth->fetch();
+        $id = $row["id"];
+        $input['id'] = $id;
+
+        //If there was no id found in Web Sessions, return an error
+        //User is not logged in
+        if (empty($id)) {
+                $input['Failure'] = "Action not authorized";
+        }
+        else {
+                //check if the session even exists between the student, tutor, and course
+                $sql = "SELECT * FROM `Sessions` WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $input['tutor_id']);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+                $session = $sth->fetchAll();
+                if(empty($session))
+                {
+                        $input['error']= "Cannot give session rating. Session does not exist.";
+                }
+                else{
+                        //check if the user is a tutor or student
+                        $sql = "SELECT * FROM `Tutors` WHERE `tutor_id` = :tutor_id";
+                        $sth = $this->db->prepare($sql);
+                        $sth->bindParam(":tutor_id", $id);
+                        $sth->execute();
+                        $sth->setFetchMode(PDO::FETCH_ASSOC);
+                        $row = $sth->fetch();
+                        $tutor_id = $row["tutor_id"];
+                        //User is not a tutor, so check if user is a student
+                        if (empty($tutor_id)) {
+                                $sql = "SELECT * FROM `Students` WHERE `student_id` = :student_id";
+                                $sth = $this->db->prepare($sql);
+                                $sth->bindParam(":student_id", $id);
+                                $sth->execute();
+                                $sth->setFetchMode(PDO::FETCH_ASSOC);
+                                $row = $sth->fetch();
+                                $student_id = $row["student_id"];
+                                if (empty($student_id)) {
+                                        $input['Failure'] = "Action not authorized";
+                                }
+                                //user is a student
+                                else{
+                                        //check if user is giving a valid rating (it must be between 1-5); if user gives invalid input, rating_value is blank in table
+                                        if($input['rating_value'] <= 5 and $input['rating_value'] >= 1){
+                                                $rating_receiver = "Tutor";
+                                                $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
+                                                        VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                                $sth = $this->db->prepare($sql);
+                                                $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                                $sth->bindParam(":student_id",$input['student_id']);
+                                                $sth->bindParam(":course_id", $input['course_id']);
+                                                $sth->bindParam(":rating_receiver", $rating_receiver);
+                                                $sth->bindParam(":rating_value", $input['rating_value']);
+                                                $sth->execute();
+                                                $input['success'] = "Success. You have given the tutor a rating of " . $input['rating_value'];
+                                        }
+                                        else{
+                                                $input['error'] = "Invalid rating. Rating must be between 1-5.";
+                                        }
+                                }
+			}
+                        }
+                        //User is a tutor so insert their rating of the student into Ratings table
+                        else{
+                                //check if user is giving a valid rating (it must be between 1-5); if user gives invalid input, rating_value is blank in table
+                                if($input['rating_value'] <= 5 and $input['rating_value'] >= 1){
+                                        $rating_receiver = "Student";
+                                        $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
+                                                VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                        $sth = $this->db->prepare($sql);
+                                        $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                        $sth->bindParam(":student_id",$input['student_id']);
+                                        $sth->bindParam(":course_id", $input['course_id']);
+                                        $sth->bindParam(":rating_receiver", $rating_receiver);
+                                        $sth->bindParam(":rating_value", $input['rating_value']);
+                                        $sth->execute();
+                                        $input['success'] = "Success. You have given the student a rating of " . $input['rating_value'];
+                                }
+                                else{
+                                        $input['error'] = "Invalid rating. Rating must be between 1-5.";
+                                }
+                        }
+                }
+        }
+        return $this->response->withJson($input);
+
+});
+
+							
+
+
 
        
 //Jacob's routes
