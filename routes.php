@@ -25,21 +25,31 @@ $app->post('/login', function ($request, $response) {
 		            $id = $row["id"];
 		            //$dbpass = implode(" ",$dbpass);
                 $inpass = $input['password'];
-	                if(password_verify($inpass, $dbpass)){
-                        $input['success'] = "logged in";
-                        $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
+	        if(password_verify($inpass, $dbpass)){
+                	//check if already logged in
+                        $sql = "SELECT * FROM `Web Sessions` WHERE id = :id AND authorization IS NOT NULL";
                         $sth = $this->db->prepare($sql);
                         $sth->bindParam(":id", $id);
-                        $sth->bindParam(":token", $token);
                         $sth->execute();
+                        if($sth->rowCount() != 0){
+                                $input['error'] = "You are already logged in.";
+                        }
+                        else{
+                                $input['success'] = "logged in";
+                                $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
+                                $sth = $this->db->prepare($sql);
+                                $sth->bindParam(":id", $id);
+                                $sth->bindParam(":token", $token);
+                                $sth->execute();
+                        }
                 }
                 else{
                         $input['failure'] = "password is wrong";
                 }
         }
         $newResponse = $this->response->withAddedHeader("Authorization",$token);
-        return $newResponse->withJson($input);
-   });
+	return $newResponse->withJson($input);
+});
 
 //student signup
 $app->post('/student/signup', function ($request, $response) {
