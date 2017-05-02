@@ -15,7 +15,8 @@ export class FindTutorComponent {
     tutors : Tutor[];
 	
 	constructor(private tutorRepository : TutorRepository, private router: Router){
-			tutorRepository.listAll()
-             .then(x => this.tutors = x);
+			  this.tutorRepository.findTutor()
+            .subscribe(x => console.log(x));
+        ;
 	}
 }

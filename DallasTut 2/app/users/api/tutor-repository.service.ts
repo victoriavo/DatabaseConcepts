@@ -54,12 +54,6 @@ export class TutorRepository {
 
 
 getAll(): Observable<Tutor[]>{
-	let body = {
-	"email" : "mmuralidhar@smu.edu",
-	"password" : "password"
-	};
-
-	let bodyString = JSON.stringify(body);
 	let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
 	let options = new RequestOptions({headers: headers});
 
@@ -69,14 +63,18 @@ getAll(): Observable<Tutor[]>{
 		console.error(error.json().error || 'Server error');
 		return caught;
 	});
-	// let student$ = this.http
-	// .get(`${this.baseUrl}/login`)
-	// .map((res: Response) => res.json())
-	// .catch(handleError);
-	// return student$;
 }
 
 
+
+findTutor(): Observable<Tutor[]>{
+	return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/findTutor')
+	.map((res:Response) => res.json() || {})
+	.catch((error:any, caught: Observable<any>) => {
+		console.error(error.json().error || 'Server error');
+		return caught;
+	});
+}
 	listAll() : Promise<Tutor[]>{
 		return this.http
 			.get(this._apiUrl)

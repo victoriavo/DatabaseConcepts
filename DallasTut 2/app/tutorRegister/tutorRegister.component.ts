@@ -1,6 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import { Router, ActivatedRoute} from '@angular/router';
 import { TutorRepository } from "../users/api/tutor-repository.service";
+import { Tutor } from "../users/api/tutor";
 // import { AlertService, UserService } from '../_services/index';
 
 @Component({
@@ -13,21 +14,25 @@ export class TutorRegisterComponent {
     alertService: any;
     model: any = {};
     loading = false;
+    tutors: Tutor [] = [];
+
 
     constructor(
         private router: Router,
         private tutorRepository: TutorRepository,
         private route: ActivatedRoute
        /* private userService: UserService,
-        private alertService: AlertService*/) { }
+        private alertService: AlertService*/) { 
+            
+        }
 
     register() {
-        // this.tutorRepository.getAll()
-        //     .subscribe(x => console.log(x));
-        // ;
+        this.model = this.tutorRepository.getAll()
+            .subscribe(tutors => this.tutors = tutors);
+        ;
 
-        this.tutorRepository.signUp(this.model)
-            .subscribe(x => console.log(x));
+        // this.tutorRepository.signUp(this.model)
+        //     .subscribe(x => console.log(x));
 
     }
 }

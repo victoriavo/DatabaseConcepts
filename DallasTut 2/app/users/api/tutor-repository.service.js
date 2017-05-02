@@ -50,11 +50,6 @@ let TutorRepository = class TutorRepository {
     // 	.catch(x => x.message);
     // }
     getAll() {
-        let body = {
-            "email": "mmuralidhar@smu.edu",
-            "password": "password"
-        };
-        let bodyString = JSON.stringify(body);
         let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
         let options = new http_1.RequestOptions({ headers: headers });
         return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors', options)
@@ -63,11 +58,14 @@ let TutorRepository = class TutorRepository {
             console.error(error.json().error || 'Server error');
             return caught;
         });
-        // let student$ = this.http
-        // .get(`${this.baseUrl}/login`)
-        // .map((res: Response) => res.json())
-        // .catch(handleError);
-        // return student$;
+    }
+    findTutor() {
+        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/findTutor')
+            .map((res) => res.json() || {})
+            .catch((error, caught) => {
+            console.error(error.json().error || 'Server error');
+            return caught;
+        });
     }
     listAll() {
         return this.http

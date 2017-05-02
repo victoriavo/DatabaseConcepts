@@ -41,6 +41,9 @@
         <div class="form-group">
             <button type="button" (click)="register()" class="btn btn-primary">Sign Up</button>
         </div>
+        <div *ngIf="tutors">
+            {{tutors | json}}
+        </div>
     </form>
      <div class="panel-footer">
             Already registered? <a [routerLink]="['/login']">Log in here</a>

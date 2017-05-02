@@ -16,8 +16,9 @@ let FindTutorComponent = class FindTutorComponent {
     constructor(tutorRepository, router) {
         this.tutorRepository = tutorRepository;
         this.router = router;
-        tutorRepository.listAll()
-            .then(x => this.tutors = x);
+        this.tutorRepository.findTutor()
+            .subscribe(x => console.log(x));
+        ;
     }
 };
 FindTutorComponent = __decorate([

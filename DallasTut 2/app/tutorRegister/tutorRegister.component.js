@@ -22,13 +22,14 @@ let TutorRegisterComponent = class TutorRegisterComponent {
         this.route = route;
         this.model = {};
         this.loading = false;
+        this.tutors = [];
     }
     register() {
-        // this.tutorRepository.getAll()
+        this.model = this.tutorRepository.getAll()
+            .subscribe(tutors => this.tutors = tutors);
+        ;
+        // this.tutorRepository.signUp(this.model)
         //     .subscribe(x => console.log(x));
-        // ;
-        this.tutorRepository.signUp(this.model)
-            .subscribe(x => console.log(x));
     }
 };
 TutorRegisterComponent = __decorate([
