@@ -17,31 +17,40 @@ $app->post('/login', function ($request, $response) {
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":email", $input['email']);
                 $sth->execute();
-		            $sth->setFetchMode(PDO::FETCH_ASSOC);
-		            $row = $sth->fetch();
+		$sth->setFetchMode(PDO::FETCH_ASSOC);
+		$row = $sth->fetch();
                 $input['dbpass'] = $row["password"];
-		            $dbpass = $row["password"];
+		$dbpass = $row["password"];
                 $input['id'] = $row["id"];
-		            $id = $row["id"];
-		            //$dbpass = implode(" ",$dbpass);
+		$id = $row["id"];
+		         
                 $inpass = $input['password'];
-		if(password_verify($inpass, $dbpass)){
-                       	$input['success'] = "logged in";
-                        $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
+	        if(password_verify($inpass, $dbpass)){
+                	//check if already logged in
+                        $sql = "SELECT * FROM `Web Sessions` WHERE id = :id AND authorization IS NOT NULL";
                         $sth = $this->db->prepare($sql);
                         $sth->bindParam(":id", $id);
-                        $sth->bindParam(":token", $token);
                         $sth->execute();
-			$newResponse = $this->response->withAddedHeader("Authorization",$token);
-		        return $newResponse->withJson($input);
+                        if($sth->rowCount() != 0){
+                                $input['error'] = "You are already logged in.";
+                        }
+                        else{
+                                $input['success'] = "logged in";
+                                $sql = "INSERT INTO `Web Sessions`(`id`,`authorization`) VALUES (:id, :token)";
+                                $sth = $this->db->prepare($sql);
+                                $sth->bindParam(":id", $id);
+                                $sth->bindParam(":token", $token);
+                                $sth->execute();
+				$newResponse = $this->response->withAddedHeader("Authorization",$token);
+				return $newResponse->withJson($input);
+                        }
                 }
                 else{
                         $input['failure'] = "password is wrong";
                 }
         }
-        $newResponse = $this->response->withAddedHeader("Authorization",$token);
-        return $newResponse->withJson($input);
-   });
+        return $this->response->withJson($input);
+});
 
 //student signup
 $app->post('/student/signup', function ($request, $response) {
@@ -67,16 +76,25 @@ $app->post('/student/signup', function ($request, $response) {
                 $sth->bindParam(":password",password_hash($input['password'], PASSWORD_DEFAULT, ['cost' => 15]));
                 $sth->bindParam(":lastId", $lastId);
                 $sth->execute();
-                //$input['email'] = $this->db->lastInsertId();
-                //$input['first_name'] = $this->db->lastInsertId();
-                //$input['last_name'] = $this->db->lastInsertId();
-                //$input['password'] = $this->db->lastInsertId();
+                $input['email'] = $this->db->lastInsertId();
+                $input['first_name'] = $this->db->lastInsertId();
+                $input['last_name'] = $this->db->lastInsertId();
+                $input['password'] = $this->db->lastInsertId();
+		//immediately log the new user in
+                $sql = "INSERT INTO `Web Sessions` (`id`, `authorization`) VALUES (:id, :token)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":token", $token);
+                $sth->bindParam(":id", $lastId);
+                $sth->execute();
+
         }
         else{
                 $input['error'] = "A user with this email already exists.";
         }
-         return $this->response->withJson($input);
-    });
+        //return $this->response->withJson($input);
+	$newResponse = $this->response->withAddedHeader("Authorization", $token);
+        return $newResponse->withJson($input);
+});
 
 //tutor signup
 //tutor sign up
@@ -108,11 +126,20 @@ $app->post('/tutor/signup', function ($request, $response) {
                 $input['last_name'] = $this->db->lastInsertId();
                 $input['password'] = $this->db->lastInsertId();
                 $input['email'] = $this->db->lastInsertId();
+		//immediately log the new user in
+                $sql = "INSERT INTO `Web Sessions` (`id`, `authorization`) VALUES (:id, :token)";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":token", $token);
+                $sth->bindParam(":id", $lastId);
+                $sth->execute();
+
         }
         else {
                 $input['error'] = "A user with that email already exists.";
         }
-        return $this->response->withJson($input);
+        //return $this->response->withJson($input);
+	$newResponse = $this->response->withAddedHeader("Authorization", $token);
+        return $newResponse->withJson($input);
 });
 //logout
     $app->post('/logout', function ($request, $response) {
@@ -139,8 +166,8 @@ $app->post('/tutor/signup', function ($request, $response) {
         else{
                 $input['Failure'] = "Error: Action not authorized";
         }
-       return $this->response->withJson($input);
-    });   
+	return $this->response->withJson($input);
+});   
 
 
 $app->post('/uploadpic', function ($request, $response) {
@@ -346,10 +373,6 @@ $app->post('/ratesession', function ($request, $response) {
         return $this->response->withJson($input);
 
 });
-
-							
-
-
 
        
 //Jacob's routes
