@@ -24,6 +24,7 @@ const appRoutes: Routes = [
     { path: 'tutor/:id/updateProfile', component: TutorEditorComponent },
     { path: 'student/:id/updateProfile', component: StudentEditorComponent },
     { path: 'tutor/:id/courses', component: CoursesEditorComponent },
+    { path: 'tutor/:id/addCourses', component: CoursesEditorComponent },
     { path: 'tutor/:id/viewProfile', component: TutorProfileComponent },
     { path: 'student/:id/viewProfile', component: StudentProfileComponent },
     { path: 'tutor/:id/sessions', component: LoginComponent },

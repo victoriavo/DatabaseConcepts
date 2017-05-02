@@ -1,5 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertService } from "../services/alert.service";
+import { StudentRepository } from "../users/api/student-repository.service";
 
 // import { AlertService, UserService } from '../_services/index';
 
@@ -15,12 +17,12 @@ export class StudentRegisterComponent {
 
     constructor(
         private router: Router,
-       /* private userService: UserService,
-        private alertService: AlertService*/) { }
+        private studentRepository: StudentRepository,
+        private alertService: AlertService) { }
 
     // register() {
     //     this.loading = true;
-    //     this.userService.create(this.model)
+    //     this.studentRepository.create(this.model)
     //         .subscribe(
     //             data => {
     //                 this.alertService.success('Registration successful', true);
@@ -32,3 +34,4 @@ export class StudentRegisterComponent {
     //             });
     // }
 }
+

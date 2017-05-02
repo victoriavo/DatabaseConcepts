@@ -51,6 +51,21 @@ let TutorRepository = class TutorRepository {
             .toPromise()
             .catch(x => x.message);
     }
+    addCourse(course) {
+        this.tutor.courses.push(course);
+    }
+    getIndex(val) {
+        for (var i = this.tutor.courses.length; i--;) {
+            var course = this.tutor.courses[i];
+            if (course == val)
+                return i;
+        }
+        return -1;
+    }
+    deleteCourse(course) {
+        var index = this.getIndex(course);
+        this.tutor.courses.splice(index, 1);
+    }
 };
 TutorRepository = __decorate([
     core_1.Injectable(),

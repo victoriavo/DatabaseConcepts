@@ -1,10 +1,29 @@
 <div class="container">
     <nav class='navbar navbar-default navbar-fixed-top'>
-    <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
-    <ul class="nav navbar-nav">
-        <li><a [routerLink]="['/findTutor']">Find Tutor</a>
-        <li><a href="#" [routerLink]="['/login']">View Sessions</a>
-    </ul>
-</nav>
+        <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
+        <ul class="nav navbar-nav">
+            <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+            <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+        </ul>
+    </nav>
+
     <h2 style="margin-top: 60px">Edit The Courses You Teach</h2>
+
+<div class="course-edit" *ngIf="tutor">
+    <div *ngFor="let course of tutor?.courses; let idx=index">
+        <label htmlFor="course-{{idx}}">Course {{idx+1}}</label>
+        <input type="text" name="course-{{idx}}" [(ngModel)]="tutor?.courses[idx]" />
+        <a href="javascript:void(0);"
+			style="color:red" class="glyphicon glyphicon-trash" (click)="delete(course)">
+		</a>    
+    </div>
+    <p>
+        <a href="javascript:void(0);" class="btn btn-primary" [routerLink]="['/tutor/' + tutor?.id +'/courses']" (click)="save()" >
+            Save
+        </a>
+        <a class="btn btn-primary" [routerLink]="['/tutor/' + tutor?.id +'/addCourses']">Add Courses</a>
+    </p>
+
+</div>
+
 </div>

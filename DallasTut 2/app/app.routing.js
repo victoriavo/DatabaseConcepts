@@ -24,6 +24,7 @@ const appRoutes = [
     { path: 'tutor/:id/updateProfile', component: tutor_editor_component_1.TutorEditorComponent },
     { path: 'student/:id/updateProfile', component: student_editor_component_1.StudentEditorComponent },
     { path: 'tutor/:id/courses', component: courses_editor_component_1.CoursesEditorComponent },
+    { path: 'tutor/:id/addCourses', component: courses_editor_component_1.CoursesEditorComponent },
     { path: 'tutor/:id/viewProfile', component: tutor_profile_component_1.TutorProfileComponent },
     { path: 'student/:id/viewProfile', component: student_profile_component_1.StudentProfileComponent },
     { path: 'tutor/:id/sessions', component: index_2.LoginComponent },

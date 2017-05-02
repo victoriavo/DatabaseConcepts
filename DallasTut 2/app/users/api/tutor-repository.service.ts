@@ -9,6 +9,8 @@ export class TutorRepository {
 
 	constructor(private http: Http) {}
 
+	tutor: Tutor;
+
 	listAll() : Promise<Tutor>{
 		return this.http
 			.get(this._apiUrl)
@@ -47,5 +49,23 @@ export class TutorRepository {
 			.toPromise()
 			.catch(x => x.message);
 	}
+
+	addCourse(course: string) {
+		this.tutor.courses.push(course);
+	}
+
+	getIndex(val: string){
+		for (var i = this.tutor.courses.length; i--;) {
+			var course = this.tutor.courses[i];
+			if(course == val) return i;
+		}
+		return -1;
+	}
+
+	deleteCourse(course: string) {
+		var index = this.getIndex(course);
+		this.tutor.courses.splice(index, 1);
+	}
+
 
 }
