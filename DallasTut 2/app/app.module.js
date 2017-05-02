@@ -17,8 +17,6 @@ const index_2 = require("./login/index");
 const users_module_1 = require("./users/users.module");
 const index_3 = require("./studentRegister/index");
 const index_4 = require("./tutorRegister/index");
-const mock_api_service_1 = require("./mock-api.service");
-const angular_in_memory_web_api_1 = require("angular-in-memory-web-api");
 const alert_service_1 = require("./services/alert.service");
 const authentication_service_1 = require("./services/authentication.service");
 const auth_guard_1 = require("./services/auth.guard");
@@ -32,7 +30,6 @@ AppModule = __decorate([
             http_1.HttpModule,
             app_routing_1.routing,
             users_module_1.UsersModule,
-            angular_in_memory_web_api_1.InMemoryWebApiModule.forRoot(mock_api_service_1.MockApiService),
         ],
         declarations: [
             app_component_1.AppComponent,

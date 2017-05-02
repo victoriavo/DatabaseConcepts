@@ -9,6 +9,12 @@ export class StudentRepository {
 
 	constructor(private http: Http) {}
 
+	private getData(response: Response){
+		let body = response.json();
+		console.log('response', body);
+		return body.data || body;
+	}
+
 	listAll() : Promise<Student[]>{
 		return this.http
 			.get(this._apiUrl)

@@ -25,7 +25,7 @@ import { AuthGuard } from "./services/auth.guard";
         HttpModule,
         routing,
         UsersModule,
-        InMemoryWebApiModule.forRoot(MockApiService),
+        // InMemoryWebApiModule.forRoot(MockApiService),
     ],
     declarations: [
         AppComponent,

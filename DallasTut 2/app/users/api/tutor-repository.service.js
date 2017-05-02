@@ -12,10 +12,62 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const http_1 = require("@angular/http");
 require("rxjs/add/operator/toPromise");
+require("rxjs/add/operator/map");
+require("rxjs/add/operator/catch");
 let TutorRepository = class TutorRepository {
     constructor(http) {
         this.http = http;
-        this._apiUrl = 'api/tutors';
+        // private _apiUrl = 'api/tutors';
+        this._apiUrl = 'http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup';
+    }
+    getData(response) {
+        let body = response.json();
+        console.log('response', body);
+        return body.data || body;
+    }
+    //  public signUp(user: any): Promise<Tutor> {
+    // 	return this.http
+    // 	.post(this._apiUrl, user)
+    // 	.toPromise()
+    // 	.then(this.getData)
+    // 	.catch(x => x.message);
+    // }
+    signUp(user) {
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
+        let options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post(this._apiUrl, options)
+            .map((res) => res.json() || {})
+            .catch((error, caught) => {
+            console.error(error.json().error || 'Server error');
+            return caught;
+        });
+    }
+    // send(user: any): Promise<Tutor> {
+    // 	return this.http
+    // 	.post(this._apiUrl, user)
+    // 	.toPromise()
+    // 	.then(this.getData)
+    // 	.catch(x => x.message);
+    // }
+    getAll() {
+        let body = {
+            "email": "mmuralidhar@smu.edu",
+            "password": "password"
+        };
+        let bodyString = JSON.stringify(body);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
+        let options = new http_1.RequestOptions({ headers: headers });
+        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors', options)
+            .map((res) => res.json() || {})
+            .catch((error, caught) => {
+            console.error(error.json().error || 'Server error');
+            return caught;
+        });
+        // let student$ = this.http
+        // .get(`${this.baseUrl}/login`)
+        // .map((res: Response) => res.json())
+        // .catch(handleError);
+        // return student$;
     }
     listAll() {
         return this.http
@@ -67,7 +119,7 @@ let TutorRepository = class TutorRepository {
         this.tutor.courses.splice(index, 1);
     }
     create(tutor) {
-        return this.http.post('/api/users', tutor, this.jwt()).map((response) => response.json());
+        return this.http.post(this._apiUrl, tutor, this.jwt()).map((response) => response.json());
     }
     jwt() {
         // create authorization header with jwt token

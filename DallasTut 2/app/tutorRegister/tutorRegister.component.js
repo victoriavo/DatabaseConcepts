@@ -11,12 +11,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
+const tutor_repository_service_1 = require("../users/api/tutor-repository.service");
 // import { AlertService, UserService } from '../_services/index';
 let TutorRegisterComponent = class TutorRegisterComponent {
-    constructor(router) {
+    constructor(router, tutorRepository, route
+        /* private userService: UserService,
+         private alertService: AlertService*/ ) {
         this.router = router;
+        this.tutorRepository = tutorRepository;
+        this.route = route;
         this.model = {};
         this.loading = false;
+    }
+    register() {
+        // this.tutorRepository.getAll()
+        //     .subscribe(x => console.log(x));
+        // ;
+        this.tutorRepository.signUp(this.model)
+            .subscribe(x => console.log(x));
     }
 };
 TutorRegisterComponent = __decorate([
@@ -25,7 +37,32 @@ TutorRegisterComponent = __decorate([
         templateUrl: 'register.component.html',
         styleUrls: ['register.component.css'],
     }),
-    __metadata("design:paramtypes", [router_1.Router])
+    __metadata("design:paramtypes", [router_1.Router,
+        tutor_repository_service_1.TutorRepository,
+        router_1.ActivatedRoute
+        /* private userService: UserService,
+         private alertService: AlertService*/ ])
 ], TutorRegisterComponent);
 exports.TutorRegisterComponent = TutorRegisterComponent;
+// if (this.tutorRepository.signUp(this.model))
+//     this.router.navigateByUrl('/home');
+// }
+// this.route.params.subscribe(
+//         p => {
+//             console.log(p);
+//         }
+//     )
+//     };
+//     this.loading = true;
+//     this.userService.create(this.model)
+//         .subscribe(
+//             data => {
+//                 this.alertService.success('Registration successful', true);
+//                 this.router.navigate(['/login']);
+//             },
+//             error => {
+//                 this.alertService.error(error);
+//                 this.loading = false;
+//             });
+// }
 //# sourceMappingURL=tutorRegister.component.js.map

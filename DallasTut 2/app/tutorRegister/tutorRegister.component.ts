@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Router, ActivatedRoute} from '@angular/router';
+import { TutorRepository } from "../users/api/tutor-repository.service";
 // import { AlertService, UserService } from '../_services/index';
 
 @Component({
@@ -10,15 +10,57 @@ import { Router } from '@angular/router';
 })
 
 export class TutorRegisterComponent {
+    alertService: any;
     model: any = {};
     loading = false;
 
     constructor(
         private router: Router,
+        private tutorRepository: TutorRepository,
+        private route: ActivatedRoute
        /* private userService: UserService,
         private alertService: AlertService*/) { }
 
-    // register() {
+    register() {
+        // this.tutorRepository.getAll()
+        //     .subscribe(x => console.log(x));
+        // ;
+
+        this.tutorRepository.signUp(this.model)
+            .subscribe(x => console.log(x));
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // if (this.tutorRepository.signUp(this.model))
+        //     this.router.navigateByUrl('/home');
+        // }
+
+       
+        
+        // this.route.params.subscribe(
+        //         p => {
+        //             console.log(p);
+
+        //         }
+        //     )
+        //     };
+
     //     this.loading = true;
     //     this.userService.create(this.model)
     //         .subscribe(
@@ -31,4 +73,3 @@ export class TutorRegisterComponent {
     //                 this.loading = false;
     //             });
     // }
-}

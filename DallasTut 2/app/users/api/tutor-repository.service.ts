@@ -2,14 +2,80 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { Tutor } from './tutor';
+import { Observable } from "rxjs/Observable";
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class TutorRepository {
-	private _apiUrl = 'api/tutors';
+	// private _apiUrl = 'api/tutors';
+
+	private _apiUrl = 'http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup';
 
 	constructor(private http: Http) {}
 
 	tutor: Tutor;
+
+	 getData(response: Response){
+		let body = response.json();
+		console.log('response', body);
+		return body.data || body;
+	}
+
+	//  public signUp(user: any): Promise<Tutor> {
+	// 	return this.http
+	// 	.post(this._apiUrl, user)
+	// 	.toPromise()
+	// 	.then(this.getData)
+	// 	.catch(x => x.message);
+	// }
+
+
+
+	 public signUp(user: any): Observable<Tutor> {
+		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+		let options = new RequestOptions({headers: headers});
+
+		return this.http.post(this._apiUrl, options)
+		.map((res:Response) => res.json() || {})
+		.catch((error:any, caught: Observable<any>) => {
+			console.error(error.json().error || 'Server error');
+			return caught;
+		});
+	}
+
+	// send(user: any): Promise<Tutor> {
+	// 	return this.http
+	// 	.post(this._apiUrl, user)
+	// 	.toPromise()
+	// 	.then(this.getData)
+	// 	.catch(x => x.message);
+	// }
+
+
+getAll(): Observable<Tutor[]>{
+	let body = {
+	"email" : "mmuralidhar@smu.edu",
+	"password" : "password"
+	};
+
+	let bodyString = JSON.stringify(body);
+	let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+	let options = new RequestOptions({headers: headers});
+
+	return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors', options)
+	.map((res:Response) => res.json() || {})
+	.catch((error:any, caught: Observable<any>) => {
+		console.error(error.json().error || 'Server error');
+		return caught;
+	});
+	// let student$ = this.http
+	// .get(`${this.baseUrl}/login`)
+	// .map((res: Response) => res.json())
+	// .catch(handleError);
+	// return student$;
+}
+
 
 	listAll() : Promise<Tutor[]>{
 		return this.http
@@ -68,7 +134,7 @@ export class TutorRepository {
 	}
 
 	create(tutor: Tutor) {
-        return this.http.post('/api/users', tutor, this.jwt()).map((response: Response) => response.json());
+        return this.http.post(this._apiUrl, tutor, this.jwt()).map((response: Response) => response.json());
     }
 
     private jwt() {

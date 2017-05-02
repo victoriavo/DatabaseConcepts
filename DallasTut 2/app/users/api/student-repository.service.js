@@ -17,6 +17,11 @@ let StudentRepository = class StudentRepository {
         this.http = http;
         this._apiUrl = 'api/students';
     }
+    getData(response) {
+        let body = response.json();
+        console.log('response', body);
+        return body.data || body;
+    }
     listAll() {
         return this.http
             .get(this._apiUrl)
