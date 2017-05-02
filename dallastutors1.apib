@@ -14,12 +14,16 @@ course in the Dallas area.
     + Body
 
             {
-                "username": "mayaplaya_margs4lyfe",
+                "email": "mayaplaya_margs4lyfe@gmail.com",
                 "password": "password1"
             }
 
 + Response 200 (application/json)
     
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+  
     + Body
 
             {
@@ -40,9 +44,17 @@ course in the Dallas area.
     + Body
     
             {
-                "error": "unauthorized",
-                "message": "<message>"
+                "error": "You are already logged in"
             }
+
++ Response 402 (application/json)
+
+    + Body
+    
+            {
+               	"failure": "password is wrong"
+            }
+	
 
 ## Logout [/logout]
 
@@ -55,6 +67,21 @@ course in the Dallas area.
      
 + Response 200 (application/json)
 
+    + Body
+    
+            {
+               	"logout_time": CURRENT_TIMESTAMP,
+		"success": "Successfully logged out"
+            }
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "Failure": "Error: Action not authorized"
+            }
+
 ## Tutor Sign up [/tutor/signup]
 
 ### Sign up [POST]
@@ -64,17 +91,24 @@ course in the Dallas area.
 
             {
                 "first_name": "Maya",
-				"last_name": "Playa",
+		"last_name": "Playa",
                 "password": "password1",
                 "email": "playamaya@gmail.com"
             }
 
 + Response 200 (application/json)
 
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters    
+
     + Body
 
             {
-                "Authorization": "LongTokenOfRandomUniqueCharacters"
+                "first_name": 34,
+		"last_name": 34,
+		"password": 34,
+		"email": 34
             }
             
 + Response 409 (application/json)
@@ -94,17 +128,24 @@ course in the Dallas area.
 
             {
                 "first_name": "Maya",
-				"last_name": "Playa",
+		"last_name": "Playa",
                 "password": "password1",
                 "email": "playamaya@gmail.com"
             }
 
 + Response 200 (application/json)
 
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters    
+
     + Body
 
             {
-                "Authorization": "LongTokenOfRandomUniqueCharacters"
+                "first_name": 34,
+		"last_name": 34,
+		"password": 34,
+		"email": 34
             }
             
 + Response 409 (application/json)
@@ -332,73 +373,132 @@ course in the Dallas area.
                 "error_msg":"No results found"
             }
         
-## Tutor Session Rating [/tutor/ratesession]
-### Rate Session [POST]
+## Upload picture for certain user [/uploadpic]   
+### Upload Picture [POST]
+Adds picture to photo table with the user id
 + Request (application/json)
-    
+
     + Headers
             
             Authorization: Bearer LongTokenOfRandomUniqueCharacters
 
     + Body
-            
+        
             {
-                "tutor_id": "1", 
-                "student_id": "2",
-                "course_id": "3"
+                "image_name": "pic13.jpg",
+                "image": file
             }
             
-
-
 + Response 200 (application/json)
 
     + Body
 
             {
-                "rating_value": 1,
-                "rating_receiver": "student"
             }
-        
-+ Response 400 (application/json)
-
-    + Body
-    
-            {
-                "error_msg":"No results found"
-            }
-
-## Student Session Rating [/student/ratesession]
-### Rate Session [GET]
+	    
+## Request Session [/requestsession]   
+### Student can request session with tutor [POST]
+Gets the course id of a given course name, and takes given tutor id and creates a session with that student. 
 + Request (application/json)
-    
+
     + Headers
             
             Authorization: Bearer LongTokenOfRandomUniqueCharacters
 
     + Body
-            
+        
             {
-                "tutor_id": "1", 
-                "student_id": "2",
-                "course_id": "3"
+               "tutor_id": 3,
+               "course_name": "AP Biology"
             }
             
-
-
 + Response 200 (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
 
     + Body
 
             {
-                "rating_value": 1,
-                "rating_receiver": "tutor"
-            }
-        
+                 "success": "Session successfully requested"
+            }           
+
 + Response 400 (application/json)
 
     + Body
     
             {
-                "error_msg":"No results found"
+                "Failure":"Action not authorized"
+            }	    
+
+## Accept Session [/acceptsession]   
+### Tutor can accept student requested session [POST]
+
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+        
+            {
+               "student_id": 3,
+               "course_id": 1000
             }
-                        
+            
++ Response 200 (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "Failure":"Action not authorized"
+            }
+
+## Rate Session [/ratesession]   
+### Any user can rate their session if the session exists [POST]
+
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+        
+            {
+               "tutor_id": 2,
+               "student_id": 3,
+               "course_id": 1000,
+               "rating_value": 3
+            }
+            
++ Response 200 (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+            
+    + Body
+        
+            {
+               "success": "you have given the tutor/student a rating of.."
+            }        
+
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "Failure":"some message"
+            }   
+            
+                
