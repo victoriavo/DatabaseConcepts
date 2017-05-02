@@ -39,7 +39,8 @@ $app->post('/login', function ($request, $response) {
                         $input['failure'] = "password is wrong";
                 }
         }
-        return $this->response->withJson($input);
+        $newResponse = $this->response->withAddedHeader("Authorization",$token);
+        return $newResponse->withJson($input);
    });
 
 //student signup
@@ -113,10 +114,9 @@ $app->post('/tutor/signup', function ($request, $response) {
         }
         return $this->response->withJson($input);
 });
-
 //logout
     $app->post('/logout', function ($request, $response) {
-        $authorization = $request->getHeader('authorization');
+        $authorization = $request->getHeader('Authorization');
         $authorization = implode(" ",$authorization);
         $input = $request->getParsedBody();
         $sql = "SELECT authorization FROM `Web Sessions` WHERE authorization = :authorization";
@@ -253,7 +253,6 @@ $app->post('/ratesession', function ($request, $response) {
         $sth->bindParam(":auth", $auth);
         $sth->execute();
         $rating_receiver = NULL;
-        
         $input["check"] = $input['tutor_id'];
         //Retrieve the ID from the resulting SQL statment
         $sth->setFetchMode(PDO::FETCH_ASSOC);
@@ -470,7 +469,7 @@ $app->get('/student/viewProfile', function ($request, $response, $args) {
 		$input["Login Error"] = "The user is not logged in";
 	}
 	else {
-		$sth = $this->db->prepare("SELECT first_name, last_name, high_school, graduation_year, bio FROM `Students` JOIN `Photos`  WHERE student_id = :student_id AND id = student_id");
+		$sth = $this->db->prepare("SELECT first_name, last_name, high_school, graduation_year, bio FROM `Students`  WHERE student_id = :student_id");
 		$sth->bindParam("student_id",$args['student_id']);
 		$sth->execute();
 		$view = $sth->fetchObject();
@@ -559,7 +558,12 @@ $app->get('/findTutor/{params:.*}', function ($request, $response, $args) {
    $find['past_high_school'] = $past_high_school;
    return $this->response->withJson($find);
 });
-
+$app->get('/alltutors', function ($request, $response, $args) {
+   $sth = $this->db->prepare("SELECT first_name, last_name, past_high_school FROM `Tutors`");
+   $sth->execute();
+   $results = $sth->fetchAll();
+   return $this->response->withJson($results);
+});
 //Edit courses
 
 //Retrieve courses taught by a tutor
