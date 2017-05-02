@@ -11,13 +11,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
-// import { AlertService, AuthenticationService } from '../_services/index';
+const authentication_service_1 = require("../services/authentication.service");
+const alert_service_1 = require("../services/alert.service");
 let LoginComponent = class LoginComponent {
-    constructor(route, router) {
+    constructor(route, router, authenticationService, alertService) {
         this.route = route;
         this.router = router;
+        this.authenticationService = authenticationService;
+        this.alertService = alertService;
         this.model = {};
         this.loading = false;
+    }
+    ngOnInit() {
+        //    // reset login status
+        //    this.authenticationService.logout();
+        //    // get return url from route parameters or default to '/'
+        //    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 };
 LoginComponent = __decorate([
@@ -27,7 +36,9 @@ LoginComponent = __decorate([
         styleUrls: ['login.component.css'],
     }),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
-        router_1.Router])
+        router_1.Router,
+        authentication_service_1.AuthenticationService,
+        alert_service_1.AlertService])
 ], LoginComponent);
 exports.LoginComponent = LoginComponent;
 //# sourceMappingURL=login.component.js.map

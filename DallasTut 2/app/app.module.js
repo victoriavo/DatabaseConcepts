@@ -19,6 +19,9 @@ const index_3 = require("./studentRegister/index");
 const index_4 = require("./tutorRegister/index");
 const mock_api_service_1 = require("./mock-api.service");
 const angular_in_memory_web_api_1 = require("angular-in-memory-web-api");
+const alert_service_1 = require("./services/alert.service");
+const authentication_service_1 = require("./services/authentication.service");
+const auth_guard_1 = require("./services/auth.guard");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -37,6 +40,11 @@ AppModule = __decorate([
             index_2.LoginComponent,
             index_3.StudentRegisterComponent,
             index_4.TutorRegisterComponent,
+        ],
+        providers: [
+            authentication_service_1.AuthenticationService,
+            alert_service_1.AlertService,
+            auth_guard_1.AuthGuard,
         ],
         bootstrap: [app_component_1.AppComponent]
     })

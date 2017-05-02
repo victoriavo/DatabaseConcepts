@@ -10,10 +10,11 @@ import { StudentProfileComponent } from "./users/students/student-profile/studen
 import { StudentRegisterComponent } from "./studentRegister/index";
 import { TutorRegisterComponent } from "./tutorRegister/index";
 import { FindTutorComponent } from "./users/tutors/findTutor/findTutor-component";
+import { AuthGuard } from "./services/auth.guard";
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent},
-    { path: 'home', component: HomeComponent },
+    { path: 'home', component: HomeComponent},
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LoginComponent },
     { path: 'tutorSignUp', component: TutorRegisterComponent },

@@ -3,33 +3,35 @@
     <nav class='navbar navbar-default navbar-fixed-top'>
     <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
     <ul class="nav navbar-nav">
-        <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+        <li><a [routerLink]="['/findstudent']">Find student</a>
         <li><a href="#" [routerLink]="['/login']">View Sessions</a>
     </ul>
 </nav>
-    <h2> Edit Your Student Profile</h2>
+    <h2 style="margin-top: 100px"> Update Your Student Profile</h2>
 
     <div class="col-md-6 col-md-offset-3">
-        <form name="form">
-            <div class="form-group">
+        <form class="form-horizontal" name="form">
+            <div class="form-group" *ngIf="student">
                 <label for="fname">First Name</label>
-                <input type="text" class="form-control" name="fname"/>
+                <input type="text" class="form-control" name="fname" [(ngModel)]="student.firstName"/>
                 <label for="lname">Last Name</label>
-                <input type="text" class="form-control" name="lname"/>
+                <input type="text" class="form-control" name="lname" [(ngModel)]="student.lastName"/>
                 <label for="email">Email</label>
-                <input type="text" class="form-control" name="email"/>
+                <input type="text" class="form-control" name="email" [(ngModel)]="student.email"/>
                 <label for="bio">Bio</label>
-                <input type="text" class="form-control" name="bio"/>
+                <textarea class="form-control" name="bio" [(ngModel)]="student.bio"></textarea>
                 <label for="high_school">High School</label>
-                <input type="text" class="form-control" name="high_school"/>
+                <input type="text" class="form-control" name="high_school" [(ngModel)]="student.high_school"/>
+                <label for="high_school">High School</label>
+                <input type="number" class="form-control" name="gradYear" [(ngModel)]="student.grad_year"/>
                 <label for="photo">Image Path</label>
-                <input type="text" class="form-control" name="photo"/>
-                <label for="grad_year">Graduation Year</label>
-                <input type="number" class="form-control" name="grad_year"/>
-                <a class="btn btn-primary btn-block"
-                    href="javascript:void(0);" >
+                <input type="text" class="form-control" name="photo"  [(ngModel)]="student.imagePath"/>
+            </div>
+            <div class="form-group">
+                <a href="javascript:void(0);" class="btn btn-primary" [routerLink]="['/student/' + student?.id +'/viewProfile']" (click)="save()" >
                     Save
                 </a>
+                <a class="btn btn-primary" [routerLink]="['/student/' + student?.id +'/viewProfile']">Cancel</a> 
             </div>
         </form>
     </div>

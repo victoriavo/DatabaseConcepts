@@ -11,10 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
+const alert_service_1 = require("../services/alert.service");
+const student_repository_service_1 = require("../users/api/student-repository.service");
 // import { AlertService, UserService } from '../_services/index';
 let StudentRegisterComponent = class StudentRegisterComponent {
-    constructor(router) {
+    constructor(router, studentRepository, alertService) {
         this.router = router;
+        this.studentRepository = studentRepository;
+        this.alertService = alertService;
         this.model = {};
         this.loading = false;
     }
@@ -25,7 +29,9 @@ StudentRegisterComponent = __decorate([
         templateUrl: 'register.component.html',
         styleUrls: ['register.component.css'],
     }),
-    __metadata("design:paramtypes", [router_1.Router])
+    __metadata("design:paramtypes", [router_1.Router,
+        student_repository_service_1.StudentRepository,
+        alert_service_1.AlertService])
 ], StudentRegisterComponent);
 exports.StudentRegisterComponent = StudentRegisterComponent;
 //# sourceMappingURL=studentRegister.component.js.map

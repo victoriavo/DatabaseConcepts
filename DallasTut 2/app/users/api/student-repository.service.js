@@ -51,6 +51,17 @@ let StudentRepository = class StudentRepository {
             .toPromise()
             .catch(x => x.message);
     }
+    create(student) {
+        return this.http.post('/api/users', student, this.jwt()).map((response) => response.json());
+    }
+    jwt() {
+        // create authorization header with jwt token
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            let headers = new http_1.Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+            return new http_1.RequestOptions({ headers: headers });
+        }
+    }
 };
 StudentRepository = __decorate([
     core_1.Injectable(),

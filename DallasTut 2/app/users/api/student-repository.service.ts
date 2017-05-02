@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { Student } from './student';
 
@@ -47,5 +47,18 @@ export class StudentRepository {
 			.toPromise()
 			.catch(x => x.message);
 	}
+
+	create(student: Student) {
+        return this.http.post('/api/users', student, this.jwt()).map((response: Response) => response.json());
+    }
+
+    private jwt() {
+        // create authorization header with jwt token
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+            return new RequestOptions({ headers: headers });
+        }
+    }
 
 }

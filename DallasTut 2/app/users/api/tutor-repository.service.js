@@ -66,6 +66,17 @@ let TutorRepository = class TutorRepository {
         var index = this.getIndex(course);
         this.tutor.courses.splice(index, 1);
     }
+    create(tutor) {
+        return this.http.post('/api/users', tutor, this.jwt()).map((response) => response.json());
+    }
+    jwt() {
+        // create authorization header with jwt token
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && currentUser.token) {
+            let headers = new http_1.Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+            return new http_1.RequestOptions({ headers: headers });
+        }
+    }
 };
 TutorRepository = __decorate([
     core_1.Injectable(),

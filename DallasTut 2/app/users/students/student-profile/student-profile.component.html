@@ -1,7 +1,30 @@
 <nav class='navbar navbar-default navbar-fixed-top'>
     <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
     <ul class="nav navbar-nav">
-        <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+        <li><a [routerLink]="['/findstudent']">Find student</a>
         <li><a href="#" [routerLink]="['/login']">View Sessions</a>
     </ul>
 </nav>
+
+
+<div class="profile" *ngIf="student">
+    <img style="margin-top: 100px; border-radius: 5px" [src]= student.imagePath/>
+
+    <h2> {{student.firstName}} {{student.lastName}} </h2>
+    <p> {{student.bio}} </p>
+    <p> {{student.email}} </p>
+
+
+        <div>
+            <p>
+        Courses taught: {{student.courses}}
+            </p>
+        </div>
+        <p>
+            Graduated from {{student.high_school}} in {{student.grad_year}}
+        </p>
+ 
+    <p>
+        <a href="javascript:void(0);" [routerLink] = "['/student/' + student.id +'/updateProfile']" class="btn btn-primary">Edit Your Profile</a> 
+    </p>
+</div>

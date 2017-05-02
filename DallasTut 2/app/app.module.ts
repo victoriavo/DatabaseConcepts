@@ -13,6 +13,9 @@ import { StudentRegisterComponent } from './studentRegister/index';
 import { TutorRegisterComponent } from './tutorRegister/index';
 import { MockApiService } from './mock-api.service';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { AlertService } from "./services/alert.service";
+import { AuthenticationService } from "./services/authentication.service";
+import { AuthGuard } from "./services/auth.guard";
 
 
 @NgModule({
@@ -31,7 +34,11 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
         StudentRegisterComponent,
         TutorRegisterComponent,
     ],
-
+    providers: [
+        AuthenticationService,
+        AlertService,
+        AuthGuard,
+    ],
     bootstrap: [AppComponent]
 })
 

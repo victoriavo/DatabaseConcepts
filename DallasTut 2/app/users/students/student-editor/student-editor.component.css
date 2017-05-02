@@ -1,7 +1,10 @@
 .btn{
     background-color: gray;
-    border: none
+    border: none;
+    margin-top: 10px;
 }
+
+
 div{
     text-align: center;
 }
@@ -15,4 +18,9 @@ p{
 .navbar a{
     font-size: 100%;
     background: transparent;
+}
+
+.form-group{
+    width: 50%;
+    margin: 0 auto;
 }
