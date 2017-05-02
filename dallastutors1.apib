@@ -14,12 +14,16 @@ course in the Dallas area.
     + Body
 
             {
-                "username": "mayaplaya_margs4lyfe",
+                "email": "mayaplaya_margs4lyfe@gmail.com",
                 "password": "password1"
             }
 
 + Response 200 (application/json)
     
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+  
     + Body
 
             {
@@ -40,9 +44,17 @@ course in the Dallas area.
     + Body
     
             {
-                "error": "unauthorized",
-                "message": "<message>"
+                "error": "You are already logged in"
             }
+
++ Response 402 (application/json)
+
+    + Body
+    
+            {
+               	"failure": "password is wrong"
+            }
+	
 
 ## Logout [/logout]
 
@@ -55,6 +67,21 @@ course in the Dallas area.
      
 + Response 200 (application/json)
 
+    + Body
+    
+            {
+               	"logout_time": CURRENT_TIMESTAMP,
+		"success": "Successfully logged out"
+            }
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "Failure": "Error: Action not authorized"
+            }
+
 ## Tutor Sign up [/tutor/signup]
 
 ### Sign up [POST]
@@ -64,17 +91,24 @@ course in the Dallas area.
 
             {
                 "first_name": "Maya",
-				"last_name": "Playa",
+		"last_name": "Playa",
                 "password": "password1",
                 "email": "playamaya@gmail.com"
             }
 
 + Response 200 (application/json)
 
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters    
+
     + Body
 
             {
-                "Authorization": "LongTokenOfRandomUniqueCharacters"
+                "first_name": 34,
+		"last_name": 34,
+		"password": 34,
+		"email": 34
             }
             
 + Response 409 (application/json)
@@ -94,17 +128,24 @@ course in the Dallas area.
 
             {
                 "first_name": "Maya",
-				"last_name": "Playa",
+		"last_name": "Playa",
                 "password": "password1",
                 "email": "playamaya@gmail.com"
             }
 
 + Response 200 (application/json)
 
+    + Headers
+
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters    
+
     + Body
 
             {
-                "Authorization": "LongTokenOfRandomUniqueCharacters"
+                "first_name": 34,
+		"last_name": 34,
+		"password": 34,
+		"email": 34
             }
             
 + Response 409 (application/json)
