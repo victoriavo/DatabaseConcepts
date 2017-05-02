@@ -373,3 +373,132 @@ course in the Dallas area.
                 "error_msg":"No results found"
             }
         
+## Upload picture for certain user [/uploadpic]   
+### Upload Picture [POST]
+Adds picture to photo table with the user id
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+        
+            {
+                "image_name": "pic13.jpg",
+                "image": file
+            }
+            
++ Response 200 (application/json)
+
+    + Body
+
+            {
+            }
+	    
+## Request Session [/requestsession]   
+### Student can request session with tutor [POST]
+Gets the course id of a given course name, and takes given tutor id and creates a session with that student. 
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+        
+            {
+               "tutor_id": 3,
+               "course_name": "AP Biology"
+            }
+            
++ Response 200 (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+
+    + Body
+
+            {
+                 "success": "Session successfully requested"
+            }           
+
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "Failure":"Action not authorized"
+            }	    
+
+## Accept Session [/acceptsession]   
+### Tutor can accept student requested session [POST]
+
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+        
+            {
+               "student_id": 3,
+               "course_id": 1000
+            }
+            
++ Response 200 (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "Failure":"Action not authorized"
+            }
+
+## Rate Session [/ratesession]   
+### Any user can rate their session if the session exists [POST]
+
++ Request (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+
+    + Body
+        
+            {
+               "tutor_id": 2,
+               "student_id": 3,
+               "course_id": 1000,
+               "rating_value": 3
+            }
+            
++ Response 200 (application/json)
+
+    + Headers
+            
+            Authorization: Bearer LongTokenOfRandomUniqueCharacters
+            
+    + Body
+        
+            {
+               "success": "you have given the tutor/student a rating of.."
+            }        
+
++ Response 400 (application/json)
+
+    + Body
+    
+            {
+                "Failure":"some message"
+            }   
+            
+                
