@@ -10,18 +10,18 @@ export class StudentService{
   constructor(private http : HttpService){
   }
 
-  getAll(): Observable<String>{
+  getAll(): Observable<Student[]>{
         let body = {
-            "email" :  "testuser2",
-            "password" : "testpass2"
+            "email" :  "mmuralidhar@smu.edu",
+            "password" : "password"
         };
 
         let bodyString = JSON.stringify(body);
         let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
         let options = new RequestOptions({headers: headers});
-      
+
      return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/login', body, options)
-      .map((res:Response) => res.headers.get('Authorization'))
+      .map((res:Response) => res.json())
       .catch((error:any) => Observable.throw(error.json().error || 'Server errr'));
     // let student$ = this.http
     // .get(`${this.baseUrl}/login`)
@@ -30,6 +30,26 @@ export class StudentService{
     //   return student$;
   }
 
+  signup(): Observable<Response>{
+        let body = {
+            "first_name": "Maya",
+            "last_name" : " M",
+            "email" : "m@gmail.com"
+        };
+
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+        let options = new RequestOptions({headers: headers});
+
+     return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup', body, options)
+      .map((res:Response) => res.json())
+      .catch((error:any) => Observable.throw(error.json().error || 'Server errr'));
+    // let student$ = this.http
+    // .get(`${this.baseUrl}/login`)
+    //   .map((res: Response) => res.json())
+    //   .catch(handleError);
+    //   return student$;
+  }
 viewProfile(): Observable<Student[]>{
   
 

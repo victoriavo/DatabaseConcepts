@@ -1,0 +1,1 @@
+{"version":3,"file":"student-editor.component.js","sourceRoot":"","sources":["student-editor.component.ts"],"names":[],"mappings":";;;;;;;;AAAA,wCAA0C;AAU1C,IAAa,sBAAsB,GAAnC;CAEC,CAAA;AAFY,sBAAsB;IAPlC,gBAAS,CAAC;QACT,QAAQ,EAAE,MAAM,CAAC,EAAE;QACnB,QAAQ,EAAE,gBAAgB;QAC1B,WAAW,EAAE,+BAA+B;QAC5C,SAAS,EAAE,CAAE,8BAA8B,CAAE;KAC9C,CAAC;GAEW,sBAAsB,CAElC;AAFY,wDAAsB"}

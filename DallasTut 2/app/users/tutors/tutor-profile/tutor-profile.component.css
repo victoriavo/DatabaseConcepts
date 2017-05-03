@@ -1,0 +1,32 @@
+.btn{
+    background-color: gray;
+    border: none
+}
+div{
+    text-align: center;
+}
+nav{
+    background-color: white;
+}
+p{
+    color: gray;
+}
+
+.navbar a{
+    font-size: 100%;
+    /*background: transparent;*/
+}
+
+.dropdown{
+    margin-right: 20px;
+}
+
+.dropdown-menu li{
+    position: relative;
+    z-index: 2;
+}
+
+
+
+
+

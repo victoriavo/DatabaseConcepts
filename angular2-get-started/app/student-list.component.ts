@@ -31,13 +31,15 @@ export class StudentListComponent implements OnInit{
   constructor(private studentService : StudentService){ }
 
   ngOnInit(){
+  
     this.studentService
-      .getAll()
+      .signup()
       .subscribe(
          /* happy path */ p => {
            console.log(p);
          },
          /* error path */ e => this.errorMessage = e,
          /* onComplete */ () => this.isLoading = false);
+         
   }
 }

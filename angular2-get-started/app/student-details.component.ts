@@ -12,7 +12,6 @@ import { StudentService } from './student.service';
 export class StudentDetailsComponent implements OnInit, OnDestroy {
     student: any;
     sub: any;
-    professions: string[] = ['jedi', 'bounty hunter', 'princess', 'sith lord'];
 
     constructor(private studentService: StudentService,
                 private route: ActivatedRoute,
