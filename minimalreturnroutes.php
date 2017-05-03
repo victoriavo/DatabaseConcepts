@@ -267,7 +267,7 @@ $app->post('/acceptsession', function ($request, $response) {
         $sth = $this->db->prepare($sql);
         $sth->bindParam(":auth", $auth);
         $sth->execute();
-
+        $input['auth'] = $auth;
         //Retrieve the ID from the resulting SQL statment
         $sth->setFetchMode(PDO::FETCH_ASSOC);
         $row = $sth->fetch();
@@ -275,10 +275,21 @@ $app->post('/acceptsession', function ($request, $response) {
         $input['id'] = $id;
 
         //If there was no id found, return an error
-        if (!empty($id)) {
+        if (empty($id)) {
                 $input["Failure"] = "Action not authorized";
         }
         else {
+                //gives failure message if session does not exist
+                $sql = "SELECT * FROM `Sessions` WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                $sth = $this->db->prepare($sql);
+                $sth->bindParam(":tutor_id", $id);
+                $sth->bindParam(":student_id", $input['student_id']);
+                $sth->bindParam(":course_id", $input['course_id']);
+                $sth->execute();
+                if($sth->rowCount() == 0){
+                        $input['Failure'] = "Cannot accept session because it doesn't exist.";
+                }
+
                 //set is accepted to 1 and add the time
                 $sql = "UPDATE `Sessions` SET `isAccepted`= 1 
                         WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
@@ -302,6 +313,7 @@ $app->post('/acceptsession', function ($request, $response) {
         //return $newResponse->withJson($input);
         return $this->response->withJson($input);
 });
+
 
 $app->post('/ratesession', function ($request, $response) {
         $input = $request->getParsedBody();
@@ -327,8 +339,8 @@ $app->post('/ratesession', function ($request, $response) {
                 $input['Failure'] = "Action not authorized";
         }
         else {
-                //check if the session even exists between the student, tutor, and course
-                $sql = "SELECT * FROM `Sessions` WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id";
+                //check if the session even exists between the student, tutor, and course and checks if it has been accepted
+                $sql = "SELECT * FROM `Sessions` WHERE `tutor_id` = :tutor_id AND `student_id` = :student_id AND `course_id` = :course_id AND `isAccepted` = 1";
                 $sth = $this->db->prepare($sql);
                 $sth->bindParam(":tutor_id", $input['tutor_id']);
                 $sth->bindParam(":student_id", $input['student_id']);
@@ -365,15 +377,47 @@ $app->post('/ratesession', function ($request, $response) {
                                         //check if user is giving a valid rating (it must be between 1-5); if user gives invalid input, rating_value is blank in table
                                         if($input['rating_value'] <= 5 and $input['rating_value'] >= 1){
                                                 $rating_receiver = "Tutor";
-                                                $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
-                                                        VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                                //check if session has already been given a rating
+                                                //if yes, update rating instead of creating a new rating
+                                                $rating_receiver = "Tutor";
+                                                $sql = "SELECT * FROM `Ratings` WHERE `tutor_id` = :tutor_id 
+                                                        AND `student_id` = :student_id
+                                                        AND `course_id` = :course_id
+                                                        AND `rating_receiver` = :rating_receiver";
                                                 $sth = $this->db->prepare($sql);
-                                                $sth->bindParam(":tutor_id",$input['tutor_id']);
-                                                $sth->bindParam(":student_id",$input['student_id']);
+                                                $sth->bindParam(":tutor_id", $input['tutor_id']);
+                                                $sth->bindParam(":student_id", $input['student_id']);
                                                 $sth->bindParam(":course_id", $input['course_id']);
                                                 $sth->bindParam(":rating_receiver", $rating_receiver);
-                                                $sth->bindParam(":rating_value", $input['rating_value']);
                                                 $sth->execute();
+                                                
+                                                //no duplicate session rating exists
+                                                if($sth->rowCount() == 0){
+                                                        $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
+                                                                VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                                        $sth = $this->db->prepare($sql);
+                                                        $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                                        $sth->bindParam(":student_id",$input['student_id']);
+                                                        $sth->bindParam(":course_id", $input['course_id']);
+                                                        $sth->bindParam(":rating_receiver", $rating_receiver);
+                                                        $sth->bindParam(":rating_value", $input['rating_value']);
+                                                        $sth->execute();
+                                                }
+                                                else{
+                                                        $sql = "UPDATE `Ratings` SET `rating_value` = :rating_value 
+                                                                WHERE `tutor_id` = :tutor_id
+                                                                AND `student_id` = :student_id
+                                                                AND `course_id` = :course_id
+                                                                AND `rating_receiver` = :rating_receiver";
+                                                        $sth = $this->db->prepare($sql);
+                                                        $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                                        $sth->bindParam(":student_id",$input['student_id']);
+                                                        $sth->bindParam(":course_id", $input['course_id']);
+                                                        $sth->bindParam(":rating_receiver", $rating_receiver);
+                                                        $sth->bindParam(":rating_value", $input['rating_value']);
+                                                        $sth->execute();
+                                                }
+
                                                 $input['success'] = "Success. You have given the tutor a rating of " . $input['rating_value'];
                                                 $newResponse = $this->response->withAddedHeader("Authorization", $auth);
                                                 return $newResponse->withJson($input);
@@ -388,15 +432,43 @@ $app->post('/ratesession', function ($request, $response) {
                                 //check if user is giving a valid rating (it must be between 1-5); if user gives invalid input, rating_value is blank in table
                                 if($input['rating_value'] <= 5 and $input['rating_value'] >= 1){
                                         $rating_receiver = "Student";
-                                        $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
-                                                VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                        $sql = "SELECT * FROM `Ratings` WHERE `tutor_id` = :tutor_id 
+                                                        AND `student_id` = :student_id
+                                                        AND `course_id` = :course_id
+                                                        AND `rating_receiver` = :rating_receiver";
                                         $sth = $this->db->prepare($sql);
-                                        $sth->bindParam(":tutor_id",$input['tutor_id']);
-                                        $sth->bindParam(":student_id",$input['student_id']);
+                                        $sth->bindParam(":tutor_id", $input['tutor_id']);
+                                        $sth->bindParam(":student_id", $input['student_id']);
                                         $sth->bindParam(":course_id", $input['course_id']);
                                         $sth->bindParam(":rating_receiver", $rating_receiver);
-                                        $sth->bindParam(":rating_value", $input['rating_value']);
                                         $sth->execute();
+                                        
+                                        if($sth->rowCount() == 0){
+                                                $sql = "INSERT INTO `Ratings` (`tutor_id`, `student_id`, `course_id`,`rating_receiver`, `rating_value`) 
+                                                        VALUES (:tutor_id, :student_id, :course_id, :rating_receiver, :rating_value) ";
+                                                $sth = $this->db->prepare($sql);
+                                                $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                                $sth->bindParam(":student_id",$input['student_id']);
+                                                $sth->bindParam(":course_id", $input['course_id']);
+                                                $sth->bindParam(":rating_receiver", $rating_receiver);
+                                                $sth->bindParam(":rating_value", $input['rating_value']);
+                                                $sth->execute();
+                                        }
+                                        else{
+                                                $sql = "UPDATE `Ratings` SET `rating_value` = :rating_value 
+                                                                WHERE `tutor_id` = :tutor_id
+                                                                AND `student_id` = :student_id
+                                                                AND `course_id` = :course_id
+                                                                AND `rating_receiver` = :rating_receiver";
+                                                        $sth = $this->db->prepare($sql);
+                                                        $sth->bindParam(":tutor_id",$input['tutor_id']);
+                                                        $sth->bindParam(":student_id",$input['student_id']);
+                                                        $sth->bindParam(":course_id", $input['course_id']);
+                                                        $sth->bindParam(":rating_receiver", $rating_receiver);
+                                                        $sth->bindParam(":rating_value", $input['rating_value']);
+                                                        $sth->execute();
+                                        }
+
                                         $input['success'] = "Success. You have given the student a rating of " . $input['rating_value'];
                                         $newResponse = $this->response->withAddedHeader("Authorization", $auth);
                                         return $newResponse->withJson($input);
