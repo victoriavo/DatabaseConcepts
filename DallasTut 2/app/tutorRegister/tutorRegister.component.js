@@ -14,22 +14,19 @@ const router_1 = require("@angular/router");
 const tutor_repository_service_1 = require("../users/api/tutor-repository.service");
 // import { AlertService, UserService } from '../_services/index';
 let TutorRegisterComponent = class TutorRegisterComponent {
+    // tutors: Tutor [] = [];
     constructor(router, tutorRepository, route
         /* private userService: UserService,
          private alertService: AlertService*/ ) {
         this.router = router;
         this.tutorRepository = tutorRepository;
         this.route = route;
-        this.model = {};
+        this.tutor = {};
         this.loading = false;
-        this.tutors = [];
     }
     register() {
-        this.model = this.tutorRepository.getAll()
-            .subscribe(tutors => this.tutors = tutors);
-        ;
-        // this.tutorRepository.signUp(this.model)
-        //     .subscribe(x => console.log(x));
+        this.tutorRepository.signup(this.tutor)
+            .subscribe(tutor => this.tutor = tutor);
     }
 };
 TutorRegisterComponent = __decorate([

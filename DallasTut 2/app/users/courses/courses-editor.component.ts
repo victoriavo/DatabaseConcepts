@@ -30,10 +30,10 @@ export class CoursesEditorComponent {
         });
     }
 
-    delete(course : string){
-      this.tutorRepository.deleteCourse(course)
-      this.router.navigateByUrl('/');
-    }
+    // delete(course : string){
+    //   this.tutorRepository.deleteCourse(course)
+    //   this.router.navigateByUrl('/');
+    // }
 
     save(){
 

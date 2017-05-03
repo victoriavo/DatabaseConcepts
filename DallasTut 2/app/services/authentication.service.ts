@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
 
@@ -23,4 +23,12 @@ export class AuthenticationService {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
     }
+
+    getRequestOptions(): RequestOptions {
+		let headers = {'Content-Type': 'application/json'};
+		// if(this.isAuthenticated.getValue() === true) {
+		// 	headers['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
+		// }
+		return new RequestOptions({headers: new Headers(headers)});
+}
 }

@@ -12,9 +12,9 @@ import { Tutor } from "../users/api/tutor";
 
 export class TutorRegisterComponent {
     alertService: any;
-    model: any = {};
+    tutor: any = {};
     loading = false;
-    tutors: Tutor [] = [];
+    // tutors: Tutor [] = [];
 
 
     constructor(
@@ -26,15 +26,20 @@ export class TutorRegisterComponent {
             
         }
 
-    register() {
-        this.model = this.tutorRepository.getAll()
-            .subscribe(tutors => this.tutors = tutors);
-        ;
+        register(){
+            this.tutorRepository.signup(this.tutor)
+                .subscribe(tutor => this.tutor = tutor);
+        }
 
-        // this.tutorRepository.signUp(this.model)
-        //     .subscribe(x => console.log(x));
+    // register() {
+    //     this.tutorRepository.getAll()
+    //         .subscribe(tutors => this.tutors = tutors);
+    //     ;
 
-    }
+    //     // this.tutorRepository.getAll()
+    //     //     .subscribe(x => console.log(x));
+
+    // }
 }
 
 

@@ -1,13 +1,10 @@
 export class Tutor {
     id: number;
-    username: string;
     password: string;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     email: string;
     bio: string;
-    high_school: string;
-    courses: string [];
-    grad_year: number;
-    imagePath: string;
+    past_high_school: string;
+    // imagePath: string;
 }

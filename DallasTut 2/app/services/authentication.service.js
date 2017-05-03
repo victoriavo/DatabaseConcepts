@@ -31,6 +31,13 @@ let AuthenticationService = class AuthenticationService {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
     }
+    getRequestOptions() {
+        let headers = { 'Content-Type': 'application/json' };
+        // if(this.isAuthenticated.getValue() === true) {
+        // 	headers['Authorization'] = `Bearer ${sessionStorage.getItem('token')}`;
+        // }
+        return new http_1.RequestOptions({ headers: new http_1.Headers(headers) });
+    }
 };
 AuthenticationService = __decorate([
     core_1.Injectable(),
