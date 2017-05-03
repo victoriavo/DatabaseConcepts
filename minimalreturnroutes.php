@@ -211,7 +211,7 @@ $app->post('/requestsession', function ($request, $response) {
 
         //If there was no id found, return an error
         if (empty($id)) {
-                $input["Failure"] = "Action not authorized";
+                $input['Failure'] = "Action not authorized";
         }
         else {
                 //get course id by requested course name
@@ -222,22 +222,41 @@ $app->post('/requestsession', function ($request, $response) {
                 $course_id = $sth->fetchColumn(0);
                 $input['course_id'] = $course_id;
                 
-                //now create a session with the tutor id, student id, course id, and timestamp
-                $sql = "INSERT INTO `Sessions` (`tutor_id`, `student_id`, `course_id`) 
-                        VALUES (:tutor_id ,:student_id, :course_id)";
-                $sth = $this->db->prepare($sql);
-                $sth->bindParam(":tutor_id", $input['tutor_id']);
-                $sth->bindParam(":student_id", $id);
-                $sth->bindParam(":course_id", $course_id);
-                $sth->execute();
-                $input['success'] = "Session successfully requested.";
-                $newResponse = $this->response->withAddedHeader("Authorization", $auth);
-                return $newResponse->withJson($input);
-                
+                //check if course is offered by seeing if course id is in course table
+                if(empty($course_id)){
+                        $input["Failure"] = "Couse does not exist";
+                }
+                else{
+                        //check if tutor with inputed tutor id even exists
+                        $sql = "SELECT * FROM `Tutors` WHERE tutor_id = :tutor_id";
+                        $sth = $this->db->prepare($sql);
+                        $sth->bindParam(":tutor_id", $input['tutor_id']);
+                        $sth->execute();
+
+                        if($sth->rowCount() == 0){
+                                $input["Failure"] = "Tutor does not exist";
+                        }
+                        else{ 
+                                //now create a session with the tutor id, student id, course id, and timestamp
+                                $sql = "INSERT INTO `Sessions` (`tutor_id`, `student_id`, `course_id`) 
+                                        VALUES (:tutor_id ,:student_id, :course_id)";
+                                $sth = $this->db->prepare($sql);
+                                $sth->bindParam(":tutor_id", $input['tutor_id']);
+                                $sth->bindParam(":student_id", $id);
+                                $sth->bindParam(":course_id", $course_id);
+                                $sth->execute();
+                                $input['success'] = "Session successfully requested.";
+                                $newResponse = $this->response->withAddedHeader("Authorization", $auth);
+                                return $newResponse->withJson($input);
+                        }
+                }
+        }
+
         //$newResponse = $this->response->withAddedHeader("Authorization", $auth);
         //return $newResponse->withJson($input);
         return $this->response->withJson($input);
 });
+
 
 $app->post('/acceptsession', function ($request, $response) {
         $input = $request->getParsedBody();
