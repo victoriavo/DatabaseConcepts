@@ -570,7 +570,7 @@ $app->get('/findTutor/{params:.*}', function ($request, $response, $args) {
    if (empty($past_high_school)) {
    	$past_high_school = '%%';
    }
-   $sth = $this->db->prepare("SELECT DISTINCT first_name, last_name, past_high_school FROM `Courses` NATURAL JOIN `Course Subjects` NATURAL JOIN `Subjects` NATURAL JOIN `Courses Taught` NATURAL JOIN `Tutors` WHERE subject_name LIKE :subject_name AND course_name LIKE :course_name AND past_high_school LIKE :past_high_school");
+   $sth = $this->db->prepare("SELECT DISTINCT first_name, last_name, past_high_school, bio FROM `Courses` NATURAL JOIN `Course Subjects` NATURAL JOIN `Subjects` NATURAL JOIN `Courses Taught` NATURAL JOIN `Tutors` WHERE subject_name LIKE :subject_name AND course_name LIKE :course_name AND past_high_school LIKE :past_high_school");
    $sth->bindParam("subject_name", $subject_name);
    $sth->bindParam("course_name", $course_name);
    $sth->bindParam("past_high_school", $past_high_school);
@@ -582,7 +582,7 @@ $app->get('/findTutor/{params:.*}', function ($request, $response, $args) {
    return $this->response->withJson($find);
 });
 $app->get('/alltutors', function ($request, $response, $args) {
-   $sth = $this->db->prepare("SELECT first_name, last_name, past_high_school FROM `Tutors`");
+   $sth = $this->db->prepare("SELECT first_name, last_name, past_high_school, email  FROM `Tutors`");
    $sth->execute();
    $results = $sth->fetchAll();
    return $this->response->withJson($results);
