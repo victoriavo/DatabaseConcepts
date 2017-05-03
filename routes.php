@@ -3,6 +3,8 @@
 // Login insert username and password
 //need to make sure login can't be done multiple time in succession because multiple authorization tokens will be created!!!
 $app->post('/login', function ($request, $response) {
+	$authorization = $request->getHeader('Authorization');
+        $authorization = implode(" ",$authorization);
         $input = $request->getParsedBody();
         $view;
         $sql = "SELECT * FROM `Users` WHERE `Users`.email = :email";
@@ -41,6 +43,8 @@ $app->post('/login', function ($request, $response) {
                         if($sth->rowCount() != 0){
                                 $view['error'] = "You are already logged in.";
                                 $input['error'] = "You are already logged in.";
+				$newResponse = $this->response->withAddedHeader("Authorization", $authorization);
+				return $newResponse->withJson($view);
                         }
                         else{
                                 $input['success'] = "logged in";
