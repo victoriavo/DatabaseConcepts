@@ -16,9 +16,11 @@ const Observable_1 = require("rxjs/Observable");
 require("rxjs/add/operator/map");
 require("rxjs/add/operator/catch");
 const authentication_service_1 = require("../../services/authentication.service");
+const alert_service_1 = require("../../services/alert.service");
 let TutorRepository = class TutorRepository {
-    constructor(http, authService) {
+    constructor(http, alertService, authService) {
         this.http = http;
+        this.alertService = alertService;
         this.authService = authService;
         // private _apiUrl = 'api/tutors';
         this._apiUrl = 'http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup';
@@ -34,68 +36,60 @@ let TutorRepository = class TutorRepository {
             .map((res) => res.headers.get('authorization'))
             .catch(this.handleError)
             .subscribe(p => {
-            console.log(p);
-            localStorage.setItem('token', p);
+            this.alertService.success('Registration successful', true);
+            sessionStorage.setItem('token', p);
         });
     }
-    updateNew(tutor) {
-        let token = localStorage.getItem('token');
+    setOptions() {
+        let token = sessionStorage.getItem('token');
         console.log(token);
         let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
         headers.append('Authorization', token);
-        let options = new http_1.RequestOptions({ headers: headers });
+        return new http_1.RequestOptions({ headers: headers });
+    }
+    updateNew(tutor) {
+        // let token = sessionStorage.getItem('token');
+        // console.log(token);
+        // let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+        // headers.append('Authorization', token);
+        // let options = new RequestOptions({headers: headers});
+        let options = this.setOptions();
         this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
             .map((res) => res.headers.get('authorization'))
             .catch(this.handleError)
             .subscribe(p => {
             console.log(p);
-            localStorage.getItem('token');
-        });
-    }
-    getCourses() {
-        let token = localStorage.getItem('token');
-        console.log(token);
-        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
-        headers.append('Authorization', token);
-        let options = new http_1.RequestOptions({ headers: headers });
-        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', options)
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
-    editCourses(tutor) {
-        let token = localStorage.getItem('token');
-        console.log(token);
-        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
-        headers.append('Authorization', token);
-        let options = new http_1.RequestOptions({ headers: headers });
-        this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', JSON.stringify(tutor), options)
-            .map((res) => res.headers.get('authorization'))
-            .catch(this.handleError)
-            .subscribe(p => {
-            console.log(p);
-            localStorage.getItem('token');
+            sessionStorage.getItem('token');
         });
     }
     update(tutor) {
-        let token = localStorage.getItem('token');
-        console.log(token);
-        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
-        headers.append('Authorization', token);
-        let options = new http_1.RequestOptions({ headers: headers });
+        let options = this.setOptions();
         this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editProfile', JSON.stringify(tutor), options)
             .map((res) => res.headers.get('authorization'))
             .catch(this.handleError)
             .subscribe(p => {
             console.log(p);
-            localStorage.getItem('token');
+            sessionStorage.getItem('token');
+        });
+    }
+    getCourses() {
+        let options = this.setOptions();
+        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    editCourses(tutor) {
+        let options = this.setOptions();
+        this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', JSON.stringify(tutor), options)
+            .map((res) => res.headers.get('authorization'))
+            .catch(this.handleError)
+            .subscribe(p => {
+            console.log(p);
+            sessionStorage.getItem('token');
         });
     }
     viewProfile() {
-        let token = localStorage.getItem('token');
-        console.log(token);
-        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
-        headers.append('Authorization', token);
-        let options = new http_1.RequestOptions({ headers: headers });
+        let options = this.setOptions();
         return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/viewProfile', options)
             .map((res) => res.json() || {})
             .catch((error, caught) => {
@@ -155,7 +149,7 @@ let TutorRepository = class TutorRepository {
 };
 TutorRepository = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http, authentication_service_1.AuthenticationService])
+    __metadata("design:paramtypes", [http_1.Http, alert_service_1.AlertService, authentication_service_1.AuthenticationService])
 ], TutorRepository);
 exports.TutorRepository = TutorRepository;
 //# sourceMappingURL=tutor-repository.service.js.map

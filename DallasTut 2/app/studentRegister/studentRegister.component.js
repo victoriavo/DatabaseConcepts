@@ -19,8 +19,12 @@ let StudentRegisterComponent = class StudentRegisterComponent {
         this.router = router;
         this.studentRepository = studentRepository;
         this.alertService = alertService;
-        this.model = {};
+        this.student = {};
         this.loading = false;
+    }
+    register() {
+        this.studentRepository.signUp(this.student);
+        this.router.navigateByUrl('/student/newProfile');
     }
 };
 StudentRegisterComponent = __decorate([

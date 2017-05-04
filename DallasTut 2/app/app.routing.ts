@@ -1,7 +1,6 @@
 ﻿import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/index';
-import { LoginComponent } from './login/index';
 import { TutorEditorComponent } from "./users/tutors/tutor-editor/tutor-editor.component";
 import { StudentEditorComponent } from "./users/students/student-editor/student-editor.component";
 import { CoursesEditorComponent } from "./users/courses/courses-editor.component";
@@ -12,26 +11,32 @@ import { TutorRegisterComponent } from "./tutorRegister/index";
 import { FindTutorComponent } from "./users/tutors/findTutor/findTutor-component";
 import { AuthGuard } from "./services/auth.guard";
 import { NewTutorComponent } from "./users/tutors/tutor-editor/new-tutor.component";
+import { NewStudentComponent } from "./users/students/student-editor/new-student.component";
+import { Home2Component } from "./home/home2.component";
+import { LoginTutComponent } from "./login/login.component";
+import { LoginStuComponent } from "./login/loginstudent.component";
 
 const appRoutes: Routes = [
-    { path: '', component: LoginComponent},
-    { path: 'home', component: HomeComponent},
-    { path: 'login', component: LoginComponent },
-    { path: 'logout', component: LoginComponent },
+    { path: '', component: LoginTutComponent},
+    { path: 'tutor/home', component: HomeComponent},
+    { path: 'student/home', component: Home2Component},
+    { path: 'login', component: LoginTutComponent },
+    { path: 'student/login', component: LoginStuComponent },
+    { path: 'logout', component: LoginTutComponent },
     { path: 'tutor/signup', component: TutorRegisterComponent },
     { path: 'student/signup', component: StudentRegisterComponent },
     { path: 'findTutor', component: FindTutorComponent },
     { path: 'tutor/newProfile', component: NewTutorComponent },
-    { path: 'student/newProfile', component: StudentEditorComponent },
+    { path: 'student/newProfile', component: NewStudentComponent },
     { path: 'tutor/editProfile', component: TutorEditorComponent },
     { path: 'student/editProfile', component: StudentEditorComponent },
     { path: 'tutor/editCourse', component: TutorProfileComponent },
-    { path: 'tutor/:id/addCourses', component: CoursesEditorComponent },
+    { path: 'tutor/addCourses', component: CoursesEditorComponent },
     { path: 'tutor/viewProfile', component: TutorProfileComponent },
-    { path: 'student/:id/viewProfile', component: StudentProfileComponent },
-    { path: 'tutor/:id/sessions', component: LoginComponent },
-    { path: 'student/:id/sessions', component: LoginComponent },
-    { path: 'aboutUs', component: LoginComponent },
+    { path: 'student/viewProfile', component: StudentProfileComponent },
+    { path: 'tutor/sessions', component: LoginTutComponent },
+    { path: 'student/sessions', component: LoginTutComponent },
+    { path: 'aboutUs', component: LoginTutComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

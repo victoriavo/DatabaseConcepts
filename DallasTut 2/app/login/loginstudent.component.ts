@@ -7,12 +7,12 @@ import { UserRepository } from "../users/api/user-repository";
 
 @Component({
    moduleId: module.id,
-   templateUrl: 'login.component.html',
+   templateUrl: 'loginstudent.component.html',
    styleUrls: ['login.component.css'],
 
 })
 
-export class LoginTutComponent{
+export class LoginStuComponent{
    user: any = {};
    loading = false;
    returnUrl: string;
@@ -26,19 +26,7 @@ export class LoginTutComponent{
 
        login(){
             this.userRepository.login(this.user);
-            this.router.navigateByUrl('tutor/home');
+            this.router.navigateByUrl('student/home');
        
        }
-    //    logout(){
-    //        this.userRepository.logout(this.user)
-    //             .subscribe(x =>{
-    //                 console.log(x);
-    //             })
-    //    }
-    
 }
-
-
-
-
-

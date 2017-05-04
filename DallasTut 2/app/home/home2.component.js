@@ -12,18 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const user_repository_1 = require("../users/api/user-repository");
 const router_1 = require("@angular/router");
-const tutor_repository_service_1 = require("../users/api/tutor-repository.service");
 // import { User } from '../users/api/user';
 // import { UserRepository } from "../users/api/user-repository";
-let HomeComponent = class HomeComponent {
+let Home2Component = class Home2Component {
     // users: User[] = [];
-    constructor(tutorRepository, router, userRepository) {
-        this.tutorRepository = tutorRepository;
-        this.router = router;
+    constructor(userRepository, router) {
         this.userRepository = userRepository;
-        this.tutor = {};
-        this.tutorRepository.viewProfile()
-            .subscribe(tutor => this.tutor = tutor);
+        this.router = router;
     }
     logout() {
         this.userRepository.logout()
@@ -31,13 +26,13 @@ let HomeComponent = class HomeComponent {
         this.router.navigateByUrl('/login');
     }
 };
-HomeComponent = __decorate([
+Home2Component = __decorate([
     core_1.Component({
         moduleId: module.id,
-        templateUrl: 'home.component.html',
+        templateUrl: 'home2.component.html',
         styleUrls: ['home.component.css'],
     }),
-    __metadata("design:paramtypes", [tutor_repository_service_1.TutorRepository, router_1.Router, user_repository_1.UserRepository])
-], HomeComponent);
-exports.HomeComponent = HomeComponent;
-//# sourceMappingURL=home.component.js.map
+    __metadata("design:paramtypes", [user_repository_1.UserRepository, router_1.Router])
+], Home2Component);
+exports.Home2Component = Home2Component;
+//# sourceMappingURL=home2.component.js.map

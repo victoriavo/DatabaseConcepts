@@ -6,6 +6,6 @@ export class Student {
     password: string;
     bio: string;
     high_school: string;
-    grad_year: number;
+    graduation_year: number;
     // imagePath: string;
 }

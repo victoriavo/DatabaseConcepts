@@ -43,16 +43,6 @@ export class TutorRegisterComponent {
 
 
 
-
-
-
-
-
-
-
-
-
-
         // if (this.tutorRepository.signUp(this.model))
         //     this.router.navigateByUrl('/home');
         // }

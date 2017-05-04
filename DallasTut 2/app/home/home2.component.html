@@ -1,4 +1,4 @@
-﻿
+
   <nav class='navbar navbar-default navbar-fixed-top'>
       <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
       <ul class="nav navbar-nav">
@@ -19,9 +19,9 @@
   </nav>
 
 <div class="container">
-  <h2>Welcome Back!{{tutor?.first_name}}</h2>
+  <h2>Welcome Back!{{currentUser?.firstName}}</h2>
   <p>
-    <a class="btn btn-primary" [routerLink]="['/tutor/viewProfile']">View Your Profile</a> 
+    <a class="btn btn-primary" [routerLink]="['/student/viewProfile']">View Your Profile</a> 
     <a class="btn btn-primary" (click) = "logout()">Logout</a>
   </p>
 </div>

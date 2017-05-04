@@ -13,14 +13,17 @@ const http_1 = require("@angular/http");
 const app_component_1 = require("./app.component");
 const app_routing_1 = require("./app.routing");
 const index_1 = require("./home/index");
-const index_2 = require("./login/index");
+// import { LoginComponent } from './login/index';
 const users_module_1 = require("./users/users.module");
-const index_3 = require("./studentRegister/index");
-const index_4 = require("./tutorRegister/index");
+const index_2 = require("./studentRegister/index");
+const index_3 = require("./tutorRegister/index");
 const alert_service_1 = require("./services/alert.service");
 const authentication_service_1 = require("./services/authentication.service");
 const auth_guard_1 = require("./services/auth.guard");
 const http_service_1 = require("./services/http.service");
+const login_component_1 = require("./login/login.component");
+const loginstudent_component_1 = require("./login/loginstudent.component");
+const home2_component_1 = require("./home/home2.component");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -35,9 +38,11 @@ AppModule = __decorate([
         declarations: [
             app_component_1.AppComponent,
             index_1.HomeComponent,
-            index_2.LoginComponent,
-            index_3.StudentRegisterComponent,
-            index_4.TutorRegisterComponent,
+            home2_component_1.Home2Component,
+            login_component_1.LoginTutComponent,
+            loginstudent_component_1.LoginStuComponent,
+            index_2.StudentRegisterComponent,
+            index_3.TutorRegisterComponent,
         ],
         providers: [
             authentication_service_1.AuthenticationService,

@@ -30,18 +30,26 @@ let UserRepository = class UserRepository {
             .catch(this.handleError)
             .subscribe(p => {
             console.log(p);
-            localStorage.setItem('token', p);
+            sessionStorage.setItem('token', p);
         });
     }
     logout() {
-        let token = localStorage.getItem('token');
-        console.log(token);
-        let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        headers.append('Authorization', token);
-        let options = this.authService.getRequestOptions();
+        let options = this.setOptions();
+        // let token = sessionStorage.getItem('token');
+        // console.log(token);
+        // let headers = new Headers({'Content-Type' : 'application/json'});
+        // headers.append('Authorization', token);
+        // let options = this.authService.getRequestOptions();
         return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/logout', options)
             .map((res) => res.headers.get('authorization'))
             .catch(this.handleError);
+    }
+    setOptions() {
+        let token = sessionStorage.getItem('token');
+        console.log(token);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', token);
+        return this.authService.getRequestOptions();
     }
     extractData(res) {
         let body = res.json();

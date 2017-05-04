@@ -14,7 +14,7 @@ const router_1 = require("@angular/router");
 const authentication_service_1 = require("../services/authentication.service");
 const alert_service_1 = require("../services/alert.service");
 const user_repository_1 = require("../users/api/user-repository");
-let LoginTutComponent = class LoginTutComponent {
+let LoginStuComponent = class LoginStuComponent {
     constructor(route, router, userRepository, authenticationService, alertService) {
         this.route = route;
         this.router = router;
@@ -26,13 +26,13 @@ let LoginTutComponent = class LoginTutComponent {
     }
     login() {
         this.userRepository.login(this.user);
-        this.router.navigateByUrl('tutor/home');
+        this.router.navigateByUrl('student/home');
     }
 };
-LoginTutComponent = __decorate([
+LoginStuComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        templateUrl: 'login.component.html',
+        templateUrl: 'loginstudent.component.html',
         styleUrls: ['login.component.css'],
     }),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
@@ -40,6 +40,6 @@ LoginTutComponent = __decorate([
         user_repository_1.UserRepository,
         authentication_service_1.AuthenticationService,
         alert_service_1.AlertService])
-], LoginTutComponent);
-exports.LoginTutComponent = LoginTutComponent;
-//# sourceMappingURL=login.component.js.map
+], LoginStuComponent);
+exports.LoginStuComponent = LoginStuComponent;
+//# sourceMappingURL=loginstudent.component.js.map

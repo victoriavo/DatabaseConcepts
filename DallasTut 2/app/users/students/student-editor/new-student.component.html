@@ -9,7 +9,7 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a [routerLink] = "['/tutor/editProfile']">Update Profile</a></li>
+                        <li><a [routerLink] = "['/student/editProfile']">Update Profile</a></li>
                         <li><a>Change Password</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a [routerLink] = "['/login']">Logout</a></li>
@@ -19,17 +19,19 @@
     </nav>
 
 
-     <h2 style="margin-top: 100px"> Complete Your New Tutor Profile</h2>
+     <h2 style="margin-top: 100px"> Complete Your New Student Profile</h2>
 
     <div class="col-md-6 col-md-offset-3">
         <form class="form-horizontal" name="form">
-            <div class="form-group" *ngIf="tutor">
+            <div class="form-group" *ngIf="student">
                 <label for="bio">Bio</label>
-                <textarea class="form-control" name="bio" [(ngModel)]="tutor.bio"></textarea>
-                <label for="past_high_school">Past High School</label>
-                <input type="text" class="form-control" name="past_high_school" [(ngModel)]="tutor.past_high_school"/>
+                <textarea class="form-control" name="bio" [(ngModel)]="student.bio"></textarea>
+                <label for="high_school">Past High School</label>
+                <input type="text" class="form-control" name="high_school" [(ngModel)]="student.high_school"/>
+                <label for="graduation_year">Graduation Year</label>
+                <input type="number" class="form-control" name="graduation_year" [(ngModel)]="student.graduation_year"/>
                 <!--<label for="photo">Image Path</label>
-                <input type="text" class="form-control" name="photo"  [(ngModel)]="tutor.imagePath"/>-->
+                <input type="text" class="form-control" name="photo"  [(ngModel)]="student.imagePath"/>-->
             </div>
             <div class="form-group">
                 <a href="javascript:void(0);" class="btn btn-primary" (click)="save()" >

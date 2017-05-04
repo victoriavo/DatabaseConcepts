@@ -7,7 +7,7 @@ import { AppComponent }  from './app.component';
 import { routing }  from './app.routing';
 
 import { HomeComponent } from './home/index';
-import { LoginComponent } from './login/index';
+// import { LoginComponent } from './login/index';
 import { UsersModule } from './users/users.module';
 import { StudentRegisterComponent } from './studentRegister/index';
 import { TutorRegisterComponent } from './tutorRegister/index';
@@ -17,6 +17,9 @@ import { AlertService } from "./services/alert.service";
 import { AuthenticationService } from "./services/authentication.service";
 import { AuthGuard } from "./services/auth.guard";
 import { HttpService } from "./services/http.service";
+import { LoginTutComponent } from "./login/login.component";
+import { LoginStuComponent } from "./login/loginstudent.component";
+import { Home2Component } from "./home/home2.component";
 
 
 @NgModule({
@@ -31,7 +34,9 @@ import { HttpService } from "./services/http.service";
     declarations: [
         AppComponent,
         HomeComponent,
-        LoginComponent,
+        Home2Component,
+        LoginTutComponent,
+        LoginStuComponent,
         StudentRegisterComponent,
         TutorRegisterComponent,
     ],

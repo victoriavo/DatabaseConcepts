@@ -18,6 +18,10 @@ p{
     background: transparent;
 }
 
+.dropdown-menu li a{ 
+   color: black;
+
+}
 
 
 .form-group{

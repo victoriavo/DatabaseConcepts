@@ -16,6 +16,7 @@ import { routing } from '../app.routing';
 import { FindTutorComponent } from "./tutors/findTutor/findTutor-component";
 import { NewTutorComponent } from "./tutors/tutor-editor/new-tutor.component";
 import { UserRepository } from "./api/user-repository";
+import { NewStudentComponent } from "./students/student-editor/new-student.component";
 
 @NgModule({
   imports:      [ 
@@ -32,7 +33,8 @@ import { UserRepository } from "./api/user-repository";
     TutorProfileComponent,
     StudentProfileComponent,
     FindTutorComponent,
-    NewTutorComponent
+    NewTutorComponent,
+    NewStudentComponent
   ],
   exports: [
     TutorEditorComponent,
@@ -41,7 +43,8 @@ import { UserRepository } from "./api/user-repository";
     TutorProfileComponent,
     StudentProfileComponent,
     FindTutorComponent,
-    NewTutorComponent
+    NewTutorComponent,
+    NewStudentComponent
   ],
   providers: [
       TutorRepository,

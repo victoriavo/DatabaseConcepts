@@ -5,12 +5,12 @@ import { Student } from "../../api/student";
 
 @Component({
   moduleId: module.id,
-  selector: 'student-editor',
-  templateUrl: 'student-editor.component.html',
+  selector: 'new-student',
+  templateUrl: 'new-student.component.html',
   styleUrls: [ 'student-editor.component.css' ],
 })
 
-export class StudentEditorComponent {
+export class NewStudentComponent {
   student: Student;
 
    constructor(private router: Router, 
@@ -31,9 +31,9 @@ export class StudentEditorComponent {
 				this.student = new Student();
         });
     }
-
+    
     save() {
-        this.studentRepository.update(this.student);
+        this.studentRepository.updateNew(this.student);
         this.router.navigateByUrl('/student/viewProfile');
     }
 

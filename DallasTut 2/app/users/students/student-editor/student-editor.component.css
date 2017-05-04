@@ -23,6 +23,10 @@ p{
     margin: 0 auto;
 }
 
+.dropdown-menu li a{ 
+   color: black;
+
+}
 
 nav{
     background-color:  #13a4f2;
@@ -39,3 +43,10 @@ nav img{
 nav li {
     padding-top: 10pt;
 }
+
+
+.dropdown-menu li a{ 
+   color: black;
+
+}
+

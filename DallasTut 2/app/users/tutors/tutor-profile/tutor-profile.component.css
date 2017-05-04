@@ -32,6 +32,11 @@ p{
     padding: 8pt 0;
 }
 
+.dropdown-menu li a{ 
+   color: black;
+
+}
+
 .tutor_info li {
     text-align: left;
 }

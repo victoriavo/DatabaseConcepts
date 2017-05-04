@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { UserRepository } from "../users/api/user-repository";
 import { Router } from "@angular/router";
 import { User } from "../users/api/user";
+import { Tutor } from "../users/api/tutor"
+import { TutorRepository } from "../users/api/tutor-repository.service";
 
 // import { User } from '../users/api/user';
 // import { UserRepository } from "../users/api/user-repository";
@@ -13,11 +15,12 @@ import { User } from "../users/api/user";
 })
 
 export class HomeComponent {
-    currentUser: User;
+    tutor: any = {};
     // users: User[] = [];
 
-    constructor(private userRepository: UserRepository, private router: Router) {
-        // this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    constructor(private tutorRepository: TutorRepository, private router: Router, private userRepository: UserRepository) {
+            this.tutorRepository.viewProfile()
+                        .subscribe(tutor => this.tutor = tutor);
     }
 
     logout(){

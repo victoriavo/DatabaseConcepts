@@ -6,6 +6,7 @@ import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { AuthenticationService } from "../../services/authentication.service";
+import { AlertService } from "../../services/alert.service";
 
 @Injectable()
 export class TutorRepository {
@@ -14,7 +15,7 @@ export class TutorRepository {
 
 	private _apiUrl = 'http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup';
 
-	constructor(private http: Http, private authService: AuthenticationService) {}
+	constructor(private http: Http, private alertService: AlertService, private authService: AuthenticationService) {}
 
 	tutor: Tutor;
 
@@ -29,35 +30,53 @@ export class TutorRepository {
 		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup', JSON.stringify(tutor), options)
 			.map((res:Response) => res.headers.get('authorization'))
 			.catch(this.handleError)
-			.subscribe(p =>{ console.log(p);
-				localStorage.setItem('token', p);
+			.subscribe(p =>{ this.alertService.success('Registration successful', true);
+				sessionStorage.setItem('token', p);
+		
 			
 		});
 	}
 
-
-	updateNew(tutor: any){
-		let token = localStorage.getItem('token');
+	setOptions(): RequestOptions{
+		let token = sessionStorage.getItem('token');
 		console.log(token);
 		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
 		headers.append('Authorization', token);
-		let options = new RequestOptions({headers: headers});
+		return new RequestOptions({headers: headers});
+
+	}
+
+	updateNew(tutor: any){
+		// let token = sessionStorage.getItem('token');
+		// console.log(token);
+		// let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+		// headers.append('Authorization', token);
+		// let options = new RequestOptions({headers: headers});
+		let options = this.setOptions();
 
 		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
 			.map((res:Response) => res.headers.get('authorization'))
 			.catch(this.handleError)
 			.subscribe(p =>{ console.log(p);
-				localStorage.getItem('token');
+				sessionStorage.getItem('token');
+			});
+		
+	}
+
+	update(tutor: any){
+		let options = this.setOptions();
+
+		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editProfile', JSON.stringify(tutor), options)
+			.map((res:Response) => res.headers.get('authorization'))
+			.catch(this.handleError)
+			.subscribe(p =>{ console.log(p);
+				sessionStorage.getItem('token');
 			});
 		
 	}
 
 	getCourses(): Observable<object>{
-		let token = localStorage.getItem('token');
-		console.log(token);
-		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-		headers.append('Authorization', token);
-		let options = new RequestOptions({headers: headers});
+		let options = this.setOptions();
 
 		return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', options)
 			.map(this.extractData)
@@ -65,41 +84,20 @@ export class TutorRepository {
 	}
 
 	editCourses(tutor: any){
-		let token = localStorage.getItem('token');
-		console.log(token);
-		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-		headers.append('Authorization', token);
-		let options = new RequestOptions({headers: headers});
+		let options = this.setOptions();
+
 		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse',JSON.stringify(tutor), options)
 			.map((res:Response) => res.headers.get('authorization'))
 			.catch(this.handleError)
 			.subscribe(p =>{ console.log(p);
-				localStorage.getItem('token');
+				sessionStorage.getItem('token');
 			});
 	}
 
-	update(tutor: any){
-		let token = localStorage.getItem('token');
-		console.log(token);
-		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-		headers.append('Authorization', token);
-		let options = new RequestOptions({headers: headers});
 
-		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editProfile', JSON.stringify(tutor), options)
-			.map((res:Response) => res.headers.get('authorization'))
-			.catch(this.handleError)
-			.subscribe(p =>{ console.log(p);
-				localStorage.getItem('token');
-			});
-		
-	}
 
 	viewProfile(): Observable<object>{
-		let token = localStorage.getItem('token');
-		console.log(token);
-		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-		headers.append('Authorization', token);
-		let options = new RequestOptions({headers: headers});
+		let options = this.setOptions();
 
 		return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/viewProfile', options)
 				.map((res:Response) => res.json() || {})
@@ -121,17 +119,17 @@ export class TutorRepository {
 	}
 
 
-getAll(): Observable<Tutor[]>{
-	let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-	let options = new RequestOptions({headers: headers});
+	getAll(): Observable<Tutor[]>{
+		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+		let options = new RequestOptions({headers: headers});
 
-	return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors', options)
-	.map((res:Response) => res.json() || {})
-	.catch((error:any, caught: Observable<any>) => {
-		console.error(error.json().error || 'Server error');
-		return caught;
-	});
-}
+		return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors', options)
+		.map((res:Response) => res.json() || {})
+		.catch((error:any, caught: Observable<any>) => {
+			console.error(error.json().error || 'Server error');
+			return caught;
+		});
+	}
 
 
 	findTutor(): Observable<Observable<Tutor[]>>{

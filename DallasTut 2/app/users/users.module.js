@@ -23,6 +23,7 @@ const app_routing_1 = require("../app.routing");
 const findTutor_component_1 = require("./tutors/findTutor/findTutor-component");
 const new_tutor_component_1 = require("./tutors/tutor-editor/new-tutor.component");
 const user_repository_1 = require("./api/user-repository");
+const new_student_component_1 = require("./students/student-editor/new-student.component");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
@@ -41,7 +42,8 @@ UsersModule = __decorate([
             tutor_profile_component_1.TutorProfileComponent,
             student_profile_component_1.StudentProfileComponent,
             findTutor_component_1.FindTutorComponent,
-            new_tutor_component_1.NewTutorComponent
+            new_tutor_component_1.NewTutorComponent,
+            new_student_component_1.NewStudentComponent
         ],
         exports: [
             tutor_editor_component_1.TutorEditorComponent,
@@ -50,7 +52,8 @@ UsersModule = __decorate([
             tutor_profile_component_1.TutorProfileComponent,
             student_profile_component_1.StudentProfileComponent,
             findTutor_component_1.FindTutorComponent,
-            new_tutor_component_1.NewTutorComponent
+            new_tutor_component_1.NewTutorComponent,
+            new_student_component_1.NewStudentComponent
         ],
         providers: [
             tutor_repository_service_1.TutorRepository,

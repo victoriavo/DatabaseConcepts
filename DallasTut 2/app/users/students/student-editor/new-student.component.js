@@ -13,7 +13,7 @@ const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
 const student_repository_service_1 = require("../../api/student-repository.service");
 const student_1 = require("../../api/student");
-let StudentEditorComponent = class StudentEditorComponent {
+let NewStudentComponent = class NewStudentComponent {
     constructor(router, studentRepository, route) {
         this.router = router;
         this.studentRepository = studentRepository;
@@ -33,20 +33,20 @@ let StudentEditorComponent = class StudentEditorComponent {
         });
     }
     save() {
-        this.studentRepository.update(this.student);
+        this.studentRepository.updateNew(this.student);
         this.router.navigateByUrl('/student/viewProfile');
     }
 };
-StudentEditorComponent = __decorate([
+NewStudentComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        selector: 'student-editor',
-        templateUrl: 'student-editor.component.html',
+        selector: 'new-student',
+        templateUrl: 'new-student.component.html',
         styleUrls: ['student-editor.component.css'],
     }),
     __metadata("design:paramtypes", [router_1.Router,
         student_repository_service_1.StudentRepository,
         router_1.ActivatedRoute])
-], StudentEditorComponent);
-exports.StudentEditorComponent = StudentEditorComponent;
-//# sourceMappingURL=student-editor.component.js.map
+], NewStudentComponent);
+exports.NewStudentComponent = NewStudentComponent;
+//# sourceMappingURL=new-student.component.js.map

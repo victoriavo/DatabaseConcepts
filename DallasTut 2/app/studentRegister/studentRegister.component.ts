@@ -12,13 +12,18 @@ import { StudentRepository } from "../users/api/student-repository.service";
 })
 
 export class StudentRegisterComponent {
-    model: any = {};
+    student: any = {};
     loading = false;
 
     constructor(
         private router: Router,
         private studentRepository: StudentRepository,
         private alertService: AlertService) { }
+
+        register(){
+            this.studentRepository.signUp(this.student)
+            this.router.navigateByUrl('/student/newProfile');
+        }
 
     // register() {
     //     this.loading = true;

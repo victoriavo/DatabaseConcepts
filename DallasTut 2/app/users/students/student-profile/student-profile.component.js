@@ -12,24 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
 const student_repository_service_1 = require("../../api/student-repository.service");
+const user_repository_1 = require("../../api/user-repository");
 // import { UserRepository } from "../../api/user-repository";
 // import { User } from "../../api/user";
 let StudentProfileComponent = class StudentProfileComponent {
-    constructor(router, studentRepository, route) {
+    constructor(router, studentRepository, route, userRepository) {
         this.router = router;
         this.studentRepository = studentRepository;
         this.route = route;
-    }
-    ngOnInit() {
-        var onLoad = (data) => {
-            this.student = data;
-        };
-        this.route.params.subscribe(params => {
-            if (params['id'] !== undefined) {
-                this.studentRepository.getById(+params['id'])
-                    .then(onLoad);
-            }
-        });
+        this.userRepository = userRepository;
+        this.student = {};
+        this.studentRepository.viewProfile()
+            .subscribe(student => this.student = student);
     }
 };
 StudentProfileComponent = __decorate([
@@ -41,7 +35,8 @@ StudentProfileComponent = __decorate([
     }),
     __metadata("design:paramtypes", [router_1.Router,
         student_repository_service_1.StudentRepository,
-        router_1.ActivatedRoute])
+        router_1.ActivatedRoute,
+        user_repository_1.UserRepository])
 ], StudentProfileComponent);
 exports.StudentProfileComponent = StudentProfileComponent;
 //# sourceMappingURL=student-profile.component.js.map

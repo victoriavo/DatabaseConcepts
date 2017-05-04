@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Student } from "../../api/student";
 import { StudentRepository } from "../../api/student-repository.service";
+import { UserRepository } from "../../api/user-repository";
 // import { UserRepository } from "../../api/user-repository";
 // import { User } from "../../api/user";
 
@@ -13,23 +14,16 @@ import { StudentRepository } from "../../api/student-repository.service";
 })
 
 export class StudentProfileComponent {
-   student : Student;
+   
+    student: any = {};
    
     constructor(private router: Router, 
                 private studentRepository: StudentRepository, 
-                private route: ActivatedRoute){}
+                private route: ActivatedRoute,
+                private userRepository: UserRepository){
 
-    ngOnInit() {
-        var onLoad = (data) => {
-            this.student = data;
-        };
+                    this.studentRepository.viewProfile()
+                        .subscribe(student => this.student = student);
 
-        this.route.params.subscribe(params => {
-            if(params['id'] !== undefined) {
-                this.studentRepository.getById(+params['id'])
-                    .then(onLoad);
-            } 
-        });
     }
-
 }
