@@ -13,20 +13,20 @@ const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
 const authentication_service_1 = require("../services/authentication.service");
 const alert_service_1 = require("../services/alert.service");
+const user_repository_1 = require("../users/api/user-repository");
 let LoginComponent = class LoginComponent {
-    constructor(route, router, authenticationService, alertService) {
+    constructor(route, router, userRepository, authenticationService, alertService) {
         this.route = route;
         this.router = router;
+        this.userRepository = userRepository;
         this.authenticationService = authenticationService;
         this.alertService = alertService;
-        this.model = {};
+        this.user = {};
         this.loading = false;
     }
-    ngOnInit() {
-        //    // reset login status
-        //    this.authenticationService.logout();
-        //    // get return url from route parameters or default to '/'
-        //    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    login() {
+        this.userRepository.login(this.user);
+        this.router.navigateByUrl('/home');
     }
 };
 LoginComponent = __decorate([
@@ -37,8 +37,28 @@ LoginComponent = __decorate([
     }),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
         router_1.Router,
+        user_repository_1.UserRepository,
         authentication_service_1.AuthenticationService,
         alert_service_1.AlertService])
 ], LoginComponent);
 exports.LoginComponent = LoginComponent;
+//        ngOnInit() {
+//     // reset login status
+//     this.authenticationService.logout();
+//     // get return url from route parameters or default to '/'
+//     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+// }
+// login() {
+//     this.loading = true;
+//     this.authenticationService.login(this.user.email, this.user.password)
+//         .subscribe(
+//             data => {
+//                 this.router.navigate([this.returnUrl]);
+//             },
+//             error => {
+//                 this.alertService.error(error);
+//                 this.loading = false;
+//             });
+//         this.router.navigateByUrl('/home');
+// }
 //# sourceMappingURL=login.component.js.map

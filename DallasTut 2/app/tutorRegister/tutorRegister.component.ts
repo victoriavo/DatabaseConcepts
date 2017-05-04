@@ -27,18 +27,14 @@ export class TutorRegisterComponent {
         }
 
         register(){
-            this.tutorRepository.signup(this.tutor)
-                .subscribe(tutor => this.tutor = tutor);
+            this.tutorRepository.signUp(this.tutor)
+            this.router.navigateByUrl('/tutor/newProfile');
         }
 
     // register() {
     //     this.tutorRepository.getAll()
     //         .subscribe(tutors => this.tutors = tutors);
     //     ;
-
-    //     // this.tutorRepository.getAll()
-    //     //     .subscribe(x => console.log(x));
-
     // }
 }
 

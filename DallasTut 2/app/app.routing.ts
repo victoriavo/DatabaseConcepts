@@ -11,6 +11,7 @@ import { StudentRegisterComponent } from "./studentRegister/index";
 import { TutorRegisterComponent } from "./tutorRegister/index";
 import { FindTutorComponent } from "./users/tutors/findTutor/findTutor-component";
 import { AuthGuard } from "./services/auth.guard";
+import { NewTutorComponent } from "./users/tutors/tutor-editor/new-tutor.component";
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent},
@@ -20,13 +21,13 @@ const appRoutes: Routes = [
     { path: 'tutor/signup', component: TutorRegisterComponent },
     { path: 'student/signup', component: StudentRegisterComponent },
     { path: 'findTutor', component: FindTutorComponent },
-    { path: 'tutor/newProfile', component: TutorEditorComponent },
+    { path: 'tutor/newProfile', component: NewTutorComponent },
     { path: 'student/newProfile', component: StudentEditorComponent },
-    { path: 'tutor/:id/updateProfile', component: TutorEditorComponent },
+    { path: 'tutor/editProfile', component: TutorEditorComponent },
     { path: 'student/:id/updateProfile', component: StudentEditorComponent },
     { path: 'tutor/:id/courses', component: CoursesEditorComponent },
     { path: 'tutor/:id/addCourses', component: CoursesEditorComponent },
-    { path: 'tutor/:id/viewProfile', component: TutorProfileComponent },
+    { path: 'tutor/viewProfile', component: TutorProfileComponent },
     { path: 'student/:id/viewProfile', component: StudentProfileComponent },
     { path: 'tutor/:id/sessions', component: LoginComponent },
     { path: 'student/:id/sessions', component: LoginComponent },

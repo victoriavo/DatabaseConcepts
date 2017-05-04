@@ -25,8 +25,8 @@ let TutorRegisterComponent = class TutorRegisterComponent {
         this.loading = false;
     }
     register() {
-        this.tutorRepository.signup(this.tutor)
-            .subscribe(tutor => this.tutor = tutor);
+        this.tutorRepository.signUp(this.tutor);
+        this.router.navigateByUrl('/tutor/newProfile');
     }
 };
 TutorRegisterComponent = __decorate([

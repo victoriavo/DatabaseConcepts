@@ -32,30 +32,69 @@ export class TutorRepository {
 	// 	.catch(x => x.message);
 	// }
 
+	// login(): Observable<object> {
 
-signup(newUser: any): Observable<object> {
-		console.log(JSON.stringify(newUser));
+	// 	let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+	// 	let options = new RequestOptions({headers: headers});
+	// 	let body 
+
+	// 	return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/login',  JSON.stringify(body), options)
+	// 		.map(this.extractData)
+	// 		.catch(this.handleError);
+	// }
+
+
+
+	 signUp(tutor: any){
 		let options = this.authService.getRequestOptions();
+		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup', JSON.stringify(tutor), options)
+			.map((res:Response) => res.headers.get('authorization'))
+			.catch(this.handleError)
+			.subscribe(p =>{ console.log(p);
+				localStorage.setItem('token', p);
+			
+	});
 
-		return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup', JSON.stringify(newUser), options)
-				.map(this.extractData)
-				.catch(this.handleError);
+
+		// let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+		// let options = new RequestOptions({headers: headers});
+
+		// console.log(JSON.stringify(tutor))
+
+		// return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup',  JSON.stringify(tutor), options)
+		// 	.map(this.extractData)
+		// 	.catch(this.handleError);
+	}
+
+
+	update(tutor: any){
+		let token = localStorage.getItem('token');
+		console.log(token);
+		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+		headers.append('Authorization', token);
+		let options = new RequestOptions({headers: headers});
+		// console.log(token);
+		// let options = this.authService.getRequestOptions();
+		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
+			.map((res:Response) => res.headers.get('authorization'))
+			.catch(this.handleError)
+			.subscribe(p =>{ console.log(p);
+				localStorage.getItem('token');
+			});
 		
-		// this.http.get(`${this.baseUrl}/${this.resource}`).subscribe();
-}
+	}
 
-
-	 signUp(tutor: any): Observable<object> {
+	getTutor(id: number): Observable<Tutor>{
+	
 		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
 		let options = new RequestOptions({headers: headers});
 
-		return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup', options)
-		.map((res:Response) => res.json() || {})
-		.catch((error:any, caught: Observable<any>) => {
-			console.error(error.json().error || 'Server error');
-			return caught;
-		});
+		return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors', options)
+			.map(this.extractData)
+			.catch(this.handleError);
+
 	}
+
 
 	// send(user: any): Promise<Tutor> {
 	// 	return this.http
@@ -112,13 +151,13 @@ findTutor(): Observable<Tutor[]>{
 			.catch(x => x.message);
 	}
 	
-	update(tutor: Tutor) : Promise<Tutor>{
-		return this.http
-			.put(`${this._apiUrl}/${tutor.id}`, tutor)
-			.toPromise()
-			.then(() => tutor)
-			.catch(x => x.message);
-	}
+	// update(tutor: Tutor) : Promise<Tutor>{
+	// 	return this.http
+	// 		.put(`${this._apiUrl}/${tutor.id}`, tutor)
+	// 		.toPromise()
+	// 		.then(() => tutor)
+	// 		.catch(x => x.message);
+	// }
 
 	delete(tutor: Tutor) : Promise<void>{
 		return this.http
@@ -127,26 +166,6 @@ findTutor(): Observable<Tutor[]>{
 			.catch(x => x.message);
 	}
 
-	// addCourse(course: string) {
-	// 	this.tutor.courses.push(course);
-	// }
-
-	// getIndex(val: string){
-	// 	for (var i = this.tutor.courses.length; i--;) {
-	// 		var course = this.tutor.courses[i];
-	// 		if(course == val) return i;
-	// 	}
-	// 	return -1;
-	// }
-
-	// deleteCourse(course: string) {
-	// 	var index = this.getIndex(course);
-	// 	this.tutor.courses.splice(index, 1);
-	// }
-
-	create(tutor: Tutor) {
-        return this.http.post(this._apiUrl, tutor, this.jwt()).map((response: Response) => response.json());
-    }
 
     private jwt() {
         // create authorization header with jwt token
@@ -162,7 +181,7 @@ findTutor(): Observable<Tutor[]>{
 		return body || [];
 	}
 
-	private handleError(error:any) {
+	handleError(error:any) {
 		let errMsg = (error.message) ? error.message :
 			error.status ? `${error.status} - ${error.statusText}` : 'Server error';
 		console.error(errMsg); // log to console instead

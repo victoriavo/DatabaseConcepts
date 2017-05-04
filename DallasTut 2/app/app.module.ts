@@ -1,7 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, RequestOptions, XHRBackend } from '@angular/http';
 
 import { AppComponent }  from './app.component';
 import { routing }  from './app.routing';
@@ -16,6 +16,7 @@ import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { AlertService } from "./services/alert.service";
 import { AuthenticationService } from "./services/authentication.service";
 import { AuthGuard } from "./services/auth.guard";
+import { HttpService } from "./services/http.service";
 
 
 @NgModule({
@@ -38,6 +39,13 @@ import { AuthGuard } from "./services/auth.guard";
         AuthenticationService,
         AlertService,
         AuthGuard,
+        {
+            provide: HttpService,
+            useFactory: (backend: XHRBackend, options: RequestOptions) => {
+                return new HttpService(backend, options);
+            },
+            deps: [XHRBackend, RequestOptions]
+        }
     ],
     bootstrap: [AppComponent]
 })

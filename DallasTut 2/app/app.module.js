@@ -20,6 +20,7 @@ const index_4 = require("./tutorRegister/index");
 const alert_service_1 = require("./services/alert.service");
 const authentication_service_1 = require("./services/authentication.service");
 const auth_guard_1 = require("./services/auth.guard");
+const http_service_1 = require("./services/http.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -42,6 +43,13 @@ AppModule = __decorate([
             authentication_service_1.AuthenticationService,
             alert_service_1.AlertService,
             auth_guard_1.AuthGuard,
+            {
+                provide: http_service_1.HttpService,
+                useFactory: (backend, options) => {
+                    return new http_service_1.HttpService(backend, options);
+                },
+                deps: [http_1.XHRBackend, http_1.RequestOptions]
+            }
         ],
         bootstrap: [app_component_1.AppComponent]
     })

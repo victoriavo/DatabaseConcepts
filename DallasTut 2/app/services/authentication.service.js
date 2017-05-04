@@ -17,7 +17,7 @@ let AuthenticationService = class AuthenticationService {
         this.http = http;
     }
     login(username, password) {
-        return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
+        return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/login', JSON.stringify({ username: username, password: password }))
             .map((response) => {
             // login successful if there's a jwt token in the response
             let user = response.json();
@@ -26,10 +26,6 @@ let AuthenticationService = class AuthenticationService {
                 localStorage.setItem('currentUser', JSON.stringify(user));
             }
         });
-    }
-    logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
     }
     getRequestOptions() {
         let headers = { 'Content-Type': 'application/json' };
