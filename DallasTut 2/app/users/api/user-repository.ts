@@ -14,26 +14,27 @@ export class UserRepository {
 	constructor(private http: HttpService, private authService: AuthenticationService, private router: Router) {}
 
 
-   login(user: any): void{
-
-           
-//         let headers = new Headers({'Content-Type' : 'application/json'});
-//         let options = new RequestOptions({headers: headers});
-
-	// console.log(JSON.stringify(user));
-	let options = this.authService.getRequestOptions();
-	this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/login', JSON.stringify(user), options)
-		.map((res:Response) => res.headers.get('authorization'))
-		.catch(this.handleError)
-		.subscribe(p =>{ 
-			console.log(p);
-			localStorage.setItem('token', p);
-	});
+   login(user: any){
+		let options = this.authService.getRequestOptions();
+		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/login', JSON.stringify(user), options)
+			.map((res:Response) => res.headers.get('authorization'))
+			.catch(this.handleError)
+			.subscribe(p =>{ 
+				console.log(p);
+				localStorage.setItem('token', p);
+			});
 }
 
-	logout(user : any){
+	logout(): Observable<object>{
+		let token = localStorage.getItem('token');
+		console.log(token);
+		let headers = new Headers({'Content-Type' : 'application/json'});
+		headers.append('Authorization', token);
+		let options = this.authService.getRequestOptions();
 
-		
+		return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/logout', options)
+			.map((res:Response) => res.headers.get('authorization'))
+			.catch(this.handleError);
 	}
 
 	extractData(res:Response) {
@@ -53,12 +54,10 @@ export class UserRepository {
 
 
   private getHeaders(){
-    let headers = new Headers();
-    headers.append('Accept', 'application/json');
-    return headers;
+	    let headers = new Headers();
+	    headers.append('Accept', 'application/json');
+	    return headers;
   }
-
-
 
 	getById(id : number) : Promise<User>{
 		return this.http

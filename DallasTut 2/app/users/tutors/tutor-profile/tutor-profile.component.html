@@ -1,43 +1,45 @@
 <div class="container" >
-    <nav class='navbar navbar-default navbar-fixed-top'>
-        <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
-        <ul class="nav navbar-nav">
-            <li><a [routerLink]="['/findTutor']">Find Tutor</a>
-            <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+   <nav class='navbar navbar-default navbar-fixed-top'>
+       <a href="#" [routerLink]="['/home']" class="navbar-left"><img style=height:50px src="../logo.png"></a>
+       <ul class="nav navbar-nav">
+           <li><a [routerLink]="['/findTutor']">Find Tutor</a>
+           <li><a href="#" [routerLink]="['/login']">View Sessions</a>
+       </ul>
+       <ul class="nav navbar-nav navbar-right">
+           <li class="dropdown">
+               <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
+                   <ul class="dropdown-menu">
+                       <li><a [routerLink] = "['/tutor/' + tutor?.id +'/updateProfile']">Update Profile</a></li>
+                       <li><a>Change Password</a></li>
+                       <li role="separator" class="divider"></li>
+                       <li><a (click) = "logout()">Logout</a></li>
+                   </ul>
+           </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Manage My Account <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a [routerLink] = "['/tutor/' + tutor?.id +'/updateProfile']">Update Profile</a></li>
-                        <li><a>Change Password</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a [routerLink] = "['/login']">Logout</a></li>
-                    </ul>
-            </li>
-		</ul>
-    </nav>
+   </nav>
 
-<div class="profile" *ngIf="tutor">
-    <img style="margin-top: 100px; border-radius: 5px" [src]= tutor.imagePath/>
+<div class="panel panel-default" *ngIf="tutor">
+   <img style="margin-top: 30px; border-radius: 50%" src="../blank.png">
 
-    <h2> {{tutor.firstName}} {{tutor.lastName}} </h2>
-    <p> {{tutor.bio}} </p>
-    <p> {{tutor.email}} </p>
-
+   <h2> {{tutor.first_name}} {{tutor.last_name}} </h2>
+   <div class="tutor_info">
+        <p> "{{tutor.bio}}" </p>
 
         <div>
-            <p>
-        Courses taught: {{tutor.courses}}
-            </p>
+            <h4>Courses taught</h4>
+                <ul><li *ngFor="let course of courses">
+                    {{course.course_name}}
+                </li></ul>
         </div>
         <p>
-            Graduated from {{tutor.high_school}} in {{tutor.grad_year}}
+            <b>Graduated from</b> {{tutor.past_high_school}}
         </p>
- 
-    <p>
-        <a href="javascript:void(0);" [routerLink] = "['/tutor/' + tutor.id +'/updateProfile']" class="btn btn-primary">Edit Your Profile</a> 
-        <a [routerLink] = "['/tutor/' + tutor.id +'/courses']" class="btn btn-primary">Edit Your Courses</a> 
-    </p>
+        <p>
+            <a href="javascript:void(0);" [routerLink] = "['/tutor/editProfile']" class="btn btn-primary">Edit Your Profile</a>
+            <a (click)="editCourses()" class="btn btn-primary">Edit Your Courses</a>
+        </p>
+   </div>
 </div>
 </div>
+
+

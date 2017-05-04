@@ -3,6 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TutorRepository } from "../../api/tutor-repository.service";
 import { Tutor } from "../../api/tutor";
 
+import { UserRepository } from "../../api/user-repository";
+import { Course } from "../../api/course";
+
 
 @Component({
   moduleId: module.id,
@@ -14,29 +17,31 @@ import { Tutor } from "../../api/tutor";
 export class TutorProfileComponent {
     // tutor : Tutor;
     tutor: any = {};
-
+    courses: any = [];
    
     constructor(private router: Router, 
                 private tutorRepository: TutorRepository, 
-                private route: ActivatedRoute){
+                private route: ActivatedRoute,
+                private userRepository: UserRepository){
 
                     this.tutorRepository.viewProfile()
-                        .subscribe(tutor => this.tutor = tutor)
+                        .subscribe(tutor => this.tutor = tutor);
+                    this.getCourses();
                 }
 
-    // ngOnInit() {
-    //     var onLoad = (data) => {
-    //         this.tutor = data;
-    //     };
+    getCourses(){
+        this.tutorRepository.getCourses()
+            .subscribe(courses => this.courses = courses);
+        // this.router.navigateByUrl('/tutor/editCourse');
+    }
 
-    //     this.route.params.subscribe(params => {
-    //         if(params['id'] !== undefined) {
-    //             this.tutorRepository.getById(+params['id'])
-    //                 .then(onLoad);
-    //         } 
-    //     });
-    // }
+    editCourses(){
+        this.tutorRepository.editCourses(this.tutor);
+    }
 
-
-
+    logout(){
+            this.userRepository.logout()
+                .subscribe(x => console.log(x));
+            this.router.navigateByUrl('/login');
+    }
 }

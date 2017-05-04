@@ -11,6 +11,6 @@
   <h2>Welcome Back!{{currentUser?.firstName}}</h2>
   <p>
     <a class="btn btn-primary" [routerLink]="['/tutor/viewProfile']">View Your Profile</a> 
-    <a class="btn btn-primary" [routerLink]="['/login']">Logout</a>
+    <a class="btn btn-primary" (click) = "logout()">Logout</a>
   </p>
 </div>

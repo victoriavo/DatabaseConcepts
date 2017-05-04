@@ -1,5 +1,71 @@
-.media-heading a{
+/*.media-heading a{
     font-family:  Helvetica, sans-serif;
     color: gray;
     font-size: 14px
+}*/
+
+
+.profile{
+    position: center;
+}
+.btn{
+    background-color: gray;
+    border: none
+}
+div{
+    text-align: center;
+    margin-top: 50px;
+}
+nav{
+    background-color: white;
+}
+p{
+    color: gray;
+}
+
+.navbar a{
+    font-size: 100%;
+    /*background: transparent;*/
+}
+
+.dropdown{
+    margin-right: 20px;
+    color: black;
+}
+
+.dropdown-menu li{
+    position: relative;
+    z-index: 2;
+}
+
+.dropdown-menu li a{ 
+   color: black;
+
+}
+.profile {
+    width: 50%;
+    display: inline-block;
+}
+.profileImage{
+    height: 250px;
+    width: 250px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+nav{
+    background-color:  #13a4f2;
+    color: white;
+    border: none;
+}
+nav a {
+    color: white; 
+    vertical-align: middle;
+}
+nav img{
+    margin: 8pt;
+}
+nav li {
+    padding-top: 10pt;
 }

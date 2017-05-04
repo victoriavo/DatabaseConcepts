@@ -34,11 +34,8 @@ let TutorEditorComponent = class TutorEditorComponent {
         });
     }
     save() {
-        if (this.tutor.id)
-            this.tutorRepository.update(this.tutor);
-        else
-            this.tutorRepository.add(this.tutor);
-        this.router.navigateByUrl('/');
+        this.tutorRepository.update(this.tutor);
+        this.router.navigateByUrl('/tutor/viewProfile');
     }
 };
 TutorEditorComponent = __decorate([

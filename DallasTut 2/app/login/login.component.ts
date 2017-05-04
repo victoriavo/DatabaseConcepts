@@ -25,8 +25,7 @@ export class LoginComponent{
        private alertService: AlertService) { }
 
        login(){
-           this.userRepository.login(this.user);
-
+            this.userRepository.login(this.user);
             this.router.navigateByUrl('/home');
        
        }

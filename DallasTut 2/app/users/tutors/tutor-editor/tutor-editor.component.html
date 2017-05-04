@@ -23,26 +23,22 @@
     <div class="col-md-6 col-md-offset-3">
         <form class="form-horizontal" name="form">
             <div class="form-group" *ngIf="tutor">
-                <label for="fname">First Name</label>
-                <input type="text" class="form-control" name="fname" [(ngModel)]="tutor.firstName"/>
-                <label for="lname">Last Name</label>
-                <input type="text" class="form-control" name="lname" [(ngModel)]="tutor.lastName"/>
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control" name="first_name" [(ngModel)]="tutor.first_name"/>
+                <label for="last_name">Last Name</label>
+                <input type="text" class="form-control" name="last_name" [(ngModel)]="tutor.last_name"/>
                 <label for="email">Email</label>
                 <input type="text" class="form-control" name="email" [(ngModel)]="tutor.email"/>
                 <label for="bio">Bio</label>
                 <textarea class="form-control" name="bio" [(ngModel)]="tutor.bio"></textarea>
-                <label for="high_school">High School</label>
-                <input type="text" class="form-control" name="high_school" [(ngModel)]="tutor.high_school"/>
-                <label for="high_school">High School</label>
-                <input type="number" class="form-control" name="gradYear" [(ngModel)]="tutor.grad_year"/>
-                <label for="photo">Image Path</label>
-                <input type="text" class="form-control" name="photo"  [(ngModel)]="tutor.imagePath"/>
+                <label for="past_high_school">Past High School</label>
+                <input type="text" class="form-control" name="high_school" [(ngModel)]="tutor.past_high_school"/>
+                <!--<label for="photo">Image Path</label>
+                <input type="text" class="form-control" name="photo"  [(ngModel)]="tutor.imagePath"/>-->
             </div>
             <div class="form-group">
-                <a href="javascript:void(0);" class="btn btn-primary" [routerLink]="['/tutor/' + tutor?.id +'/viewProfile']" (click)="save()" >
-                    Save
-                </a>
-                <a class="btn btn-primary" [routerLink]="['/tutor/' + tutor?.id +'/viewProfile']">Cancel</a> 
+                <a href="javascript:void(0);" class="btn btn-primary" (click)="save()"> Save</a>
+                <a class="btn btn-primary" [routerLink]="['/tutor/viewProfile']">Cancel</a> 
             </div>
         </form>
     </div>

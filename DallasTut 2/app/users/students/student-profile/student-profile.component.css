@@ -5,9 +5,7 @@
 div{
     text-align: center;
 }
-nav{
-    background-color: white;
-}
+
 p{
     color: gray;
 }
@@ -15,4 +13,21 @@ p{
 .navbar a{
     font-size: 100%;
     background: transparent;
+}
+
+
+nav{
+    background-color:  #13a4f2;
+    color: white;
+    border: none;
+}
+nav a {
+    color: white; 
+    vertical-align: middle;
+}
+nav img{
+    margin: 8pt;
+}
+nav li {
+    padding-top: 10pt;
 }

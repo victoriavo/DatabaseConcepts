@@ -16,9 +16,27 @@ let FindTutorComponent = class FindTutorComponent {
     constructor(tutorRepository, router) {
         this.tutorRepository = tutorRepository;
         this.router = router;
+        this.tutors = [];
+        this.keys = [];
+        this.imagesarray = [];
         this.tutorRepository.findTutor()
-            .subscribe(x => console.log(x));
-        ;
+            .subscribe(tutor => this.tutors = tutor);
+        console.log(this.tutors);
+        this.keys = Object.keys(this.tutors);
+        this.imagesarray = ['/app/users/tutors/findTutor/curry.jpeg', '/app/users/tutors/findTutor/sss.jpg',
+            '/app/users/tutors/findTutor/ey.jpg', '/app/users/tutors/findTutor/girl.jpg', '/app/users/tutors/findTutor/asdf.jpg',
+            '/app/users/tutors/findTutor/ffff.jpg', '/app/users/tutors/findTutor/square.jpeg', '/app/users/tutors/findTutor/1234.jpg',
+            '/app/users/tutors/findTutor/student.jpg', '/app/users/tutors/findTutor/stancliffe.jpg', '/app/users/tutors/findTutor/tony.jpg'];
+    }
+    ;
+    createRange(number) {
+        {
+            var items = [];
+            for (var i = 1; i <= number; i++) {
+                items.push(i);
+            }
+            return items;
+        }
     }
 };
 FindTutorComponent = __decorate([

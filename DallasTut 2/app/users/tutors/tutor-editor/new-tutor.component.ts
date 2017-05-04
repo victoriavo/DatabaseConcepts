@@ -35,14 +35,8 @@ export class NewTutorComponent {
 
 
     save() {
-        this.tutorRepository.update(this.tutor);
+        this.tutorRepository.updateNew(this.tutor);
         this.router.navigateByUrl('/tutor/viewProfile');
-
-        // if(this.tutor.id)
-        //     this.tutorRepository.update(this.tutor);
-        // else 
-        //     this.tutorRepository.add(this.tutor);
-        // this.router.navigateByUrl('/');           
     }
 
 }

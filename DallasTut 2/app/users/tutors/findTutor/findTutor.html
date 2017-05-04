@@ -17,16 +17,26 @@
             </li>
 		</ul>
     </nav>
-
-
-   <h1 style="margin-top: 75px"> Tutors Near You </h1>
+</div>
+<div class="profile" *ngFor="let item of createRange(10)"> 
+    <span class="media">
+		<div class="profileImage" [ngStyle]="{ 'background-image': 'url(' + imagesarray[item] + ')' }"></div>
+	</span>
+    <h2>  {{tutors[item]?.first_name}} {{tutors[item]?.last_name}} </h2>
+    <a href="mailto:{{ tutors[item]?.email }}">
+			    <i class="glyphicon glyphicon-envelope"></i> {{ tutors[item]?.email }} </a>
+    <p> {{tutors[item]?.bio}} </p>
+    <p> {{tutors[item]?.past_high_school}} </p>
+  
+<!--</div>-->
+   <!--<h1 style="margin-top: 75px"> Tutors Near You </h1>
    <div class="media" *ngFor="let tutor of tutors">
 	<span class="media">
 		<img style="height:250px; border-radius: 10px" [src]="tutor.imagePath || 'images/blank.jpg'"/>
 	</span>
 	<div class="media-body">
 		<h4 class="media-heading">
-			{{ tutor.firstName }} {{ tutor.lastName }} <br>
+			{{ tutors.firstName }} {{ tutors.lastName }} <br>
 		
 			<a href="javascript:void(0);" [routerLink]="['/tutor/' + tutor.id +'/viewProfile']">
                 <i class="glyphicon glyphicon-new-window"> </i>
@@ -39,5 +49,5 @@
         <br>
 
 	</div>
-</div>
+</div>-->
 </div>

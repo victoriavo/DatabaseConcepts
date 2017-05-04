@@ -24,9 +24,6 @@ let UserRepository = class UserRepository {
         this._apiUrl = 'api/users';
     }
     login(user) {
-        //         let headers = new Headers({'Content-Type' : 'application/json'});
-        //         let options = new RequestOptions({headers: headers});
-        // console.log(JSON.stringify(user));
         let options = this.authService.getRequestOptions();
         this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/login', JSON.stringify(user), options)
             .map((res) => res.headers.get('authorization'))
@@ -36,7 +33,15 @@ let UserRepository = class UserRepository {
             localStorage.setItem('token', p);
         });
     }
-    logout(user) {
+    logout() {
+        let token = localStorage.getItem('token');
+        console.log(token);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        headers.append('Authorization', token);
+        let options = this.authService.getRequestOptions();
+        return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/logout', options)
+            .map((res) => res.headers.get('authorization'))
+            .catch(this.handleError);
     }
     extractData(res) {
         let body = res.json();

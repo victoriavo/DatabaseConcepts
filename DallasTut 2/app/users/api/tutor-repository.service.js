@@ -28,21 +28,6 @@ let TutorRepository = class TutorRepository {
         console.log('response', body);
         return body.data || body;
     }
-    //  public signUp(user: any): Promise<Tutor> {
-    // 	return this.http
-    // 	.post(this._apiUrl, user)
-    // 	.toPromise()
-    // 	.then(this.getData)
-    // 	.catch(x => x.message);
-    // }
-    // login(): Observable<object> {
-    // 	let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-    // 	let options = new RequestOptions({headers: headers});
-    // 	let body 
-    // 	return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/login',  JSON.stringify(body), options)
-    // 		.map(this.extractData)
-    // 		.catch(this.handleError);
-    // }
     signUp(tutor) {
         let options = this.authService.getRequestOptions();
         this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup', JSON.stringify(tutor), options)
@@ -52,12 +37,44 @@ let TutorRepository = class TutorRepository {
             console.log(p);
             localStorage.setItem('token', p);
         });
-        // let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
-        // let options = new RequestOptions({headers: headers});
-        // console.log(JSON.stringify(tutor))
-        // return this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/signup',  JSON.stringify(tutor), options)
-        // 	.map(this.extractData)
-        // 	.catch(this.handleError);
+    }
+    updateNew(tutor) {
+        let token = localStorage.getItem('token');
+        console.log(token);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
+        headers.append('Authorization', token);
+        let options = new http_1.RequestOptions({ headers: headers });
+        this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
+            .map((res) => res.headers.get('authorization'))
+            .catch(this.handleError)
+            .subscribe(p => {
+            console.log(p);
+            localStorage.getItem('token');
+        });
+    }
+    getCourses() {
+        let token = localStorage.getItem('token');
+        console.log(token);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
+        headers.append('Authorization', token);
+        let options = new http_1.RequestOptions({ headers: headers });
+        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', options)
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+    editCourses(tutor) {
+        let token = localStorage.getItem('token');
+        console.log(token);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
+        headers.append('Authorization', token);
+        let options = new http_1.RequestOptions({ headers: headers });
+        this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editCourse', JSON.stringify(tutor), options)
+            .map((res) => res.headers.get('authorization'))
+            .catch(this.handleError)
+            .subscribe(p => {
+            console.log(p);
+            localStorage.getItem('token');
+        });
     }
     update(tutor) {
         let token = localStorage.getItem('token');
@@ -65,7 +82,7 @@ let TutorRepository = class TutorRepository {
         let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
         headers.append('Authorization', token);
         let options = new http_1.RequestOptions({ headers: headers });
-        this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
+        this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/editProfile', JSON.stringify(tutor), options)
             .map((res) => res.headers.get('authorization'))
             .catch(this.handleError)
             .subscribe(p => {
@@ -93,13 +110,6 @@ let TutorRepository = class TutorRepository {
             .map(this.extractData)
             .catch(this.handleError);
     }
-    // send(user: any): Promise<Tutor> {
-    // 	return this.http
-    // 	.post(this._apiUrl, user)
-    // 	.toPromise()
-    // 	.then(this.getData)
-    // 	.catch(x => x.message);
-    // }
     getAll() {
         let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
         let options = new http_1.RequestOptions({ headers: headers });
@@ -111,7 +121,7 @@ let TutorRepository = class TutorRepository {
         });
     }
     findTutor() {
-        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/alltutors')
+        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/findTutor/')
             .map((res) => res.json() || {})
             .catch((error, caught) => {
             console.error(error.json().error || 'Server error');
@@ -131,34 +141,6 @@ let TutorRepository = class TutorRepository {
             .toPromise()
             .then(x => x.json().data)
             .catch(x => x.message);
-    }
-    add(tutor) {
-        return this.http
-            .post(this._apiUrl, tutor)
-            .toPromise()
-            .then(x => x.json().data)
-            .catch(x => x.message);
-    }
-    // update(tutor: Tutor) : Promise<Tutor>{
-    // 	return this.http
-    // 		.put(`${this._apiUrl}/${tutor.id}`, tutor)
-    // 		.toPromise()
-    // 		.then(() => tutor)
-    // 		.catch(x => x.message);
-    // }
-    delete(tutor) {
-        return this.http
-            .delete(`${this._apiUrl}/${tutor.id}`)
-            .toPromise()
-            .catch(x => x.message);
-    }
-    jwt() {
-        // create authorization header with jwt token
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (currentUser && currentUser.token) {
-            let headers = new http_1.Headers({ 'Authorization': 'Bearer ' + currentUser.token });
-            return new http_1.RequestOptions({ headers: headers });
-        }
     }
     extractData(res) {
         let body = res.json();

@@ -12,15 +12,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular/core");
 const router_1 = require("@angular/router");
 const tutor_repository_service_1 = require("../../api/tutor-repository.service");
+const user_repository_1 = require("../../api/user-repository");
 let TutorProfileComponent = class TutorProfileComponent {
-    constructor(router, tutorRepository, route) {
+    constructor(router, tutorRepository, route, userRepository) {
         this.router = router;
         this.tutorRepository = tutorRepository;
         this.route = route;
+        this.userRepository = userRepository;
         // tutor : Tutor;
         this.tutor = {};
+        this.courses = [];
         this.tutorRepository.viewProfile()
             .subscribe(tutor => this.tutor = tutor);
+        this.getCourses();
+    }
+    getCourses() {
+        this.tutorRepository.getCourses()
+            .subscribe(courses => this.courses = courses);
+        // this.router.navigateByUrl('/tutor/editCourse');
+    }
+    editCourses() {
+        this.tutorRepository.editCourses(this.tutor);
+    }
+    logout() {
+        this.userRepository.logout()
+            .subscribe(x => console.log(x));
+        this.router.navigateByUrl('/login');
     }
 };
 TutorProfileComponent = __decorate([
@@ -32,7 +49,8 @@ TutorProfileComponent = __decorate([
     }),
     __metadata("design:paramtypes", [router_1.Router,
         tutor_repository_service_1.TutorRepository,
-        router_1.ActivatedRoute])
+        router_1.ActivatedRoute,
+        user_repository_1.UserRepository])
 ], TutorProfileComponent);
 exports.TutorProfileComponent = TutorProfileComponent;
 //# sourceMappingURL=tutor-profile.component.js.map
