@@ -2,6 +2,8 @@
 //Victoria's Routes
 // Login insert username and password
 $app->post('/login', function ($request, $response) {
+	$authorization = $request->getHeader('Authorization');
+        $authorization = implode(" ",$authorization);
         $input = $request->getParsedBody();
         $sql = "SELECT * FROM `Users` WHERE `Users`.email = :email";
         $sth = $this->db->prepare($sql);
@@ -33,6 +35,8 @@ $app->post('/login', function ($request, $response) {
                         $sth->execute();
                         if($sth->rowCount() != 0){
                                 $input['error'] = "You are already logged in.";
+				$newResponse = $this->response->withAddedHeader("Authorization",$token);
+				return $newResponse->withJson($input);
                         }
                         else{
                                 $input['success'] = "logged in";
@@ -83,6 +87,7 @@ $app->post('/student/signup', function ($request, $response) {
 		//immediately log the new user in
                 $sql = "INSERT INTO `Web Sessions` (`id`, `authorization`) VALUES (:id, :token)";
                 $sth = $this->db->prepare($sql);
+		$token  = bin2hex(openssl_random_pseudo_bytes(16));
                 $sth->bindParam(":token", $token);
                 $sth->bindParam(":id", $lastId);
                 $sth->execute();
@@ -129,7 +134,8 @@ $app->post('/tutor/signup', function ($request, $response) {
 		//immediately log the new user in
                 $sql = "INSERT INTO `Web Sessions` (`id`, `authorization`) VALUES (:id, :token)";
                 $sth = $this->db->prepare($sql);
-                $sth->bindParam(":token", $token);
+                $token  = bin2hex(openssl_random_pseudo_bytes(16));
+		$sth->bindParam(":token", $token);
                 $sth->bindParam(":id", $lastId);
                 $sth->execute();
 
@@ -570,7 +576,7 @@ $app->get('/findTutor/{params:.*}', function ($request, $response, $args) {
    if (empty($past_high_school)) {
    	$past_high_school = '%%';
    }
-   $sth = $this->db->prepare("SELECT DISTINCT first_name, last_name, past_high_school, bio FROM `Courses` NATURAL JOIN `Course Subjects` NATURAL JOIN `Subjects` NATURAL JOIN `Courses Taught` NATURAL JOIN `Tutors` WHERE subject_name LIKE :subject_name AND course_name LIKE :course_name AND past_high_school LIKE :past_high_school");
+   $sth = $this->db->prepare("SELECT DISTINCT first_name, last_name, past_high_school, bio, photo FROM `Courses` NATURAL JOIN `Course Subjects` NATURAL JOIN `Subjects` NATURAL JOIN `Courses Taught` NATURAL JOIN `Tutors` JOIN `Photos`  WHERE subject_name LIKE :subject_name AND course_name LIKE :course_name AND past_high_school LIKE :past_high_school AND `Tutors`.tutor_id = `Photos`.id");
    $sth->bindParam("subject_name", $subject_name);
    $sth->bindParam("course_name", $course_name);
    $sth->bindParam("past_high_school", $past_high_school);
