@@ -65,14 +65,25 @@ let TutorRepository = class TutorRepository {
         let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
         headers.append('Authorization', token);
         let options = new http_1.RequestOptions({ headers: headers });
-        // console.log(token);
-        // let options = this.authService.getRequestOptions();
         this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
             .map((res) => res.headers.get('authorization'))
             .catch(this.handleError)
             .subscribe(p => {
             console.log(p);
             localStorage.getItem('token');
+        });
+    }
+    viewProfile() {
+        let token = localStorage.getItem('token');
+        console.log(token);
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json', 'Accept': 'q=0.8;application/json;q=0.9' });
+        headers.append('Authorization', token);
+        let options = new http_1.RequestOptions({ headers: headers });
+        return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/viewProfile', options)
+            .map((res) => res.json() || {})
+            .catch((error, caught) => {
+            console.error(error.json().error || 'Server error');
+            return caught;
         });
     }
     getTutor(id) {

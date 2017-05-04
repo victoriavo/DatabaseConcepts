@@ -73,8 +73,7 @@ export class TutorRepository {
 		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
 		headers.append('Authorization', token);
 		let options = new RequestOptions({headers: headers});
-		// console.log(token);
-		// let options = this.authService.getRequestOptions();
+
 		this.http.post('http://52.27.67.68/testingdallastutors/public/index.php/tutor/newProfile', JSON.stringify(tutor), options)
 			.map((res:Response) => res.headers.get('authorization'))
 			.catch(this.handleError)
@@ -82,6 +81,21 @@ export class TutorRepository {
 				localStorage.getItem('token');
 			});
 		
+	}
+
+	viewProfile(): Observable<object>{
+		let token = localStorage.getItem('token');
+		console.log(token);
+		let headers = new Headers({'Content-Type' : 'application/json', 'Accept' : 'q=0.8;application/json;q=0.9'});
+		headers.append('Authorization', token);
+		let options = new RequestOptions({headers: headers});
+
+		return this.http.get('http://52.27.67.68/testingdallastutors/public/index.php/tutor/viewProfile', options)
+				.map((res:Response) => res.json() || {})
+				.catch((error:any, caught: Observable<any>) => {
+					console.error(error.json().error || 'Server error');
+					return caught;
+				});
 	}
 
 	getTutor(id: number): Observable<Tutor>{

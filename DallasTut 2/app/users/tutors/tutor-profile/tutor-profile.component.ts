@@ -12,22 +12,31 @@ import { Tutor } from "../../api/tutor";
 })
 
 export class TutorProfileComponent {
-    tutor : Tutor;
+    // tutor : Tutor;
+    tutor: any = {};
+
    
     constructor(private router: Router, 
                 private tutorRepository: TutorRepository, 
-                private route: ActivatedRoute){}
+                private route: ActivatedRoute){
 
-    ngOnInit() {
-        var onLoad = (data) => {
-            this.tutor = data;
-        };
+                    this.tutorRepository.viewProfile()
+                        .subscribe(tutor => this.tutor = tutor)
+                }
 
-        this.route.params.subscribe(params => {
-            if(params['id'] !== undefined) {
-                this.tutorRepository.getById(+params['id'])
-                    .then(onLoad);
-            } 
-        });
-    }
+    // ngOnInit() {
+    //     var onLoad = (data) => {
+    //         this.tutor = data;
+    //     };
+
+    //     this.route.params.subscribe(params => {
+    //         if(params['id'] !== undefined) {
+    //             this.tutorRepository.getById(+params['id'])
+    //                 .then(onLoad);
+    //         } 
+    //     });
+    // }
+
+
+
 }

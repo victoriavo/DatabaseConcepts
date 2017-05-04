@@ -17,17 +17,10 @@ let TutorProfileComponent = class TutorProfileComponent {
         this.router = router;
         this.tutorRepository = tutorRepository;
         this.route = route;
-    }
-    ngOnInit() {
-        var onLoad = (data) => {
-            this.tutor = data;
-        };
-        this.route.params.subscribe(params => {
-            if (params['id'] !== undefined) {
-                this.tutorRepository.getById(+params['id'])
-                    .then(onLoad);
-            }
-        });
+        // tutor : Tutor;
+        this.tutor = {};
+        this.tutorRepository.viewProfile()
+            .subscribe(tutor => this.tutor = tutor);
     }
 };
 TutorProfileComponent = __decorate([
