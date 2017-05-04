@@ -163,6 +163,7 @@ $app->post('/tutor/signup', function ($request, $response) {
          //$newResponse = $this->response->withAddedHeader("Authorization", $token);
          //return $newResponse->withJson($input);
 });
+
 //logout
 $app->post('/logout', function ($request, $response) {
         $authorization = $request->getHeader('Authorization');
@@ -615,7 +616,7 @@ $app->get('/student/viewProfile', function ($request, $response, $args) {
 		$input["Login Error"] = "The user is not logged in";
 	}
 	else {
-		$sth = $this->db->prepare("SELECT first_name, last_name, high_school, graduation_year, bio FROM `Students`  WHERE student_id = :student_id");
+		$sth = $this->db->prepare("SELECT first_name, last_name, high_school, graduation_year, bio FROM `Students` JOIN `Photos`  WHERE student_id = :student_id AND id = student_id");
 		$sth->bindParam("student_id",$args['student_id']);
 		$sth->execute();
 		$view = $sth->fetchObject();
@@ -710,6 +711,7 @@ $app->get('/alltutors', function ($request, $response, $args) {
    $results = $sth->fetchAll();
    return $this->response->withJson($results);
 });
+
 //Edit courses
 
 //Retrieve courses taught by a tutor
@@ -762,13 +764,23 @@ $app->post('/tutor/editCourse', function ($request, $response) {
 		$input["Login Error"] = "The user is not logged in";
 	}
 	else {
-		$sql = "INSERT INTO `Courses Taught` (`course_id`, `tutor_id`) VALUES (:course_id, :tutor_id)";
+		// Check to see if the course has already been added
+		$sql = "SELECT * FROM `Courses Taught` WHERE course_id = :course_id";
 		$sth = $this->db->prepare($sql);
 		$sth->bindParam(":course_id", $input['course_id']);
-		$sth->bindParam(":tutor_id", $id);
 		$sth->execute();
-		$input['course_id'] = $this->db->lastInsertId();
-		$input['tutor_id'] = $this->db->lastInsertId();
+		if($sth->rowCount() == 0) {
+			$sql = "INSERT INTO `Courses Taught` (`course_id`, `tutor_id`) VALUES (:course_id, :tutor_id)";
+			$sth = $this->db->prepare($sql);
+			$sth->bindParam(":course_id", $input['course_id']);
+			$sth->bindParam(":tutor_id", $id);
+			$sth->execute();
+			$input['course_id'] = $this->db->lastInsertId();
+			$input['tutor_id'] = $this->db->lastInsertId();
+		}
+		else {
+			$input['Error'] = "The tutor is already registered to teach this class.";
+		}
 	}
 	$newResponse = $this->response->withAddedHeader("Authorization", $auth);
 	return $newResponse->withJson($input);
